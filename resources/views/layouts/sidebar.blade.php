@@ -70,7 +70,13 @@
     <div class="p-2">
         <img src="{{ asset('images/logo.png') }}" alt="Logo" style="h-6;max-width: auto; height: 150px;">
     </div>
+    <div class="item"><a class="sub-btn"> {{ __('word.links') }}<i class="bx bx-chevrons-down dropdown"></i>
+        </a>
+        <div class="flex flex-col sub-menu" style="display: none;">
+            <a href="https://yasmin.server.local/ar/dashboard" target="_blank">مجمع واحة الياسمين</a>
+        </div>
 
+    </div>
     @can('expense-list')
         <div class="item"><a class="sub-btn"> {{ __('word.accountant') }} <i class="bx bx-chevrons-down dropdown"></i>
             </a>
