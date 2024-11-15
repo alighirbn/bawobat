@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Models\Cash;
+namespace App\Models\Project;
 
-use App\Models\Project\Project;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Transaction extends Model
+class ProjectStage extends Model
 {
     use HasFactory;
 
@@ -16,12 +16,15 @@ class Transaction extends Model
      * @var array
      */
     protected $fillable = [
+        'url_address',
+        'user_id_create',
+        'user_id_update',
         'project_id',
-        'cash_account_id',
-        'amount',
-        'type',
+        'name',
         'description',
-        'date',
+        'status',
+        'start_date',
+        'end_date',
     ];
 
     /**
@@ -34,9 +37,13 @@ class Transaction extends Model
         return $this->belongsTo(Project::class);
     }
 
-    // Belongs to a cash account
-    public function cashAccount()
+    public function user_create()
     {
-        return $this->belongsTo(CashAccount::class);
+        return $this->belongsTo(User::class, 'user_id_create', 'id');
+    }
+
+    public function user_update()
+    {
+        return $this->belongsTo(User::class, 'user_id_update', 'id');
     }
 }

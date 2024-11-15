@@ -12,17 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('cash_accounts', function (Blueprint $table) {
-
             $table->id();
-            $table->string('url_address', '60')->unique();
-            $table->string('account_name');  // e.g., 'Main Account', 'Savings Account'
-            $table->decimal('balance', 15, 0)->default(0); // Initial balance
+            $table->string('name');
+            $table->string('account_number')->unique();
+            $table->decimal('balance', 15, 2)->default(0);
+            $table->timestamps();
             $table->unsignedBigInteger('user_id_create')->nullable();
             $table->foreign('user_id_create')->references('id')->on('users');
 
             $table->unsignedBigInteger('user_id_update')->nullable();
             $table->foreign('user_id_update')->references('id')->on('users');
-            $table->timestamps();
+
+            $table->string('url_address', '60')->unique();
         });
     }
 

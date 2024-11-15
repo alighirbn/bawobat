@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expenses', function (Blueprint $table) {
+        Schema::create('incomes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('project_id')->constrained()->onDelete('cascade'); // New field
             $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
-            $table->foreignId('expense_type_id')->constrained()->onDelete('restrict');
-            $table->string('category');
+            $table->foreignId('income_type_id')->constrained()->onDelete('restrict');
+            $table->string('source');
             $table->decimal('amount', 15, 2);
             $table->text('description')->nullable();
             $table->date('date');
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expenses');
+        Schema::dropIfExists('incomes');
     }
 };

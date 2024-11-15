@@ -13,25 +13,13 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('url_address', '60')->unique();
-            $table->decimal('transaction_amount', 15, 0);
-            $table->string('transaction_type'); // debit or credit
-            $table->date('transaction_date');
-
-            $table->unsignedBigInteger('user_id_create')->nullable();
-            $table->foreign('user_id_create')->references('id')->on('users');
-
-            $table->unsignedBigInteger('user_id_update')->nullable();
-            $table->foreign('user_id_update')->references('id')->on('users');
-
-            // Polymorphic columns
-            $table->unsignedBigInteger('transactionable_id');
-            $table->string('transactionable_type');
-
+            $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->foreignId('cash_account_id')->constrained()->onDelete('cascade');
+            $table->decimal('amount', 15, 2);
+            $table->enum('type', ['income', 'expense']);
+            $table->text('description')->nullable();
+            $table->date('date');
             $table->timestamps();
-
-            $table->unsignedBigInteger('cash_account_id');
-            $table->foreign('cash_account_id')->references('id')->on('cash_accounts')->onDelete('cascade');
         });
     }
 

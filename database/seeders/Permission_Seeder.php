@@ -20,15 +20,6 @@ class Permission_Seeder extends Seeder
 
 
 
-            //**************************building******************************* */
-            //building permissions
-            'building-list',
-            'building-show',
-            'building-create',
-            'building-update',
-            'building-delete',
-
-
             //**************************customer******************************* */
             //customer permissions
             'customer-list',
@@ -38,40 +29,18 @@ class Permission_Seeder extends Seeder
             'customer-delete',
             'customer-statement',
 
-            //**************************contract******************************* */
-            //contract permissions
-            'contract-list',
-            'contract-show',
-            'contract-create',
-            'contract-update',
-            'contract-delete',
-            'contract-statement',
-            'contract-due',
-            'contract-print',
-            'contract-accept',
-            'contract-authenticat',
-            'contract-archive',
-            'contract-archiveshow',
 
 
-            //**************************transfer******************************* */
-            //transfer permissions
-            'transfer-list',
-            'transfer-show',
-            'transfer-create',
-            'transfer-update',
-            'transfer-delete',
-            'transfer-approve',
-            'transfer-print',
 
-            //**************************payment******************************* */
-            //payment permissions
-            'payment-list',
-            'payment-show',
-            'payment-create',
-            'payment-update',
-            'payment-delete',
-            'payment-approve',
+
+            //**************************income******************************* */
+            //income permissions
+            'income-list',
+            'income-show',
+            'income-create',
+            'income-update',
+            'income-delete',
+            'income-approve',
 
             //**************************expense******************************* */
             //expense permissions
@@ -99,37 +68,16 @@ class Permission_Seeder extends Seeder
             'cash_transfer-delete',
             'cash_transfer-approve',
 
-            //**************************service******************************* */
-            //service permissions
-            'service-list',
-            'service-show',
-            'service-create',
-            'service-update',
-            'service-delete',
 
-            //**************************report******************************* */
-            //report permissions
-            'report-list',
-            'report-category',
-            'report-due_installments',
-            'report-first_installment',
-            'report-general_report',
 
-            //**************************user******************************* */
-            // map
-            'map-map',
-            'map-draw',
-            'map-empty',
-            'map-contract',
-            'map-due',
-            'map-edit',
-            'map-hidden',
+
+
+
 
 
             //**************************user******************************* */
 
-            // user permissions
-            'dashboard-users',
+
 
             'user-list',
             'user-show',
@@ -139,8 +87,7 @@ class Permission_Seeder extends Seeder
 
             //**************************role******************************* */
 
-            // role permissions
-            'dashboard-roles',
+
             'role-list',
             'role-show',
             'role-create',
@@ -169,257 +116,6 @@ class Permission_Seeder extends Seeder
         $role->syncPermissions($per);
 
         $user->assignRole([$role]);
-
-
-        // create user -- accountant 
-        $user = User::create([
-            'name' => 'accountant',
-            'email' => 'accountant@admin.com',
-            'password' => bcrypt('12345678'),
-            'department_id' => 1,
-            'url_address' => $this->get_random_string(60),
-            'Status' => 'active',
-        ]);
-
-        $accountantRole = Role::create(['name' => 'accountant']);
-
-        // Define a subset of permissions for the accountant role
-        $accountantPermissions = [
-
-            //**************************customer******************************* */
-            //customer permissions
-            'customer-list',
-            'customer-show',
-            'customer-create',
-            'customer-update',
-
-            'customer-statement',
-
-            //**************************contract******************************* */
-            //contract permissions
-            'contract-list',
-            'contract-show',
-            'contract-create',
-            'contract-update',
-
-            'contract-statement',
-            'contract-due',
-            'contract-print',
-            'contract-accept',
-
-
-            //**************************transfer******************************* */
-            //transfer permissions
-            'transfer-list',
-            'transfer-show',
-            'transfer-create',
-            'transfer-update',
-
-            'transfer-approve',
-            'transfer-print',
-
-            //**************************payment******************************* */
-            //payment permissions
-            'payment-list',
-            'payment-show',
-            'payment-create',
-            'payment-update',
-
-            'payment-approve',
-
-            //**************************expense******************************* */
-            //expense permissions
-            'expense-list',
-            'expense-show',
-            'expense-create',
-            'expense-update',
-
-            'expense-approve',
-
-            //**************************cash_account******************************* */
-            //cash_account permissions
-            'cash_account-list',
-            'cash_account-show',
-            'cash_account-create',
-            'cash_account-update',
-
-
-            //**************************cash_transfer******************************* */
-            //cash_transfer permissions
-            'cash_transfer-list',
-            'cash_transfer-show',
-            'cash_transfer-create',
-            'cash_transfer-update',
-
-            'cash_transfer-approve',
-
-            //**************************service******************************* */
-            //service permissions
-            'service-list',
-            'service-show',
-            'service-create',
-            'service-update',
-
-
-            //**************************report******************************* */
-            //report permissions
-            'report-list',
-            'report-category',
-            'report-due_installments',
-            'report-first_installment',
-
-
-            // map
-            'map-map',
-            'map-draw',
-            'map-empty',
-            'map-contract',
-            'map-due',
-        ];
-
-        // Sync only the accountant permissions
-        $accountantRole->syncPermissions($accountantPermissions);
-        $user->assignRole($accountantRole);
-
-
-        // create user -- lawyer 
-        $user = User::create([
-            'name' => 'lawyer',
-            'email' => 'lawyer@admin.com',
-            'password' => bcrypt('12345678'),
-            'department_id' => 1,
-            'url_address' => $this->get_random_string(60),
-            'Status' => 'active',
-        ]);
-
-        $lawyerRole = Role::create(['name' => 'lawyer']);
-
-        // Define a subset of permissions for the lawyer role
-        $lawyerPermissions = [
-
-            //**************************customer******************************* */
-            //customer permissions
-            'customer-list',
-            'customer-show',
-            'customer-create',
-            'customer-update',
-
-            'customer-statement',
-
-            //**************************contract******************************* */
-            //contract permissions
-            'contract-list',
-            'contract-show',
-            'contract-create',
-            'contract-update',
-
-            'contract-statement',
-            'contract-due',
-            'contract-print',
-            'contract-accept',
-
-
-            //**************************transfer******************************* */
-            //transfer permissions
-            'transfer-list',
-            'transfer-show',
-            'transfer-create',
-            'transfer-update',
-
-            'transfer-approve',
-            'transfer-print',
-
-            //**************************payment******************************* */
-            //payment permissions
-            'payment-list',
-            'payment-show',
-            'payment-create',
-            'payment-update',
-
-            'payment-approve',
-
-            //**************************expense******************************* */
-            //expense permissions
-            'expense-list',
-            'expense-show',
-            'expense-create',
-            'expense-update',
-
-            'expense-approve',
-
-            //**************************cash_account******************************* */
-            //cash_account permissions
-            'cash_account-list',
-            'cash_account-show',
-            'cash_account-create',
-            'cash_account-update',
-
-
-            //**************************cash_transfer******************************* */
-            //cash_transfer permissions
-            'cash_transfer-list',
-            'cash_transfer-show',
-            'cash_transfer-create',
-            'cash_transfer-update',
-
-            'cash_transfer-approve',
-
-            //**************************service******************************* */
-            //service permissions
-            'service-list',
-            'service-show',
-            'service-create',
-            'service-update',
-
-
-            //**************************report******************************* */
-            //report permissions
-            'report-list',
-            'report-category',
-            'report-due_installments',
-            'report-first_installment',
-
-
-            // map
-            'map-map',
-            'map-draw',
-            'map-empty',
-            'map-contract',
-            'map-due',
-        ];
-
-        // Sync only the lawyer permissions
-        $lawyerRole->syncPermissions($lawyerPermissions);
-        $user->assignRole($lawyerRole);
-
-        // create user -- lawyer 
-        $user = User::create([
-            'name' => 'sale',
-            'email' => 'sale@admin.com',
-            'password' => bcrypt('12345678'),
-            'department_id' => 1,
-            'url_address' => $this->get_random_string(60),
-            'Status' => 'active',
-        ]);
-        $salesRole = Role::create(['name' => 'sales']);
-
-        // Define a subset of permissions for the sales role
-        $salesPermissions = [
-
-
-            'customer-create',
-
-            'contract-create',
-
-            'map-map',
-            'map-draw',
-            'map-empty',
-
-        ];
-
-        // Sync only the sales permissions
-        $salesRole->syncPermissions($salesPermissions);
-        $user->assignRole($salesRole);
     }
 
     public function get_random_string($length)

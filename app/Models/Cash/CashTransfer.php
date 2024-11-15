@@ -2,6 +2,7 @@
 
 namespace App\Models\Cash;
 
+use App\Models\Cash\CashAccount;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,35 +11,37 @@ class CashTransfer extends Model
 {
     use HasFactory;
 
-    protected $table = 'cash_transfers';
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'url_address',
-        'transfer_date',
-        'from_account_id',
-        'to_account_id',
-        'amount',
-        'transfer_note',
-        'approved',
         'user_id_create',
         'user_id_update',
+        'from_account_id',  // ID of the source CashAccount
+        'to_account_id',    // ID of the target CashAccount
+        'amount',            // Amount transferred
+        'description',       // Optional description for the transfer
+        'transaction_date',  // Date of the transfer
     ];
 
-    public function transactions()
-    {
-        return $this->morphMany(Transaction::class, 'transactionable');
-    }
+    /**
+     * Relationships
+     */
 
+    // Relationship with from CashAccount
     public function fromAccount()
     {
-        return $this->belongsTo(Cash_Account::class, 'from_account_id');
+        return $this->belongsTo(CashAccount::class, 'from_account_id');
     }
 
+    // Relationship with to CashAccount
     public function toAccount()
     {
-        return $this->belongsTo(Cash_Account::class, 'to_account_id');
+        return $this->belongsTo(CashAccount::class, 'to_account_id');
     }
-
     public function user_create()
     {
         return $this->belongsTo(User::class, 'user_id_create', 'id');

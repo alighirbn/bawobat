@@ -2,7 +2,7 @@
 
 namespace App\Models\Customer;
 
-use App\Models\Contract\Contract;
+
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,10 +22,7 @@ class Customer extends Model
         return $this->belongsTo(User::class, 'user_id_update', 'id');
     }
 
-    public function contracts()
-    {
-        return $this->hasMany(Contract::class, 'contract_customer_id', 'id');
-    }
+
 
     protected $fillable = [
         'url_address',
@@ -40,7 +37,7 @@ class Customer extends Model
         'full_address',
         'address_card_number',
         'saleman',
-
+        'url_address',
         'user_id_create',
         'user_id_update',
     ];

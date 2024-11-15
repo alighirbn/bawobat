@@ -13,21 +13,19 @@ return new class extends Migration
     {
         Schema::create('cash_transfers', function (Blueprint $table) {
             $table->id();
-            $table->string('url_address', '60')->unique();
-            $table->date('transfer_date');
-            $table->foreignId('from_account_id')->constrained('cash_accounts')->onDelete('cascade');
-            $table->foreignId('to_account_id')->constrained('cash_accounts')->onDelete('cascade');
-            $table->decimal('amount', 15, 0);
-            $table->text('transfer_note')->nullable(); // Optional notes about the expense
-            $table->boolean('approved')->default(false); // New field for approval status
-
+            $table->foreignId('from_account_id')->constrained('cash_accounts')->onDelete('cascade'); // Source account
+            $table->foreignId('to_account_id')->constrained('cash_accounts')->onDelete('cascade'); // Target account
+            $table->decimal('amount', 15, 2); // Transfer amount
+            $table->text('description')->nullable(); // Optional description
+            $table->date('transaction_date'); // Transfer date
+            $table->timestamps();
             $table->unsignedBigInteger('user_id_create')->nullable();
             $table->foreign('user_id_create')->references('id')->on('users');
 
             $table->unsignedBigInteger('user_id_update')->nullable();
             $table->foreign('user_id_update')->references('id')->on('users');
 
-            $table->timestamps();
+            $table->string('url_address', '60')->unique();
         });
     }
 

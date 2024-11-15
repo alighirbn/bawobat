@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('expenses', function (Blueprint $table) {
+        Schema::create('project_stages', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained()->onDelete('cascade'); // New field
-            $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
-            $table->foreignId('expense_type_id')->constrained()->onDelete('restrict');
-            $table->string('category');
-            $table->decimal('amount', 15, 2);
+            $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->string('name');
             $table->text('description')->nullable();
-            $table->date('date');
+            $table->enum('status', ['pending', 'ongoing', 'completed'])->default('pending');
+            $table->date('start_date');
+            $table->date('end_date')->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('user_id_create')->nullable();
             $table->foreign('user_id_create')->references('id')->on('users');
@@ -36,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('expenses');
+        Schema::dropIfExists('project_stages');
     }
 };

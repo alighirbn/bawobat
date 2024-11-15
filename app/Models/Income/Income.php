@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Models\Cash;
+namespace App\Models\Income;
 
+use App\Models\Cash\Transaction;
 use App\Models\Project\Project;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Expense extends Model
+class Income extends Model
 {
     use HasFactory;
 
@@ -16,10 +18,13 @@ class Expense extends Model
      * @var array
      */
     protected $fillable = [
+        'url_address',
+        'user_id_create',
+        'user_id_update',
         'transaction_id',
         'project_id',  // Add project_id to fillable
-        'expense_type_id', // Add expense_type_id to fillable
-        'category',
+        'income_type_id', // Add income_type_id to fillable
+        'source',
         'amount',
         'description',
         'date',
@@ -29,21 +34,29 @@ class Expense extends Model
      * Relationships
      */
 
-    // Relationship with Project
+    // Relationship with Transaction
     public function project()
     {
         return $this->belongsTo(Project::class);
     }
 
-    // Relationship with Transaction
     public function transaction()
     {
         return $this->belongsTo(Transaction::class);
     }
 
-    // Relationship with ExpenseType
-    public function expenseType()
+    public function incomeType()
     {
-        return $this->belongsTo(ExpenseType::class);
+        return $this->belongsTo(IncomeType::class);
+    }
+
+    public function user_create()
+    {
+        return $this->belongsTo(User::class, 'user_id_create', 'id');
+    }
+
+    public function user_update()
+    {
+        return $this->belongsTo(User::class, 'user_id_update', 'id');
     }
 }

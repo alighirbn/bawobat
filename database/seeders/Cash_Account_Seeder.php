@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Cash\Cash_Account;
 
+use App\Models\Cash\CashAccount;
 use Illuminate\Database\Seeder;
 
 class Cash_Account_Seeder extends Seeder
@@ -17,13 +17,14 @@ class Cash_Account_Seeder extends Seeder
     $cash_accounts = [
       [
         'url_address' => 'kguydsgsdjdsvwuwufuvvudvvwuvuugsgssf',
-        'account_name' => 'القاصة',
+        'name' => 'الحساب الرئيسي',
+        'account_number' => '530000',
         'balance' => 0,
       ],
 
     ];
     foreach ($cash_accounts as $cash_account) {
-      Cash_Account::create($cash_account);
+      CashAccount::create($cash_account);
     }
   }
 }

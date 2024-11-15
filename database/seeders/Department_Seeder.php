@@ -8,21 +8,19 @@ use Illuminate\Database\Seeder;
 
 class Department_Seeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
-    {
-                // add Departments
-        $departments = [
-          'مجمع واحة الياسمين',
-          'اخرى',
+  /**
+   * Run the database seeds.
+   */
+  public function run(): void
+  {
+    // add Departments
+    $departments = [
+      'شركة بوابة العلم',
+      'اخرى',
 
-        ];
-         foreach ($departments as $department)
-          {
-             Department::create(['department' => $department]);
-          }
-
+    ];
+    foreach ($departments as $department) {
+      Department::create(['department' => $department]);
     }
+  }
 }

@@ -71,23 +71,6 @@
         <img src="{{ asset('images/logo.png') }}" alt="Logo" style="h-6;max-width: auto; height: 150px;">
     </div>
 
-    @can('map-map')
-        <div class="item"><a class="sub-btn" style="font-family: 'Cairo', sans-serif;"> {{ __('word.Map') }} <i
-                    class="bx bx-chevrons-down dropdown"></i> </a>
-            <div class="flex flex-col   sub-menu" style="display: none;">
-                @include('map.nav.navigation')
-            </div>
-        </div>
-    @endcan
-    @can('contract-list')
-        <div class="item"><a class="sub-btn"> {{ __('word.contract') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
-            <div class="flex flex-col   sub-menu" style="display: none;">
-                @include('contract.nav.navigation')
-                @include('service.nav.navigation')
-            </div>
-        </div>
-    @endcan
-
     @can('expense-list')
         <div class="item"><a class="sub-btn"> {{ __('word.accountant') }} <i class="bx bx-chevrons-down dropdown"></i>
             </a>
@@ -100,25 +83,10 @@
         </div>
     @endcan
 
-    @can('building-list')
-        <div class="item"><a class="sub-btn"> {{ __('word.Building') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
-            <div class="flex flex-col   sub-menu" style="display: none;">
-                @include('building.nav.navigation')
-            </div>
-        </div>
-    @endcan
     @can('customer-list')
         <div class="item"><a class="sub-btn"> {{ __('word.Customer') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
             <div class="flex flex-col   sub-menu" style="display: none;">
                 @include('customer.nav.navigation')
-            </div>
-        </div>
-    @endcan
-
-    @can('report-list')
-        <div class="item"><a class="sub-btn"> {{ __('word.report') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
-            <div class="flex flex-col   sub-menu" style="display: none;">
-                @include('report.nav.navigation')
             </div>
         </div>
     @endcan
