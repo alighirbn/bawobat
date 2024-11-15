@@ -34,14 +34,7 @@ Route::group(['middleware' => 'checkStatus'], function () {
             return view('dashboard');
         })->middleware(['auth', 'verified'])->name('dashboard');
 
-        //map routes
-        require __DIR__ . '/map.php';
-
-        //report routes
-        require __DIR__ . '/report.php';
-
-        //building routes
-        require __DIR__ . '/building.php';
+        
 
         //customer routes
         require __DIR__ . '/customer.php';
@@ -61,11 +54,7 @@ Route::group(['middleware' => 'checkStatus'], function () {
         //cash_transfer routes
         require __DIR__ . '/cash_transfer.php';
 
-        //contract routes
-        require __DIR__ . '/contract.php';
-        //transfer routes
-        require __DIR__ . '/transfer.php';
-
+       
 
         //user routes
         require __DIR__ . '/user.php';
