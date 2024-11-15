@@ -8,7 +8,7 @@
     }
 
     .item {
-        color: #fff;
+        color: #f8e8cc;
         text-align: center;
         font-weight: bold;
         padding-bottom: 30px;
@@ -56,7 +56,12 @@
         border-left: 4px solid #ffcc00;
         /* Highlighted border for sub-menu */
     }
+
+    .div {
+        font-family: 'Cairo', sans-serif;
+    }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet">
 
 <!-- Boxicons CSS -->
 <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -67,7 +72,8 @@
     </div>
 
     @can('map-map')
-        <div class="item"><a class="sub-btn"> {{ __('word.Map') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
+        <div class="item"><a class="sub-btn" style="font-family: 'Cairo', sans-serif;"> {{ __('word.Map') }} <i
+                    class="bx bx-chevrons-down dropdown"></i> </a>
             <div class="flex flex-col   sub-menu" style="display: none;">
                 @include('map.nav.navigation')
             </div>

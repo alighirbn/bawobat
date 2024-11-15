@@ -18,66 +18,67 @@ Route::get('/', function () {
     return redirect('login');
 });
 Route::group(['middleware' => 'checkStatus'], function () {
+    Route::middleware(['dynamic.app.name'])->group(function () {
+        //Clear Cache facade value:
+        Route::get('/clear', function () {
+            Artisan::call('cache:clear');
+            Artisan::call('optimize');
+            Artisan::call('route:cache');
+            Artisan::call('route:clear');
+            Artisan::call('view:clear');
+            Artisan::call('config:cache');
+            return '<h1>Cache cleared</h1>';
+        });
 
-    //Clear Cache facade value:
-    Route::get('/clear', function () {
-        Artisan::call('cache:clear');
-        Artisan::call('optimize');
-        Artisan::call('route:cache');
-        Artisan::call('route:clear');
-        Artisan::call('view:clear');
-        Artisan::call('config:cache');
-        return '<h1>Cache cleared</h1>';
+        Route::get('/dashboard', function () {
+            return view('dashboard');
+        })->middleware(['auth', 'verified'])->name('dashboard');
+
+        //map routes
+        require __DIR__ . '/map.php';
+
+        //report routes
+        require __DIR__ . '/report.php';
+
+        //building routes
+        require __DIR__ . '/building.php';
+
+        //customer routes
+        require __DIR__ . '/customer.php';
+
+        //service routes
+        require __DIR__ . '/service.php';
+
+        //payment routes
+        require __DIR__ . '/payment.php';
+
+        //expense routes
+        require __DIR__ . '/expense.php';
+
+        //cash_account routes
+        require __DIR__ . '/cash_account.php';
+
+        //cash_transfer routes
+        require __DIR__ . '/cash_transfer.php';
+
+        //contract routes
+        require __DIR__ . '/contract.php';
+        //transfer routes
+        require __DIR__ . '/transfer.php';
+
+
+        //user routes
+        require __DIR__ . '/user.php';
+
+        //role routes
+        require __DIR__ . '/role.php';
+
+        //notification routes
+        require __DIR__ . '/notification.php';
+
+        //profile routes
+        require __DIR__ . '/profile.php';
     });
-
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->middleware(['auth', 'verified'])->name('dashboard');
-
-    //map routes
-    require __DIR__ . '/map.php';
-
-    //report routes
-    require __DIR__ . '/report.php';
-
-    //building routes
-    require __DIR__ . '/building.php';
-
-    //customer routes
-    require __DIR__ . '/customer.php';
-
-    //service routes
-    require __DIR__ . '/service.php';
-
-    //payment routes
-    require __DIR__ . '/payment.php';
-
-    //expense routes
-    require __DIR__ . '/expense.php';
-
-    //cash_account routes
-    require __DIR__ . '/cash_account.php';
-
-    //cash_transfer routes
-    require __DIR__ . '/cash_transfer.php';
-
-    //contract routes
-    require __DIR__ . '/contract.php';
-    //transfer routes
-    require __DIR__ . '/transfer.php';
-
-
-    //user routes
-    require __DIR__ . '/user.php';
-
-    //role routes
-    require __DIR__ . '/role.php';
-
-    //notification routes
-    require __DIR__ . '/notification.php';
-
-    //profile routes
-    require __DIR__ . '/profile.php';
 });
 //auth routes
 require __DIR__ . '/auth.php';

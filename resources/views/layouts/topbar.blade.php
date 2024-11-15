@@ -1,6 +1,6 @@
-<div class="w-full p-2 flex justify-between" style="background-color: #751743;">
+<div class="w-full p-2 flex justify-between" style="background-color: #122436;">
     <button onclick="myFunction()" x-on:click.prevent="isOpen = !isOpen">
-        <i class='bx bx-menu' style="color: #fff;"></i>
+        <i class='bx bx-menu' style="color: #efd7ac;"></i>
     </button>
 
     <div class="flex">
@@ -8,8 +8,8 @@
         <div class="hidden sm:flex sm:items-center sm:ml-1">
             <x-dropdown alignment="right" width="48">
                 <x-slot name="trigger">
-                    <button
-                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                    <button style="color: #efd7ac;"
+                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                         <div>{{ LaravelLocalization::getCurrentLocaleNative() }}</div>
                         <div class="ml-1">
                             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -40,13 +40,13 @@
         <div class="hidden sm:flex sm:items-center sm:ml-1">
             <x-dropdown alignment="right" width="48">
                 <x-slot name="trigger">
-                    <button
-                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                    <button style="color: #efd7ac;"
+                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500  hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                         <span class="inline-flex">
-                            <span class="notification-count hidden w-4 h-4 font-bold bg-red-600 text-white rounded">
+                            <span class="notification-count hidden w-4 h-4 font-bold bg-red-600  rounded">
                                 {{ auth()->user()->unreadNotifications()->count() }}
                             </span>
-                            <svg class="w-5 h-5 text-gray-700 fill-current" viewBox="0 0 20 20">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
                                 <path
                                     d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"
                                     fill-rule="evenodd" clip-rule="evenodd" />
@@ -99,8 +99,8 @@
         <div class="hidden sm:flex sm:items-center sm:ml-1">
             <x-dropdown align="left" width="46">
                 <x-slot name="trigger">
-                    <button
-                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                    <button style="color: #efd7ac;"
+                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                         <div>{{ Auth::user()->name }}</div>
                         <div class="ml-1">
                             <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

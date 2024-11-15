@@ -10,12 +10,12 @@
         <style>
             /* Custom CSS */
             .gradient-background {
-                background: linear-gradient(to bottom, #751743, #490117);
+                background: linear-gradient(to bottom, #122436, #284e72);
                 /* Adjust colors as needed  #2b6a9a, #0c6e70 */
             }
 
             .gradient-background-nav {
-                background: linear-gradient(to bottom, #751743, #a91d53);
+                background: linear-gradient(to bottom, #122436, #284e72, );
                 /* Adjust colors as needed   #2b6a9a, #d0e3ff*/
             }
 
