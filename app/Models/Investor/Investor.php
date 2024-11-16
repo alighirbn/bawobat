@@ -18,12 +18,12 @@ class Investor extends Model
      */
     protected $fillable = [
         'url_address',
-        'user_id_create',
-        'user_id_update',
         'name',
         'email',
         'phone',
         'address',
+        'user_id_create',
+        'user_id_update',
     ];
 
     /**

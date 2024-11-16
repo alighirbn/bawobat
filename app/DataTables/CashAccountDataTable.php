@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Cash\Cash_Account;
+use App\Models\Cash\CashAccount;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Yajra\DataTables\EloquentDataTable;
@@ -36,7 +36,7 @@ class CashAccountDataTable extends DataTable
      * @param \App\Models\Cash\Expense $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Cash_Account $model): QueryBuilder
+    public function query(CashAccount $model): QueryBuilder
     {
         // Get the base query with relationships (if any)
         return  $model->newQuery();

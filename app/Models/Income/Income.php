@@ -19,8 +19,6 @@ class Income extends Model
      */
     protected $fillable = [
         'url_address',
-        'user_id_create',
-        'user_id_update',
         'transaction_id',
         'project_id',  // Add project_id to fillable
         'income_type_id', // Add income_type_id to fillable
@@ -28,6 +26,8 @@ class Income extends Model
         'amount',
         'description',
         'date',
+        'user_id_create',
+        'user_id_update',
     ];
 
     /**

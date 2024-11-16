@@ -2,16 +2,6 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Word Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are used during viewing all pages for various
-    | messages that we need to display to the user. You are free to modify
-    | these language lines according to your application's requirements.
-    |
-     */
     //auth
     'user_create' => 'تم الانشاء من قبل',
     'user_update' => 'تم التحديث من قبل',
@@ -33,6 +23,13 @@ return [
     'date_to' => '  الى',
     'name' => 'الاسم',
     'links' => 'روابط',
+
+    'description' => 'الوصف',
+    'budget' => 'الميزانية',
+    'start_date' => 'تاريخ البدء',
+    'end_date' => 'تاريخ الانتهاء',
+    'status' => 'الحالة',
+
 
     // general values
     'year' => 'سنة',

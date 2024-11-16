@@ -19,14 +19,14 @@ class Project extends Model
      */
     protected $fillable = [
         'url_address',
-        'user_id_create',
-        'user_id_update',
         'name',
         'description',
         'budget',
         'start_date',
         'end_date',
         'status',
+        'user_id_create',
+        'user_id_update',
     ];
 
     /**

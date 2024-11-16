@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('project_stages', function (Blueprint $table) {
             $table->id();
+            $table->string('url_address', '60')->unique();
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
@@ -25,8 +26,6 @@ return new class extends Migration
 
             $table->unsignedBigInteger('user_id_update')->nullable();
             $table->foreign('user_id_update')->references('id')->on('users');
-
-            $table->string('url_address', '60')->unique();
         });
     }
 

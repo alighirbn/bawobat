@@ -18,10 +18,17 @@ class Permission_Seeder extends Seeder
         $permissions = [
             //dashboard
 
+            //**************************project******************************* */
+
+            'project-list',
+            'project-show',
+            'project-create',
+            'project-update',
+            'project-delete',
 
 
             //**************************customer******************************* */
-            //customer permissions
+
             'customer-list',
             'customer-show',
             'customer-create',
@@ -30,11 +37,8 @@ class Permission_Seeder extends Seeder
             'customer-statement',
 
 
-
-
-
             //**************************income******************************* */
-            //income permissions
+
             'income-list',
             'income-show',
             'income-create',
@@ -43,7 +47,7 @@ class Permission_Seeder extends Seeder
             'income-approve',
 
             //**************************expense******************************* */
-            //expense permissions
+
             'expense-list',
             'expense-show',
             'expense-create',
@@ -52,7 +56,7 @@ class Permission_Seeder extends Seeder
             'expense-approve',
 
             //**************************cash_account******************************* */
-            //cash_account permissions
+
             'cash_account-list',
             'cash_account-show',
             'cash_account-create',
@@ -60,7 +64,7 @@ class Permission_Seeder extends Seeder
             'cash_account-delete',
 
             //**************************cash_transfer******************************* */
-            //cash_transfer permissions
+
             'cash_transfer-list',
             'cash_transfer-show',
             'cash_transfer-create',
@@ -69,15 +73,7 @@ class Permission_Seeder extends Seeder
             'cash_transfer-approve',
 
 
-
-
-
-
-
-
             //**************************user******************************* */
-
-
 
             'user-list',
             'user-show',
@@ -86,7 +82,6 @@ class Permission_Seeder extends Seeder
             'user-delete',
 
             //**************************role******************************* */
-
 
             'role-list',
             'role-show',

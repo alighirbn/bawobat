@@ -34,7 +34,7 @@ Route::group(['middleware' => 'checkStatus'], function () {
             return view('dashboard');
         })->middleware(['auth', 'verified'])->name('dashboard');
 
-        
+
 
         //customer routes
         require __DIR__ . '/customer.php';
@@ -42,8 +42,8 @@ Route::group(['middleware' => 'checkStatus'], function () {
         //service routes
         require __DIR__ . '/service.php';
 
-        //payment routes
-        require __DIR__ . '/payment.php';
+        //project routes
+        require __DIR__ . '/project.php';
 
         //expense routes
         require __DIR__ . '/expense.php';
@@ -54,7 +54,7 @@ Route::group(['middleware' => 'checkStatus'], function () {
         //cash_transfer routes
         require __DIR__ . '/cash_transfer.php';
 
-       
+
 
         //user routes
         require __DIR__ . '/user.php';

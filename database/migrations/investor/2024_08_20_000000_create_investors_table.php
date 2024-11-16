@@ -13,10 +13,16 @@ return new class extends Migration
     {
         Schema::create('investors', function (Blueprint $table) {
             $table->id();
+            $table->string('url_address', '60')->unique();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->text('address')->nullable();
+            $table->unsignedBigInteger('user_id_create')->nullable();
+            $table->foreign('user_id_create')->references('id')->on('users');
+
+            $table->unsignedBigInteger('user_id_update')->nullable();
+            $table->foreign('user_id_update')->references('id')->on('users');
             $table->timestamps();
         });
     }
