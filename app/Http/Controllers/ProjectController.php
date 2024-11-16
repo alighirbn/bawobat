@@ -69,12 +69,16 @@ class ProjectController extends Controller
     }
 
     // Delete a project
-    public function destroy($id)
+    public function destroy($url_address)
     {
-        $project = Project::findOrFail($id);
+        $project = Project::with(['stages', 'investors', 'transactions'])
+            ->where('url_address', $url_address)
+            ->firstOrFail();
         $project->delete();
 
-        return response()->json(['message' => 'Project deleted successfully']);
+        //inform the user
+        return redirect()->route('project.index')
+            ->with('success', 'تمت حذف البيانات بنجاح ');
     }
 
     // Add a stage to a project

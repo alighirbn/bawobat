@@ -40,10 +40,6 @@
 
                             </div>
 
-                            <h2 class="font-semibold underline text-l text-gray-800 leading-tight mx-4  w-full">
-                                {{ __('word.project_card') }}
-                            </h2>
-
                             <div class="flex">
                                 <div class=" mx-4 my-4 w-full">
                                     <x-input-label for="start_date" class="w-full mb-1" :value="__('word.start_date')" />

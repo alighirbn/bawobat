@@ -77,6 +77,13 @@
         </div>
 
     </div>
+    @can('project-list')
+        <div class="item"><a class="sub-btn"> {{ __('word.project') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
+            <div class="flex flex-col   sub-menu" style="display: none;">
+                @include('project.nav.navigation')
+            </div>
+        </div>
+    @endcan
     @can('expense-list')
         <div class="item"><a class="sub-btn"> {{ __('word.accountant') }} <i class="bx bx-chevrons-down dropdown"></i>
             </a>
