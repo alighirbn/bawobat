@@ -25,6 +25,8 @@ class Permission_Seeder extends Seeder
             'project-create',
             'project-update',
             'project-delete',
+            'project-archiveshow',
+            'project-archive',
 
 
             //**************************customer******************************* */

@@ -2,6 +2,7 @@
 
 namespace App\Models\Cash;
 
+use App\Models\Archive;
 use App\Models\Project\Project;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,5 +46,9 @@ class Expense extends Model
     public function expenseType()
     {
         return $this->belongsTo(ExpenseType::class);
+    }
+    public function archives()
+    {
+        return $this->morphMany(Archive::class, 'archivable');
     }
 }

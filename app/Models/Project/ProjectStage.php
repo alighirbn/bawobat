@@ -2,6 +2,7 @@
 
 namespace App\Models\Project;
 
+use App\Models\Archive;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,6 +36,11 @@ class ProjectStage extends Model
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function archives()
+    {
+        return $this->morphMany(Archive::class, 'archivable');
     }
 
     public function user_create()

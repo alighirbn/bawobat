@@ -2,6 +2,7 @@
 
 namespace App\Models\Cash;
 
+use App\Models\Archive;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -32,6 +33,10 @@ class CashAccount extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+    public function archives()
+    {
+        return $this->morphMany(Archive::class, 'archivable');
     }
     public function user_create()
     {

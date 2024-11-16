@@ -2,6 +2,7 @@
 
 namespace App\Models\Cash;
 
+use App\Models\Archive;
 use App\Models\Cash\CashAccount;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,6 +42,10 @@ class CashTransfer extends Model
     public function toAccount()
     {
         return $this->belongsTo(CashAccount::class, 'to_account_id');
+    }
+    public function archives()
+    {
+        return $this->morphMany(Archive::class, 'archivable');
     }
     public function user_create()
     {

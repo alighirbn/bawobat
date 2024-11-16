@@ -2,6 +2,7 @@
 
 namespace App\Models\Income;
 
+use App\Models\Archive;
 use App\Models\Cash\Transaction;
 use App\Models\Project\Project;
 use App\Models\User;
@@ -50,6 +51,10 @@ class Income extends Model
         return $this->belongsTo(IncomeType::class);
     }
 
+    public function archives()
+    {
+        return $this->morphMany(Archive::class, 'archivable');
+    }
     public function user_create()
     {
         return $this->belongsTo(User::class, 'user_id_create', 'id');

@@ -2,6 +2,7 @@
 
 namespace App\Models\Project;
 
+use App\Models\Archive;
 use App\Models\Cash\Transaction;
 use App\Models\Investor\Investor;
 use App\Models\User;
@@ -49,6 +50,11 @@ class Project extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    public function archives()
+    {
+        return $this->morphMany(Archive::class, 'archivable');
     }
 
     public function user_create()
