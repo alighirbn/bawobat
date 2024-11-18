@@ -9,6 +9,8 @@ use App\Models\Cash\CashAccount;
 use App\Models\Cash\Transaction;
 
 use App\Models\Income\Income;
+use App\Models\Income\IncomeType;
+use App\Models\Project\Project;
 use App\Models\User;
 use App\Notifications\IncomeNotify;
 use Illuminate\Http\Request;
@@ -29,8 +31,10 @@ class IncomeController extends Controller
     public function create()
     {
 
+        $projects = Project::all();
+        $income_types = IncomeType::all();
 
-        return view('Income.create', compact(['contracts']));
+        return view('Income.create', compact(['projects', 'income_types']));
     }
 
     /**
@@ -49,11 +53,11 @@ class IncomeController extends Controller
      */
     public function show(string $url_address)
     {
-        $Income = Income::with(['contract.customer', 'contract.building.building_category', 'contract_installment.installment'])->where('url_address', '=', $url_address)->first();
+        $income = Income::with(['project', 'incomeType', 'archives'])->where('url_address', '=', $url_address)->first();
 
-        if (isset($Income)) {
+        if (isset($income)) {
             $cash_accounts = CashAccount::all();
-            return view('Income.show', compact(['Income', 'cash_accounts']));
+            return view('income.show', compact(['income', 'cash_accounts']));
         } else {
             $ip = $this->getIPAddress();
             return view('Income.accessdenied', ['ip' => $ip]);

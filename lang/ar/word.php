@@ -65,6 +65,10 @@ return [
     'project_add' => 'اضافة مشروع',
     'project_search' => 'بحث عن مشروع',
 
+    'project_archive' => 'اضافة صورة',
+    'project_scan' => 'اضافة مستند',
+    'archiveshow' => 'المرفقات',
+
     //project_info
     'project_info' => 'بيانات المشروع',
 

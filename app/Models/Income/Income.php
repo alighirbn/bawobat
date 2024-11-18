@@ -20,17 +20,22 @@ class Income extends Model
      */
     protected $fillable = [
         'url_address',
-        'transaction_id',
         'project_id',  // Add project_id to fillable
+        'cash_account_id', // cash_account
         'income_type_id', // Add income_type_id to fillable
         'source',
+        'approved', // New field
         'amount',
         'description',
         'date',
         'user_id_create',
         'user_id_update',
     ];
-
+    public function approve()
+    {
+        $this->approved = true;
+        $this->save();
+    }
     /**
      * Relationships
      */
@@ -41,9 +46,9 @@ class Income extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function transaction()
+    public function transactions()
     {
-        return $this->belongsTo(Transaction::class);
+        return $this->morphMany(Transaction::class, 'transactionable');
     }
 
     public function incomeType()

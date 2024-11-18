@@ -88,7 +88,7 @@
         <div class="item"><a class="sub-btn"> {{ __('word.accountant') }} <i class="bx bx-chevrons-down dropdown"></i>
             </a>
             <div class="flex flex-col   sub-menu" style="display: none;">
-                @include('payment.nav.navigation')
+
                 @include('expense.nav.navigation')
                 @include('cash_account.nav.navigation')
                 @include('cash_transfer.nav.navigation')

@@ -3,7 +3,7 @@
     <x-slot name="header">
 
 
-        @include('payment.nav.navigation')
+        @include('income.nav.navigation')
 
         @if ($message = Session::get('success'))
             <div class="alert alert-success">

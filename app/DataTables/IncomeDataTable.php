@@ -37,7 +37,7 @@ class IncomeDataTable extends DataTable
     public function query(Income $model): QueryBuilder
     {
         // Get the base query with relationships
-        $query = $model->newQuery();
+        $query = $model->newQuery()->with(['incomeType', 'project']);
         return $query;
     }
 
@@ -102,14 +102,12 @@ class IncomeDataTable extends DataTable
                 ->title(__('word.action'))
                 ->addClass('text-center'),
             Column::make('id')->title(__('word.Income_id'))->class('text-center'),
-            Column::make('Income_date')->title(__('word.Income_date'))->class('text-center'),
+            Column::make('date')->title(__('word.Income_date'))->class('text-center'),
 
+            Column::make('income_type_id')->title(__('word.income_type_id'))->data('incomeType.name')->class('text-center'),
+            Column::make('Income_contract_id')->title(__('word.contract_id'))->data('Income_contract_id')->class('text-center'),
             Column::make('Income_contract_id')->title(__('word.contract_id'))->data('Income_contract_id')->class('text-center'),
             Column::make('contract_date')->title(__('word.contract_date'))->data('contract.contract_date')->name('contract.contract_date')->class('text-center'),
-            Column::make('building_number')->title(__('word.building_number'))->data('contract.building.building_number')->name('contract.building.building_number')->class('text-center'),
-
-            Column::make('customer_full_name')->title(__('word.customer_full_name'))->data('contract.customer.customer_full_name')->name('contract.customer.customer_full_name')->class('text-center'),
-            Column::make('installment_name')->title(__('word.installment_name'))->data('contract_installment.installment.installment_name')->name('contract_installment.installment.installment_name')->class('text-center'),
 
             Column::make('Income_amount')->title(__('word.Income_amount'))->class('text-center'),
             Column::make('approved')

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
-class PaymentRequest extends FormRequest
+class IncomeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,14 +30,15 @@ class PaymentRequest extends FormRequest
 
 
             //foreign id and reference
-            'payment_contract_id' => ['required'],
-
+            'project_id' => ['required'],
+            'income_type_id' => ['required'],
 
 
             //normal fields
-            'payment_date' => ['required', 'date_format:Y-m-d'],
-            'payment_amount' => ['required'],
-            'payment_note' => ['required', 'max:200'],
+            'source' => ['required'],
+            'date' => ['required', 'date_format:Y-m-d'],
+            'amount' => ['required'],
+            'description' => ['required', 'max:200'],
         ];
     }
 
@@ -47,9 +48,9 @@ class PaymentRequest extends FormRequest
         $this->mergeIfMissing(['url_address' => $this->get_random_string(60)]);
 
         //add user_id base on route
-        if (request()->routeIs('payment.store')) {
+        if (request()->routeIs('income.store')) {
             $this->mergeIfMissing(['user_id_create' => auth()->user()->id]);
-        } elseif (request()->routeIs('payment.update')) {
+        } elseif (request()->routeIs('income.update')) {
             $this->mergeIfMissing(['user_id_update' =>  auth()->user()->id]);
         }
     }

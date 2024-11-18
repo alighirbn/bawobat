@@ -22,6 +22,8 @@ class Transaction extends Model
         'type',
         'description',
         'date',
+        'transactionable_id',    // Polymorphic ID
+        'transactionable_type',  // Polymorphic type (Payment, Expense, etc.)
     ];
 
     /**
@@ -34,9 +36,15 @@ class Transaction extends Model
         return $this->belongsTo(Project::class);
     }
 
+    // Polymorphic relationship
+    public function transactionable()
+    {
+        return $this->morphTo();
+    }
+
     // Belongs to a cash account
     public function cashAccount()
     {
-        return $this->belongsTo(CashAccount::class);
+        return $this->belongsTo(CashAccount::class, 'cash_account_id', 'id');
     }
 }

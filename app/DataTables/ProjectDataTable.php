@@ -22,6 +22,9 @@ class ProjectDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', 'project.action') // Reference to the 'projects.action' Blade view
+            ->addColumn('budget', function ($row) {
+                return number_format($row->budget, 0);
+            })
             ->setRowId('id');
     }
 
@@ -81,8 +84,7 @@ class ProjectDataTable extends DataTable
             Column::make('start_date'),
             Column::make('end_date'),
             Column::make('status'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+
         ];
     }
 
