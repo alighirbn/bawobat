@@ -3,6 +3,7 @@
 namespace App\Models\Income;
 
 use App\Models\Archive;
+use App\Models\Cash\CashAccount;
 use App\Models\Cash\Transaction;
 use App\Models\Project\Project;
 use App\Models\User;
@@ -20,14 +21,16 @@ class Income extends Model
      */
     protected $fillable = [
         'url_address',
+
         'project_id',  // Add project_id to fillable
-        'cash_account_id', // cash_account
         'income_type_id', // Add income_type_id to fillable
-        'source',
-        'approved', // New field
+
         'amount',
         'description',
         'date',
+
+        'approved', // New field
+        'cash_account_id', // cash_account
         'user_id_create',
         'user_id_update',
     ];
@@ -51,9 +54,13 @@ class Income extends Model
         return $this->morphMany(Transaction::class, 'transactionable');
     }
 
-    public function incomeType()
+    public function income_type()
     {
         return $this->belongsTo(IncomeType::class);
+    }
+    public function cash_account()
+    {
+        return $this->belongsTo(CashAccount::class, 'cash_account_id', 'id');
     }
 
     public function archives()

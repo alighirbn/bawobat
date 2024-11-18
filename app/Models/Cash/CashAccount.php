@@ -25,6 +25,35 @@ class CashAccount extends Model
         'balance',
     ];
 
+    public function adjustBalance($amount, $type)
+    {
+        // Type can be 'credit' or 'debit'
+        if ($type === 'credit') {
+            $this->balance += $amount;
+        } else if ($type === 'debit') {
+            $this->balance -= $amount;
+        }
+
+        $this->save();
+    }
+
+    public function recalculateBalance()
+    {
+        // Sum all credits (transaction_type = 'credit')
+        $creditSum = $this->transactions()->where('transaction_type', 'credit')->sum('transaction_amount');
+
+        // Sum all debits (transaction_type = 'debit')
+        $debitSum = $this->transactions()->where('transaction_type', 'debit')->sum('transaction_amount');
+
+        // Set the new balance by subtracting debits from credits
+        $this->balance = $creditSum - $debitSum;
+
+        // Save the new balance
+        $this->save();
+
+        return $this->balance;
+    }
+
     /**
      * Relationships
      */
@@ -32,7 +61,7 @@ class CashAccount extends Model
     // Relationship with Transactions
     public function transactions()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(Transaction::class, 'cash_account_id', 'id');
     }
     public function archives()
     {

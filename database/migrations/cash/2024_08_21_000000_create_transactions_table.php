@@ -16,9 +16,12 @@ return new class extends Migration
             $table->foreignId('project_id')->constrained()->onDelete('cascade');
             $table->foreignId('cash_account_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 15, 2);
-            $table->enum('type', ['income', 'expense']);
+            $table->string('type'); // debit or credit
             $table->text('description')->nullable();
             $table->date('date');
+            // Polymorphic columns
+            $table->unsignedBigInteger('transactionable_id');
+            $table->string('transactionable_type');
             $table->timestamps();
         });
     }

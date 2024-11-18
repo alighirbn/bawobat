@@ -22,6 +22,12 @@ class IncomeDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', 'income.action')
+            ->addColumn('amount', function ($row) {
+                return number_format($row->amount, 0);
+            })
+            ->addColumn('approved', function ($row) {
+                return $row->approved ? __('word.approved') : __('word.pending');
+            })
             ->rawColumns(['action'])
             ->setRowId('id');
     }
@@ -37,7 +43,7 @@ class IncomeDataTable extends DataTable
     public function query(Income $model): QueryBuilder
     {
         // Get the base query with relationships
-        $query = $model->newQuery()->with(['incomeType', 'project']);
+        $query = $model->newQuery()->with(['income_type', 'project', 'cash_account']);
         return $query;
     }
 
@@ -103,19 +109,16 @@ class IncomeDataTable extends DataTable
                 ->addClass('text-center'),
             Column::make('id')->title(__('word.Income_id'))->class('text-center'),
             Column::make('date')->title(__('word.Income_date'))->class('text-center'),
-
-            Column::make('income_type_id')->title(__('word.income_type_id'))->data('incomeType.name')->class('text-center'),
-            Column::make('Income_contract_id')->title(__('word.contract_id'))->data('Income_contract_id')->class('text-center'),
-            Column::make('Income_contract_id')->title(__('word.contract_id'))->data('Income_contract_id')->class('text-center'),
-            Column::make('contract_date')->title(__('word.contract_date'))->data('contract.contract_date')->name('contract.contract_date')->class('text-center'),
-
-            Column::make('Income_amount')->title(__('word.Income_amount'))->class('text-center'),
+            Column::make('income_type_id')->title(__('word.income_type_id'))->data('income_type.name')->name('income_type.name')->class('text-center'),
+            Column::make('project_id')->title(__('word.project_id'))->data('project_id')->class('text-center'),
+            Column::make('project_name')->title(__('word.project_name'))->data('project.name')->name('project.name')->class('text-center'),
+            Column::make('amount')->title(__('word.Income_amount'))->class('text-center'),
             Column::make('approved')
                 ->title(__('word.approve_status'))
                 ->class('text-center')
                 ->orderable(false) // Disable sorting
                 ->searchable(false), // Disable searching
-            Column::make('cash_account')->title(__('word.account_name'))->data('cash_account.account_name')->name('cash_account.account_name')->class('text-center'),
+            Column::make('cash_account')->title(__('word.account_name'))->data('cash_account.name')->name('cash_account.name')->class('text-center'),
 
         ];
     }

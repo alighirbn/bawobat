@@ -125,7 +125,9 @@ class CashTransferDataTable extends DataTable
                 ->title(__('word.approve_status'))
                 ->class('text-center')
                 ->orderable(false) // Disable sorting
-                ->searchable(false) // Disable searching
+                ->searchable(false), // Disable searching
+            Column::make('cash_account')->title(__('word.account_name'))->data('cash_account.account_name')->name('cash_account.account_name')->class('text-center'),
+
         ];
     }
 

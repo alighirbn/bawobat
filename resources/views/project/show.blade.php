@@ -35,6 +35,16 @@
                         @endcan
 
                     </div>
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success">
+                            <p>{{ $message }}</p>
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     <div>
                         <h1 class=" font-semibold underline text-l text-gray-900 leading-tight mx-4  w-full">
                             {{ __('word.project_info') }}

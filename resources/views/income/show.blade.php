@@ -48,7 +48,7 @@
                                 <label for="cash_account_id">الصندوق</label>
                                 <select name="cash_account_id" required>
                                     @foreach ($cash_accounts as $account)
-                                        <option value="{{ $account->id }}">{{ $account->account_name }}</option>
+                                        <option value="{{ $account->id }}">{{ $account->name }}</option>
                                     @endforeach
                                 </select>
                                 <button type="submit" class="btn btn-custom-edit">
@@ -57,6 +57,11 @@
                         @endif
                     </div>
 
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success">
+                            <p>{{ $message }}</p>
+                        </div>
+                    @endif
                     @if (session('error'))
                         <div class="alert alert-danger">
                             {{ session('error') }}
@@ -135,48 +140,6 @@
 
                         </div>
 
-                        <div class="flex ">
-                            <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="building_category_id" class="w-full mb-1" :value="__('word.building_category_id')" />
-                                <p id="building_category_id" class="w-full h-9 block mt-1 " type="text"
-                                    name="building_category_id">
-                                    {{ $income->project->building->building_category->category_name }}
-                                </p>
-                            </div>
-
-                            <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="building_number" class="w-full mb-1" :value="__('word.building_number')" />
-                                <p id="building_number" class="w-full h-9 block mt-1 " type="text"
-                                    name="building_number">
-                                    {{ $income->project->building->building_number }}
-                                </p>
-                            </div>
-
-                            <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="block_number" class="w-full mb-1" :value="__('word.block_number')" />
-                                <p id="block_number" class="w-full h-9 block mt-1" type="text"
-                                    name="block_number">
-                                    {{ $income->project->building->block_number }}
-                                </p>
-                            </div>
-
-                            <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="house_number" class="w-full mb-1" :value="__('word.house_number')" />
-                                <p id="house_number" class="w-full h-9 block mt-1 " type="text"
-                                    name="house_number">
-                                    {{ $income->project->building->house_number }}
-                                </p>
-                            </div>
-
-                            <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="building_area" class="w-full mb-1" :value="__('word.building_area')" />
-                                <p id="building_area" class="w-full h-9 block mt-1 " type="text"
-                                    name="building_area">
-                                    {{ $income->project->building->building_area }}
-                                </p>
-                            </div>
-
-                        </div>
                         <div class="flex ">
                             <div class=" mx-4 my-4 w-full ">
                                 <x-input-label for="description" class="w-full mb-1" :value="__('word.description')" />

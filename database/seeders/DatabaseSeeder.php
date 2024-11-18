@@ -17,14 +17,13 @@ class DatabaseSeeder extends Seeder
   {
     // Facility referance tables
 
-
     $this->call([
       // General seeders
       Permission_Seeder::class,
       Department_Seeder::class,
       Expense_Type_Seeder::class,
       Cash_Account_Seeder::class,
-  
+      Income_Type_Seeder::class,
     ]);
   }
 }

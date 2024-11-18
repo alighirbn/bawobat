@@ -24,6 +24,22 @@
                             </h1>
 
                             <div class="flex ">
+                                <div class=" mx-4 my-4 w-full">
+                                    <x-input-label for="project_id" class="w-full mb-1" :value="__('word.building_number')" />
+                                    <select id="project_id" class="js-example-basic-single w-full block mt-1 "
+                                        name="project_id" data-placeholder="ادخل المشروع   ">
+                                        <option value="">
+
+                                        </option>
+                                        @foreach ($projects as $project)
+                                            <option value="{{ $project->id }}"
+                                                {{ old('project_id') == $project->id ? 'selected' : '' }}>
+                                                {{ $project->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <x-input-error :messages="$errors->get('project_id')" class="w-full mt-2" />
+                                </div>
 
                                 <div class=" mx-4 my-4 w-full">
                                     <x-input-label for="income_type_id" class="w-full mb-1" :value="__('word.building_number')" />

@@ -28,14 +28,11 @@ class IncomeRequest extends FormRequest
             'user_id_create' => ['Numeric'],
             'user_id_update' => ['Numeric'],
 
-
             //foreign id and reference
             'project_id' => ['required'],
             'income_type_id' => ['required'],
 
-
             //normal fields
-            'source' => ['required'],
             'date' => ['required', 'date_format:Y-m-d'],
             'amount' => ['required'],
             'description' => ['required', 'max:200'],

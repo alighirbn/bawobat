@@ -11,8 +11,6 @@ use App\Models\Cash\Transaction;
 use App\Models\Income\Income;
 use App\Models\Income\IncomeType;
 use App\Models\Project\Project;
-use App\Models\User;
-use App\Notifications\IncomeNotify;
 use Illuminate\Http\Request;
 
 class IncomeController extends Controller
@@ -22,7 +20,7 @@ class IncomeController extends Controller
      */
     public function index(IncomeDataTable $dataTable, Request $request)
     {
-        return $dataTable->render('Income.index');
+        return $dataTable->render('income.index');
     }
 
     /**
@@ -34,7 +32,7 @@ class IncomeController extends Controller
         $projects = Project::all();
         $income_types = IncomeType::all();
 
-        return view('Income.create', compact(['projects', 'income_types']));
+        return view('income.create', compact(['projects', 'income_types']));
     }
 
     /**
@@ -42,10 +40,10 @@ class IncomeController extends Controller
      */
     public function store(IncomeRequest $request)
     {
-        $Income = Income::create($request->validated());
+        $income = Income::create($request->validated());
 
-        return redirect()->route('Income.show', $Income->url_address)
-            ->with('success', 'تمت أضافة الدفعة بنجاح في انتظار الموافقة عليها ');
+        return redirect()->route('income.show', $income->url_address)
+            ->with('success', 'تمت أضافة الايراد بنجاح في انتظار الموافقة عليها ');
     }
 
     /**
@@ -53,7 +51,7 @@ class IncomeController extends Controller
      */
     public function show(string $url_address)
     {
-        $income = Income::with(['project', 'incomeType', 'archives'])->where('url_address', '=', $url_address)->first();
+        $income = Income::with(['project', 'income_type', 'archives'])->where('url_address', '=', $url_address)->first();
 
         if (isset($income)) {
             $cash_accounts = CashAccount::all();
@@ -65,39 +63,40 @@ class IncomeController extends Controller
     }
     public function approve(Request $request, string $url_address)
     {
-        $Income = Income::where('url_address', '=', $url_address)->first();
+        $income = Income::where('url_address', '=', $url_address)->first();
 
-        if (isset($Income)) {
-            // Approve the Income
-            $Income->approve();
+        if (isset($income)) {
+            // Approve the income
+            $income->approve();
 
             $cash_account_id = $request->cash_account_id;
 
-            // Update the cash_account_id in the Income model
-            $Income->cash_account_id = $cash_account_id;
-            $Income->save(); // Save the updated Income model
+            // Update the cash_account_id in the income model
+            $income->cash_account_id = $cash_account_id;
+            $income->save(); // Save the updated income model
 
             // Get the cash account (assuming main account with ID 1)
             $cashAccount = CashAccount::find($cash_account_id); // or find based on your logic
 
-            // Adjust the cash account balance by crediting the Income amount
-            $cashAccount->adjustBalance($Income->Income_amount, 'credit');
+            // Adjust the cash account balance by crediting the income amount
+            $cashAccount->adjustBalance($income->amount, 'credit');
 
-            // Create a transaction for the approved Income
+            // Create a transaction for the approved income
             Transaction::create([
-                'url_address' => $this->get_random_string(60),
+
                 'cash_account_id' => $cashAccount->id,
-                'transactionable_id' => $Income->id,
-                'transactionable_type' => Income::class,
-                'transaction_amount' => $Income->Income_amount,
-                'transaction_date' => now(),
-                'transaction_type' => 'credit', // Since it's a Income
+                'project_id' => $income->project->id,
+                'amount' => $income->amount,
+                'date' => now(),
+                'type' => 'credit', // Since it's a income
+                'transactionable_id' => $income->id,
+                'transactionable_type' => income::class,
             ]);
 
 
 
-            return redirect()->route('contract.show', $Income->contract->url_address)
-                ->with('success', 'تم قبول الدفعة بنجاح وتم تسجيل المعاملة في الحساب النقدي.');
+            return redirect()->route('project.show', $income->project->url_address)
+                ->with('success', 'تم قبول الايراد بنجاح وتم تسجيل المعاملة في الحساب النقدي.');
         } else {
             $ip = $this->getIPAddress();
             return view('Income.accessdenied', ['ip' => $ip]);
@@ -112,15 +111,16 @@ class IncomeController extends Controller
     public function edit(string $url_address)
     {
 
-        $Income = Income::where('url_address', '=', $url_address)->first();
+        $income = Income::where('url_address', '=', $url_address)->first();
 
-        if (isset($Income)) {
-            if ($Income->approved) {
-                return redirect()->route('Income.index')
-                    ->with('error', 'لا يمكن تعديل دفعة موافق عليها.');
+        if (isset($income)) {
+            if ($income->approved) {
+                return redirect()->route('income.index')
+                    ->with('error', 'لا يمكن تعديل ايراد موافق عليه.');
             }
-
-            return view('Income.edit', compact(['Income', 'contracts']));
+            $projects = Project::all();
+            $income_types = IncomeType::all();
+            return view('income.edit', compact(['income', 'projects', 'income_types']));
         } else {
             $ip = $this->getIPAddress();
             return view('Income.accessdenied', ['ip' => $ip]);
@@ -137,8 +137,8 @@ class IncomeController extends Controller
         Income::where('url_address', $url_address)->update($request->validated());
 
         //inform the user
-        return redirect()->route('Income.index')
-            ->with('success', 'تمت تعديل الدفعة  بنجاح ');
+        return redirect()->route('income.index')
+            ->with('success', 'تمت تعديل الايراد  بنجاح ');
     }
 
 
@@ -147,26 +147,26 @@ class IncomeController extends Controller
      */
     public function destroy(string $url_address)
     {
-        $Income = Income::where('url_address', $url_address)->first();
+        $income = Income::where('url_address', $url_address)->first();
 
-        if (isset($Income)) {
-            if ($Income->approved) {
-                // Adjust the cash account balance by debiting the Income amount
-                $cashAccount = Cash_Account::find($Income->cash_account_id); // or find based on your logic
-                $cashAccount->adjustBalance($Income->Income_amount, 'debit');
+        if (isset($income)) {
+            if ($income->approved) {
+                // Adjust the cash account balance by debiting the income amount
+                $cashAccount = CashAccount::find($income->cash_account_id); // or find based on your logic
+                $cashAccount->adjustBalance($income->income_amount, 'debit');
 
                 // Delete related transactions
-                $Income->transactions()->delete();
+                $income->transactions()->delete();
             }
 
-            // Delete the Income
-            $Income->delete();
+            // Delete the income
+            $income->delete();
 
-            return redirect()->route('Income.index')
-                ->with('success', 'تمت حذف الدفعة بنجاح ');
+            return redirect()->route('income.index')
+                ->with('success', 'تمت حذف الايراد بنجاح ');
         } else {
             $ip = $this->getIPAddress();
-            return view('Income.accessdenied', ['ip' => $ip]);
+            return view('income.accessdenied', ['ip' => $ip]);
         }
     }
 
