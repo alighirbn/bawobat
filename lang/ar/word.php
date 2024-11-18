@@ -29,6 +29,9 @@ return [
     'start_date' => 'تاريخ البدء',
     'end_date' => 'تاريخ الانتهاء',
     'status' => 'الحالة',
+    'date' => 'التاريخ',
+    'amount' => 'المبلغ',
+
 
 
     // general values
@@ -43,7 +46,7 @@ return [
     'accountant' => 'الحسابات',
     'report' => 'التقارير',
 
-    'income' => 'الدفعات',
+    'income' => 'الايرادات',
     'expense' => 'سندات الصرف',
 
     'Customer' => 'الزبائن',
@@ -58,10 +61,10 @@ return [
     'basic_msg' => 'الصفحة الخاصة بالمعلومات الاساسية',
 
     //************************************* project        *******************************************
-
-
-
     //nav
+    'project_id' => 'عدد المشروع',
+    'project_date' => 'تاريخ المشروع',
+    'project_name' => 'اسم المشروع',
     'project_add' => 'اضافة مشروع',
     'project_search' => 'بحث عن مشروع',
 
@@ -74,23 +77,24 @@ return [
 
     //************************************* income        *******************************************
 
-    'income_id' => 'عدد الدفعة',
-    'income_date' => 'تاريخ الدفعة',
+    'income_id' => 'عدد الايراد',
+    'income_date' => 'تاريخ الايراد',
     'income_amount' => 'المبلغ المستلم',
     'income_note' => 'الملاحظات',
-    'add_income' => 'تسديد الدفعة',
+    'income_type_id' => 'نوع الايراد',
+    'add_income' => 'تسديد الايراد',
 
     //nav
-    'income_add' => 'اضافة دفعة',
-    'income_search' => 'بحث عن دفعة',
-    'income_approve' => 'قبول الدفعة',
+    'income_add' => 'اضافة ايراد',
+    'income_search' => 'بحث عن ايراد',
+    'income_approve' => 'قبول الايراد',
     'approved' => 'مقبولة',
     'pending' => 'في الانتظار',
 
     //income_info
-    'income_info' => 'بيانات الدفعة',
-    'last_income' => 'اخر دفعة',
-    'income_pending' => 'الدفعات غير الموافق عليها',
+    'income_info' => 'بيانات الايراد',
+    'last_income' => 'اخر ايراد',
+    'income_pending' => 'الايرادات غير الموافق عليها',
     'income_status' => 'حالة الدفع',
     'approve_status' => 'الحالة',
     'unpaid' => 'لم تسدد',

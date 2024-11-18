@@ -107,12 +107,12 @@ class IncomeDataTable extends DataTable
                 ->width(60)
                 ->title(__('word.action'))
                 ->addClass('text-center'),
-            Column::make('id')->title(__('word.Income_id'))->class('text-center'),
-            Column::make('date')->title(__('word.Income_date'))->class('text-center'),
+            Column::make('id')->title(__('word.income_id'))->class('text-center'),
+            Column::make('date')->title(__('word.income_date'))->class('text-center'),
             Column::make('income_type_id')->title(__('word.income_type_id'))->data('income_type.name')->name('income_type.name')->class('text-center'),
             Column::make('project_id')->title(__('word.project_id'))->data('project_id')->class('text-center'),
             Column::make('project_name')->title(__('word.project_name'))->data('project.name')->name('project.name')->class('text-center'),
-            Column::make('amount')->title(__('word.Income_amount'))->class('text-center'),
+            Column::make('amount')->title(__('word.income_amount'))->class('text-center'),
             Column::make('approved')
                 ->title(__('word.approve_status'))
                 ->class('text-center')
