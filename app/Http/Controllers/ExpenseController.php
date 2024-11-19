@@ -62,8 +62,9 @@ class ExpenseController extends Controller
                 return redirect()->route('expense.index')
                     ->with('error', 'لا يمكن تعديل مصروف تمت الموافقة عليه.');
             }
+            $projects = Project::all();
             $expense_types = ExpenseType::all();
-            return view('expense.edit', compact(['expense', 'expense_types']));
+            return view('expense.edit', compact(['expense', 'expense_types', 'projects']));
         } else {
             $ip = $this->getIPAddress();
             return view('expense.accessdenied', ['ip' => $ip]);
