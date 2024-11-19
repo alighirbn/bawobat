@@ -27,6 +27,8 @@ class Permission_Seeder extends Seeder
             'project-delete',
             'project-archiveshow',
             'project-archive',
+            'project-addInvestor',
+            'project-addStage',
 
 
             //**************************customer******************************* */

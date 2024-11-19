@@ -33,4 +33,8 @@ Route::group(['prefix' => 'project'], function () {
     //scan
     Route::get('/scan/{url_address}', [ProjectController::class, 'scancreate'])->middleware(['auth', 'verified', 'permission:project-archive'])->name('project.scancreate');
     Route::post('/scan', [ProjectController::class, 'scanstore'])->middleware(['auth', 'verified', 'permission:project-archive'])->name('project.scanstore');
+
+    // add
+    Route::post('/{projectId}/add-investor', [ProjectController::class, 'addInvestor'])->middleware(['auth', 'verified', 'permission:project-addInvestor'])->name('project.addInvestor');
+    Route::post('/{projectId}/add-stage', [ProjectController::class, 'addStage'])->middleware(['auth', 'verified', 'permission:project-addStage'])->name('project.addStage');
 });

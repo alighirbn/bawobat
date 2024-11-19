@@ -42,15 +42,15 @@
     color: #ffffff;
     /* Text color */
 }
-.btn-custom-transfer {
-    background-color: #848383;
+.btn-custom-add {
+    background-color: #1e0e66;
     /* Replace with your desired color */
     color: #ffffff;
     /* Text color */
 }
 
-.btn-custom-transfer:hover {
-    background-color: #797979;
+.btn-custom-add:hover {
+    background-color: #0e0955;
     /* Darker shade on hover */
     color: #ffffff;
     /* Text color */
@@ -134,20 +134,6 @@
 
 .btn-custom-delete:hover {
     background-color: #560606;
-    /* Darker shade on hover */
-    color: #ffffff;
-    /* Text color */
-}
-
-.btn-custom-statement {
-    background-color: #5f4de7;
-    /* Replace with your desired color */
-    color: #ffffff;
-    /* Text color */
-}
-
-.btn-custom-statement:hover {
-    background-color: #4230b8;
     /* Darker shade on hover */
     color: #ffffff;
     /* Text color */

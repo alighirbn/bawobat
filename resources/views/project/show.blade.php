@@ -1,6 +1,7 @@
 <x-app-layout>
 
     <x-slot name="header">
+
         <!-- app css-->
         <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
 
@@ -11,11 +12,19 @@
     <div class="bg-custom py-6">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class=" overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-gray-900 bg-white">
                     <div class="header-buttons">
                         <a href="{{ url()->previous() }}" class="btn btn-custom-back">
                             {{ __('word.back') }}
                         </a>
+
+                        <button class="btn btn-custom-add" data-bs-toggle="modal" data-bs-target="#addInvestorModal">
+                            {{ __('word.investor_add') }}
+                        </button>
+                        <button class="btn btn-custom-add" data-bs-toggle="modal" data-bs-target="#addStageModal">
+                            {{ __('word.stage_add') }}
+                        </button>
+
                         @can('project-archive')
                             <a href="{{ route('project.archivecreate', $project->url_address) }}"
                                 class="btn btn-custom-archive">
@@ -45,7 +54,8 @@
                             {{ session('error') }}
                         </div>
                     @endif
-                    <div>
+
+                    <div class="container mt-4">
                         <h1 class=" font-semibold underline text-l text-gray-900 leading-tight mx-4  w-full">
                             {{ __('word.project_info') }}
                         </h1>
@@ -87,28 +97,78 @@
                             </div>
 
                         </div>
+                        <div class="container mt-4">
 
-                        <div class="flex">
-                            @if (isset($project->user_id_create))
-                                <div class="mx-4 my-4 ">
-                                    {{ __('word.user_create') }} {{ $project->user_create->name }}
-                                    {{ $project->created_at }}
-                                </div>
-                            @endif
+                            <h1 class=" font-semibold underline text-l text-gray-900 leading-tight mx-4  w-full">
+                                {{ __('word.investor') }}
+                            </h1>
+                            <br>
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>{{ __('word.name') }}</th>
+                                        <th>{{ __('word.email') }}</th>
+                                        <th>{{ __('word.investment_amount') }}</th>
+                                        <th>{{ __('word.investment_percentage') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($project->investors as $investor)
+                                        @php
+                                            $percentage =
+                                                $project->budget > 0
+                                                    ? ($investor->pivot->investment_amount / $project->budget) * 100
+                                                    : 0;
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $investor->name }}</td>
+                                            <td>{{ $investor->email }}</td>
+                                            <td>{{ number_format($investor->pivot->investment_amount, 0) }}</td>
+                                            <td>{{ number_format($percentage, 2) }}%</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
 
-                            @if (isset($project->user_id_update))
-                                <div class="mx-4 my-4 ">
-                                    {{ __('word.user_update') }} {{ $project->user_update->name }}
-                                    {{ $project->updated_at }}
-                                </div>
-                            @endif
+                        </div>
+
+                        <div class="container mt-4">
+                            <h1 class=" font-semibold underline text-l text-gray-900 leading-tight mx-4  w-full">
+                                {{ __('word.stages') }}
+                            </h1>
+                            <br>
+                            <ul>
+                                @foreach ($project->stages as $stage)
+                                    <li>
+                                        <strong>{{ $stage->name }}</strong>: {{ $stage->description }}
+                                        ({{ $stage->start_date }} - {{ $stage->end_date }})
+                                    </li>
+                                @endforeach
+                            </ul>
                         </div>
 
                     </div>
 
                 </div>
+                <div class="flex  text-gray-900">
+                    @if (isset($project->user_id_create))
+                        <div class="mx-4 my-4 ">
+                            {{ __('word.user_create') }} {{ $project->user_create->name }}
+                            {{ $project->created_at }}
+                        </div>
+                    @endif
+
+                    @if (isset($project->user_id_update))
+                        <div class="mx-4 my-4 ">
+                            {{ __('word.user_update') }} {{ $project->user_update->name }}
+                            {{ $project->updated_at }}
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
-
+    <!-- Modals -->
+    @include('project.modals.add-investor')
+    @include('project.modals.add-stage')
 </x-app-layout>

@@ -22,9 +22,12 @@ return [
     'date_from' => ' من',
     'date_to' => '  الى',
     'name' => 'الاسم',
-    'links' => 'روابط',
+    'links' => 'روابط خارجية',
+    'phone' => 'رقم الموبايل',
+    'email' => 'عنوان البريد الالكتروني',
+    'address' => 'عنوان السكن',
 
-    'description' => 'الوصف',
+    'description' => 'الملاحظات',
     'budget' => 'الميزانية',
     'start_date' => 'تاريخ البدء',
     'end_date' => 'تاريخ الانتهاء',
@@ -42,7 +45,7 @@ return [
     //main navigation
     'dashboard' => 'الرئيسية',
     'project' => 'المشاريع',
-
+    'investor' => 'المساهمين',
     'accountant' => 'الحسابات',
     'report' => 'التقارير',
 
@@ -160,27 +163,27 @@ return [
 
 
 
-    //************************************* customer        *******************************************
+    //************************************* investor        *******************************************
 
-    'customer_full_name' => 'الاسم الرباعي واللقب',
-    'customer_phone' => 'رقم الموبايل',
-    'customer_email' => 'عنوان البريد الالكتروني',
-    'customer_card_number' => 'رقم البطاقة الوطنية',
-    'customer_card_issud_auth' => 'جهة الاصدار',
-    'customer_card_issud_date' => 'تاريخ الاصدار',
-    'mother_full_name' => 'اسم الام الكامل',
-    'full_address' => 'العنوان بالكامل',
-    'address_card_number' => 'رقم بطاقة السكن',
-    'saleman' => 'الوسيط',
 
     //nav
-    'customer_add' => 'اضافة زبون',
-    'customer_search' => 'بحث عن زبون',
+    'investor_add' => 'اضافة مستثمر',
+    'investor_search' => 'بحث عن مستثمر',
+    'investment_amount' => 'مبلغ الاستثمار',
+    'investment_percentage' => 'نسبة الاستثمار',
+    //investor_info
+    'investor_info' => 'بيانات المستثمر',
 
-    //customer_info
-    'customer_info' => 'بيانات الزبون',
-    'customer_card' => 'بيانات البطاقة الوطنية',
-    'customer_address' => 'بيانات بطاقة السكن',
+
+    //************************************* stage        *******************************************
+
+    'stages' => 'المراحل',
+    //nav
+    'stage_add' => 'اضافة مرحلة',
+    'stage_search' => 'بحث عن مرحلة',
+
+    //stage_info
+    'stage_info' => 'بيانات المرحلة',
 
     //************************************* users        *******************************************
     'user_name' => 'اسم المستخدم',

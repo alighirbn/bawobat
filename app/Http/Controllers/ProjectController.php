@@ -7,6 +7,7 @@ use App\Http\Requests\ProjectRequest;
 use App\Models\Project\Project;
 use App\Models\Project\ProjectStage;
 use App\Models\Cash\Transaction;
+use App\Models\Investor\Investor;
 use App\Services\WiaScanner;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -26,14 +27,11 @@ class ProjectController extends Controller
     // Show a single project
     public function show($url_address)
     {
-        // Find the project by its url_address
-        $project = Project::with(['stages', 'investors', 'transactions'])
-            ->where('url_address', $url_address)
-            ->firstOrFail();
-
-        // Return a view with the project data
-        return view('project.show', compact('project'));
+        $project = Project::with(['stages', 'investors'])->where('url_address', $url_address)->firstOrFail();
+        $investors = Investor::all();
+        return view('project.show', compact(['project', 'investors']));
     }
+
 
     // Create a new project
     // Show the form for creating a new project
@@ -85,7 +83,26 @@ class ProjectController extends Controller
             ->with('success', 'تمت حذف البيانات بنجاح ');
     }
 
-    // Add a stage to a project
+
+    public function addInvestor(Request $request, $projectId)
+    {
+        $validated = $request->validate([
+            'investor_id' => 'required|exists:investors,id',
+            'investment_amount' => 'required|numeric',
+        ]);
+
+        $project = Project::findOrFail($projectId);
+
+        if ($project->investors()->where('investor_id', $validated['investor_id'])->exists()) {
+            return response()->json(['message' => 'Investor already added to this project'], 400);
+        }
+
+        $project->investors()->attach($validated['investor_id'], ['investment_amount' => $validated['investment_amount']]);
+
+        return redirect()->route('project.show', $project->url_address)
+            ->with('success', 'Investor added successfully.');
+    }
+
     public function addStage(Request $request, $projectId)
     {
         $validated = $request->validate([
@@ -98,51 +115,14 @@ class ProjectController extends Controller
         $project = Project::findOrFail($projectId);
 
         $stage = new ProjectStage($validated);
+        $stage->url_address = $this->get_random_string(60);
         $stage->project_id = $project->id;
         $stage->user_id_create = Auth::id();
         $stage->user_id_update = Auth::id();
         $stage->save();
 
-        return response()->json($stage, 201);
-    }
-
-    // Add an investor to a project
-    public function addInvestor(Request $request, $projectId)
-    {
-        $validated = $request->validate([
-            'investor_id' => 'required|exists:investors,id',
-            'investment_amount' => 'required|numeric',
-        ]);
-
-        $project = Project::findOrFail($projectId);
-
-        // Check if the investor is already linked to this project
-        $existingInvestor = $project->investors()->where('investor_id', $validated['investor_id'])->first();
-        if ($existingInvestor) {
-            return response()->json(['message' => 'Investor already added to this project'], 400);
-        }
-
-        $project->investors()->attach($validated['investor_id'], ['investment_amount' => $validated['investment_amount']]);
-
-        return response()->json(['message' => 'Investor added successfully']);
-    }
-
-    // Add a transaction to a project
-    public function addTransaction(Request $request, $projectId)
-    {
-        $validated = $request->validate([
-            'amount' => 'required|numeric',
-            'transaction_type' => 'required|string|max:255',
-            'description' => 'nullable|string',
-        ]);
-
-        $project = Project::findOrFail($projectId);
-
-        $transaction = new Transaction($validated);
-        $transaction->project_id = $project->id;
-        $transaction->save();
-
-        return response()->json($transaction, 201);
+        return redirect()->route('project.show', $project->url_address)
+            ->with('success', 'Stage added successfully.');
     }
 
 
@@ -291,5 +271,35 @@ class ProjectController extends Controller
             $ip = $this->getIPAddress();
             return view('project.accessdenied', ['ip' => $ip]);
         }
+    }
+
+
+    public function getIPAddress()
+    {
+        //whether ip is from the share internet
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        }
+        //whether ip is from the proxy
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+        //whether ip is from the remote address
+        else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+    }
+    function get_random_string($length)
+    {
+        $array = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+        $text = "";
+        $length = rand(22, $length);
+
+        for ($i = 0; $i < $length; $i++) {
+            $random = rand(0, 61);
+            $text .= $array[$random];
+        }
+        return $text;
     }
 }
