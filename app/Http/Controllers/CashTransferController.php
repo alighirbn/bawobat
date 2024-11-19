@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\CashTransferDataTable;
 use App\Http\Requests\CashTransferRequest;
 use App\Models\Cash\CashTransfer;
-use App\Models\Cash\Cash_Account;
+use App\Models\Cash\CashAccount;
 use App\Models\Cash\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +21,7 @@ class CashTransferController extends Controller
 
     public function create()
     {
-        $accounts = Cash_Account::all();
+        $accounts = CashAccount::all();
         return view('cash_transfer.create', compact('accounts'));
     }
 
@@ -55,7 +55,7 @@ class CashTransferController extends Controller
             return Redirect::back()->with('error', 'لم يتم العثور على التحويل.');
         }
 
-        $accounts = Cash_Account::all();
+        $accounts = CashAccount::all();
         return view('cash_transfer.edit', compact('transfer', 'accounts'));
     }
 
@@ -93,8 +93,8 @@ class CashTransferController extends Controller
             return Redirect::back()->with('error', 'تمت الموافقة على هذا التحويل بالفعل.');
         }
 
-        $fromAccount = Cash_Account::find($transfer->from_account_id);
-        $toAccount = Cash_Account::find($transfer->to_account_id);
+        $fromAccount = CashAccount::find($transfer->from_account_id);
+        $toAccount = CashAccount::find($transfer->to_account_id);
 
         if (!$fromAccount || !$toAccount) {
             return Redirect::back()->with('error', 'لم يتم العثور على حسابات نقدية.');
@@ -121,11 +121,11 @@ class CashTransferController extends Controller
     private function createTransaction($account, $amount, $type, $transfer)
     {
         $transaction = new Transaction();
-        $transaction->url_address = $this->random_string(60);
+
         $transaction->cash_account_id = $account->id;
-        $transaction->transaction_amount = $amount;
-        $transaction->transaction_date = $transfer->transfer_date;
-        $transaction->transaction_type = $type;
+        $transaction->amount = $amount;
+        $transaction->date = $transfer->date;
+        $transaction->type = $type;
         $transaction->transactionable_id = $transfer->id;
         $transaction->transactionable_type = CashTransfer::class;
         $transaction->save();
@@ -139,8 +139,8 @@ class CashTransferController extends Controller
             return Redirect::back()->with('error', 'لم يتم العثور على التحويل.');
         }
         $amount = $transfer->amount;
-        $fromAccount = Cash_Account::find($transfer->from_account_id);
-        $toAccount = Cash_Account::find($transfer->to_account_id);
+        $fromAccount = CashAccount::find($transfer->from_account_id);
+        $toAccount = CashAccount::find($transfer->to_account_id);
 
         if ($transfer->approved) {
             // Delete related transactions

@@ -23,9 +23,10 @@ class CashTransfer extends Model
         'user_id_update',
         'from_account_id',  // ID of the source CashAccount
         'to_account_id',    // ID of the target CashAccount
+        'approved',
         'amount',            // Amount transferred
         'description',       // Optional description for the transfer
-        'transaction_date',  // Date of the transfer
+        'date',  // Date of the transfer
     ];
 
     /**
@@ -33,15 +34,18 @@ class CashTransfer extends Model
      */
 
     // Relationship with from CashAccount
+
     public function fromAccount()
     {
         return $this->belongsTo(CashAccount::class, 'from_account_id');
     }
-
-    // Relationship with to CashAccount
     public function toAccount()
     {
         return $this->belongsTo(CashAccount::class, 'to_account_id');
+    }
+    public function transactions()
+    {
+        return $this->morphMany(Transaction::class, 'transactionable');
     }
     public function archives()
     {

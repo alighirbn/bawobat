@@ -118,15 +118,15 @@ class CashTransferDataTable extends DataTable
                 ->title(__('word.action'))
                 ->addClass('text-center'),
             Column::make('id')->title(__('word.cash_transfer_id'))->class('text-center'),
-            Column::make('fromaccount')->title(__('word.from_account_id'))->data('fromaccount.account_name')->name('fromaccount.account_name')->class('text-center'),
-            Column::make('toaccount')->title(__('word.to_account_id'))->data('toaccount.account_name')->name('toaccount.account_name')->class('text-center'),
+            Column::make('fromaccount')->title(__('word.from_account_id'))->data('fromaccount.name')->name('fromaccount.name')->class('text-center'),
+            Column::make('toaccount')->title(__('word.to_account_id'))->data('toaccount.name')->name('toaccount.name')->class('text-center'),
             Column::make('amount')->title(__('word.amount'))->class('text-center'),
             Column::make('approved')
                 ->title(__('word.approve_status'))
                 ->class('text-center')
                 ->orderable(false) // Disable sorting
                 ->searchable(false), // Disable searching
-            Column::make('cash_account')->title(__('word.account_name'))->data('cash_account.account_name')->name('cash_account.account_name')->class('text-center'),
+            Column::make('cash_account')->title(__('word.account_name'))->data('cash_account.name')->name('cash_account.name')->class('text-center'),
 
         ];
     }

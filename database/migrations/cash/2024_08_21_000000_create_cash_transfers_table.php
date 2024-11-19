@@ -17,7 +17,8 @@ return new class extends Migration
             $table->foreignId('to_account_id')->constrained('cash_accounts')->onDelete('cascade'); // Target account
             $table->decimal('amount', 15, 2); // Transfer amount
             $table->text('description')->nullable(); // Optional description
-            $table->date('transaction_date'); // Transfer date
+            $table->date('date'); // Transfer date
+            $table->boolean('approved')->default(false); // Add the approved column, default to false
             $table->timestamps();
             $table->unsignedBigInteger('user_id_create')->nullable();
             $table->foreign('user_id_create')->references('id')->on('users');

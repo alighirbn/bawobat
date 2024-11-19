@@ -4,8 +4,7 @@
         <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
 
         <div class="flex justify-start">
-            @include('payment.nav.navigation')
-            @include('expense.nav.navigation')
+
             @include('cash_account.nav.navigation')
             @include('cash_transfer.nav.navigation')
         </div>
@@ -63,7 +62,7 @@
                             </div>
                             <div class="mx-2 my-2 w-full">
                                 <p><strong>{{ __('word.transfer_number') }}:</strong> {{ $cashTransfer->id }}</p>
-                                <p><strong>{{ __('word.transfer_date') }}:</strong> {{ $cashTransfer->transfer_date }}
+                                <p><strong>{{ __('word.transfer_date') }}:</strong> {{ $cashTransfer->date }}
                                 </p>
                             </div>
                         </div>
@@ -74,14 +73,14 @@
                             <div class="mx-4 my-4 w-full">
                                 <x-input-label for="from_account_id" class="w-full mb-1" :value="__('word.from_account')" />
                                 <p id="from_account_id" class="w-full h-9 block mt-1">
-                                    {{ $cashTransfer->fromAccount->account_name }}
+                                    {{ $cashTransfer->fromAccount->name }}
                                 </p>
                             </div>
 
                             <div class="mx-4 my-4 w-full">
                                 <x-input-label for="to_account_id" class="w-full mb-1" :value="__('word.to_account')" />
                                 <p id="to_account_id" class="w-full h-9 block mt-1">
-                                    {{ $cashTransfer->toAccount->account_name }}
+                                    {{ $cashTransfer->toAccount->name }}
                                 </p>
                             </div>
 

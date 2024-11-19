@@ -23,13 +23,14 @@ class CashTransferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'url_address' => 'required|string|max:255',
+            'url_address' => 'required|string|max:60',
 
-            'transfer_date' => 'required',
             'from_account_id' => 'required',
             'to_account_id' => 'required',
+
             'amount' => 'numeric',
-            'transfer_note' => 'required',
+            'description' => 'required',
+            'date' => 'required',
         ];
     }
 

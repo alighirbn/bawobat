@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained()->onDelete('cascade');
+            $table->foreignId('project_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('cash_account_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 15, 2);
             $table->string('type'); // debit or credit

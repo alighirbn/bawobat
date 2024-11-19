@@ -8,8 +8,7 @@
         <link rel="stylesheet" type="text/css" href="{{ url('/css/select2.min.css') }}" />
         <script src="{{ asset('js/select2.min.js') }}"></script>
         <div class="flex justify-start">
-            @include('payment.nav.navigation')
-            @include('expense.nav.navigation')
+
             @include('cash_account.nav.navigation')
             @include('cash_transfer.nav.navigation')
         </div>
@@ -26,6 +25,26 @@
                         </a>
 
                     </div>
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success">
+                            <p>{{ $message }}</p>
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                {{-- Loop through the errors and display each one --}}
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <div class="container">
                         <h1>إضافة تحويل نقدي جديد</h1>
 
@@ -42,7 +61,7 @@
                                         @foreach ($accounts as $account)
                                             <option value="{{ $account->id }}"
                                                 {{ old('from_account_id') == $account->id ? 'selected' : '' }}>
-                                                {{ $account->account_name }}
+                                                {{ $account->name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -59,7 +78,7 @@
                                         @foreach ($accounts as $account)
                                             <option value="{{ $account->id }}"
                                                 {{ old('to_account_id') == $account->id ? 'selected' : '' }}>
-                                                {{ $account->account_name }}
+                                                {{ $account->name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -81,18 +100,18 @@
                                 </div>
 
                                 <div class=" mx-4 my-4 w-full">
-                                    <x-input-label for="transfer_date" class="w-full mb-1" :value="__('word.transfer_date')" />
-                                    <x-text-input id="transfer_date" class="w-full block mt-1" type="text"
-                                        name="transfer_date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" />
-                                    <x-input-error :messages="$errors->get('transfer_date')" class="w-full mt-2" />
+                                    <x-input-label for="date" class="w-full mb-1" :value="__('word.date')" />
+                                    <x-text-input id="date" class="w-full block mt-1" type="text" name="date"
+                                        value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" />
+                                    <x-input-error :messages="$errors->get('date')" class="w-full mt-2" />
                                 </div>
                             </div>
                             <div class="flex ">
                                 <div class=" mx-4 my-4 w-full">
-                                    <x-input-label for="transfer_note" class="w-full mb-1" :value="__('word.transfer_note')" />
-                                    <x-text-input id="transfer_note" class="w-full block mt-1" type="text"
-                                        name="transfer_note" value="{{ old('transfer_note') }}" />
-                                    <x-input-error :messages="$errors->get('transfer_note')" class="w-full mt-2" />
+                                    <x-input-label for="description" class="w-full mb-1" :value="__('word.description')" />
+                                    <x-text-input id="description" class="w-full block mt-1" type="text"
+                                        name="description" value="{{ old('description') }}" />
+                                    <x-input-error :messages="$errors->get('description')" class="w-full mt-2" />
                                 </div>
 
                             </div>

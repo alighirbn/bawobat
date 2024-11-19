@@ -1,8 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-start">
-            @include('payment.nav.navigation')
-            @include('expense.nav.navigation')
+
             @include('cash_account.nav.navigation')
             @include('cash_transfer.nav.navigation')
         </div>
