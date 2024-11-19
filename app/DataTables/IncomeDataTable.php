@@ -118,7 +118,7 @@ class IncomeDataTable extends DataTable
             Column::make('id')->title(__('word.income_id'))->class('text-center'),
             Column::make('date')->title(__('word.income_date'))->class('text-center'),
             Column::make('income_type_id')->title(__('word.income_type_id'))->data('income_type.name')->name('income_type.name')->class('text-center'),
-            Column::make('project_id')->title(__('word.project_id'))->data('project_id')->class('text-center'),
+
             Column::make('project_name')->title(__('word.project_name'))->data('project.name')->name('project.name')->class('text-center'),
             Column::make('amount')->title(__('word.income_amount'))->class('text-center'),
             Column::make('description')->title(__('word.description'))->class('text-center'),

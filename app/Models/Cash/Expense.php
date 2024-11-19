@@ -33,7 +33,11 @@ class Expense extends Model
         'user_id_create',
         'user_id_update',
     ];
-
+    public function approve()
+    {
+        $this->approved = true;
+        $this->save();
+    }
     /**
      * Relationships
      */

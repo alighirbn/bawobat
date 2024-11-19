@@ -119,7 +119,7 @@ class ExpenseDataTable extends DataTable
             Column::make('id')->title(__('word.expense_id'))->class('text-center'),
             Column::make('date')->title(__('word.date'))->class('text-center'),
             Column::make('expense_type_id')->title(__('word.expense_type_id'))->data('expense_type.name')->name('expense_type.name')->class('text-center'),
-            Column::make('project_id')->title(__('word.project_id'))->data('project_id')->class('text-center'),
+
             Column::make('project_name')->title(__('word.project_name'))->data('project.name')->name('project.name')->class('text-center'),
             Column::make('amount')->title(__('word.amount'))->class('text-center'),
             Column::make('description')->title(__('word.description'))->class('text-center'),

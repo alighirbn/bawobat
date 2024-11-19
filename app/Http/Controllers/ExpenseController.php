@@ -7,27 +7,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ExpenseRequest;
 use App\Models\Cash\Expense;
 use App\Models\Cash\Transaction;
-
 use App\Models\Cash\CashAccount;
-
 use App\Models\Cash\ExpenseType;
 use App\Models\Project\Project;
 use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
 
     public function index(ExpenseDataTable $dataTable, Request $request)
     {
         $onlyPending = $request->input('onlyPending');
         return $dataTable->onlyPending($onlyPending)->render('expense.index');
     }
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
         $projects = Project::all();
@@ -35,9 +28,7 @@ class ExpenseController extends Controller
         return view('expense.create', compact(['expense_types', 'projects']));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(ExpenseRequest $request)
     {
         $expense = Expense::create($request->validated());
@@ -47,9 +38,7 @@ class ExpenseController extends Controller
             ->with('success', 'تمت إضافة المصروف بنجاح، في انتظار الموافقة.');
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(string $url_address)
     {
         $expense = Expense::where('url_address', $url_address)->first();
@@ -63,9 +52,7 @@ class ExpenseController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(string $url_address)
     {
         $expense = Expense::where('url_address', $url_address)->first();
@@ -83,9 +70,7 @@ class ExpenseController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(ExpenseRequest $request, string $url_address)
     {
         $expense = Expense::where('url_address', $url_address)->first();
@@ -101,9 +86,6 @@ class ExpenseController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $url_address)
     {
         $expense = Expense::where('url_address', $url_address)->first();
@@ -130,9 +112,6 @@ class ExpenseController extends Controller
     }
 
 
-    /**
-     * Approve the expense and create a transaction.
-     */
     public function approve(Request $request, string $url_address)
     {
         $expense = Expense::where('url_address', $url_address)->first();
@@ -148,17 +127,18 @@ class ExpenseController extends Controller
 
             // Adjust cash account balance
             $cashAccount = CashAccount::find($cash_account_id); // or find based on your logic
-            $cashAccount->adjustBalance($expense->expense_amount, 'debit');
+            $cashAccount->adjustBalance($expense->amount, 'debit');
 
             // Create a transaction for the approved expense
             Transaction::create([
-                'url_address' => $this->get_random_string(60),
+
                 'cash_account_id' => $cashAccount->id,
+                'project_id' => $expense->project->id,
+                'amount' => $expense->amount,
+                'date' => now(),
+                'type' => 'debit', // Since it's an expense
                 'transactionable_id' => $expense->id,
                 'transactionable_type' => Expense::class,
-                'transaction_amount' => $expense->expense_amount,
-                'transaction_date' => now(),
-                'transaction_type' => 'debit', // Since it's an expense
             ]);
 
             return redirect()->route('expense.index')

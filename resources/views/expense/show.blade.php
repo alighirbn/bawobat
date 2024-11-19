@@ -42,7 +42,7 @@
                                 <label for="cash_account_id">الصندوق</label>
                                 <select name="cash_account_id" required>
                                     @foreach ($cash_accounts as $account)
-                                        <option value="{{ $account->id }}">{{ $account->account_name }}</option>
+                                        <option value="{{ $account->id }}">{{ $account->name }}</option>
                                     @endforeach
                                 </select>
                                 <button type="submit" class="btn btn-custom-edit">
@@ -86,9 +86,9 @@
                             </div>
 
                             <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="expense_date" class="w-full mb-1" :value="__('word.expense_date')" />
-                                <p id="expense_date" class="w-full h-9 block mt-1 " type="text" name="expense_date">
-                                    {{ $expense->expense_date }}
+                                <x-input-label for="date" class="w-full mb-1" :value="__('word.date')" />
+                                <p id="date" class="w-full h-9 block mt-1 " type="text" name="date">
+                                    {{ $expense->date }}
                                 </p>
                             </div>
 
@@ -96,15 +96,14 @@
                                 <x-input-label for="expense_type_id" class="w-full mb-1" :value="__('word.expense_type_id')" />
                                 <p id="expense_type_id" class="w-full h-9 block mt-1" type="text"
                                     name="expense_type_id">
-                                    {{ $expense->expense_type->expense_type }}
+                                    {{ $expense->expense_type->name }}
                                 </p>
                             </div>
 
                             <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="expense_amount" class="w-full mb-1" :value="__('word.expense_amount')" />
-                                <p id="expense_amount" class="w-full h-9 block mt-1 " type="text"
-                                    name="expense_amount">
-                                    {{ number_format($expense->expense_amount, 0) }} دينار
+                                <x-input-label for="amount" class="w-full mb-1" :value="__('word.amount')" />
+                                <p id="amount" class="w-full h-9 block mt-1 " type="text" name="amount">
+                                    {{ number_format($expense->amount, 0) }} دينار
                                 </p>
                             </div>
 
@@ -112,9 +111,9 @@
 
                         <div class="flex ">
                             <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="expense_note" class="w-full mb-1" :value="__('word.expense_note')" />
-                                <p id="expense_note" class="w-full h-9 block mt-1" type="text" name="expense_note">
-                                    {{ $expense->expense_note }}
+                                <x-input-label for="description" class="w-full mb-1" :value="__('word.description')" />
+                                <p id="description" class="w-full h-9 block mt-1" type="text" name="description">
+                                    {{ $expense->description }}
                                 </p>
                             </div>
 
