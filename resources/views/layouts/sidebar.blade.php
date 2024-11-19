@@ -116,14 +116,6 @@
         </div>
     @endcan
 
-    @can('customer-list')
-        <div class="item"><a class="sub-btn"> {{ __('word.Customer') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
-            <div class="flex flex-col   sub-menu" style="display: none;">
-                @include('customer.nav.navigation')
-            </div>
-        </div>
-    @endcan
-
     @can('user-list')
         <div class="item"><a class="sub-btn"> {{ __('word.users') }}<i class="bx bx-chevrons-down dropdown"></i> </a>
             <div class="flex flex-col   sub-menu" style="display: none;">

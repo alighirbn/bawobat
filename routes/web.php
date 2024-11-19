@@ -35,10 +35,6 @@ Route::group(['middleware' => 'checkStatus'], function () {
         })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-
-        //customer routes
-        require __DIR__ . '/customer.php';
-
         //investor routes
         require __DIR__ . '/investor.php';
 
