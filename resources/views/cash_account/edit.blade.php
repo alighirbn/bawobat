@@ -2,8 +2,7 @@
 
     <x-slot name="header">
         <div class="flex justify-start">
-            @include('payment.nav.navigation')
-            @include('expense.nav.navigation')
+
             @include('cash_account.nav.navigation')
             @include('cash_transfer.nav.navigation')
         </div>
@@ -27,11 +26,18 @@
 
                             <div class="flex ">
                                 <div class=" mx-4 my-4 w-full">
-                                    <x-input-label for="account_name" class="w-full mb-1" :value="__('word.account_name')" />
-                                    <x-text-input id="account_name" class="w-full block mt-1" type="text"
-                                        name="account_name"
-                                        value="{{ old('account_name') ?? $cash_account->account_name }}" />
-                                    <x-input-error :messages="$errors->get('account_name')" class="w-full mt-2" />
+                                    <x-input-label for="name" class="w-full mb-1" :value="__('word.name')" />
+                                    <x-text-input id="name" class="w-full block mt-1" type="text" name="name"
+                                        value="{{ old('name') ?? $cash_account->name }}" />
+                                    <x-input-error :messages="$errors->get('name')" class="w-full mt-2" />
+                                </div>
+
+                                <div class=" mx-4 my-4 w-full">
+                                    <x-input-label for="account_number" class="w-full mb-1" :value="__('word.account_number')" />
+                                    <x-text-input id="account_number" class="w-full block mt-1" type="text"
+                                        name="account_number"
+                                        value="{{ old('account_number') ?? $cash_account->account_number }}" />
+                                    <x-input-error :messages="$errors->get('account_number')" class="w-full mt-2" />
                                 </div>
 
                             </div>

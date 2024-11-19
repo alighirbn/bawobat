@@ -40,10 +40,10 @@ class CashAccount extends Model
     public function recalculateBalance()
     {
         // Sum all credits (transaction_type = 'credit')
-        $creditSum = $this->transactions()->where('transaction_type', 'credit')->sum('transaction_amount');
+        $creditSum = $this->transactions()->where('type', 'credit')->sum('amount');
 
-        // Sum all debits (transaction_type = 'debit')
-        $debitSum = $this->transactions()->where('transaction_type', 'debit')->sum('transaction_amount');
+        // Sum all debits (type = 'debit')
+        $debitSum = $this->transactions()->where('type', 'debit')->sum('amount');
 
         // Set the new balance by subtracting debits from credits
         $this->balance = $creditSum - $debitSum;

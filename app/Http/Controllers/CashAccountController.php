@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use App\DataTables\CashAccountDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CashAccountRequest;
-use App\Models\Cash\Cash_Account;
-use App\Models\Cash\CashTransfer;
-use App\Models\Cash\Transaction;
+use App\Models\Cash\CashAccount;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+
 
 class CashAccountController extends Controller
 {
@@ -34,7 +32,7 @@ class CashAccountController extends Controller
      */
     public function store(CashAccountRequest $request)
     {
-        $cash_account = Cash_Account::create($request->validated());
+        $cash_account = CashAccount::create($request->validated());
 
         // Return a success message and redirect
         return redirect()->route('cash_account.index')
@@ -46,7 +44,7 @@ class CashAccountController extends Controller
      */
     public function show(string $url_address)
     {
-        $cash_account = Cash_Account::where('url_address', $url_address)->first();
+        $cash_account = CashAccount::where('url_address', $url_address)->first();
 
         $newBalance = $cash_account->recalculateBalance();
 
@@ -61,11 +59,11 @@ class CashAccountController extends Controller
     public function statement(Request $request, $url_address)
     {
         // Retrieve the cash account by its URL address
-        $cashAccount = Cash_Account::where('url_address', $url_address)->firstOrFail();
+        $cashAccount = CashAccount::where('url_address', $url_address)->firstOrFail();
         $newBalance = $cashAccount->recalculateBalance();
         // Get all transactions for the cash account, sorted by date
         $transactions = $cashAccount->transactions()
-            ->orderBy('transaction_date', 'asc')
+            ->orderBy('date', 'asc')
             ->get();
 
         // Initialize the running balance
@@ -73,10 +71,10 @@ class CashAccountController extends Controller
 
         // Iterate over transactions to calculate the running balance
         $transactions->each(function ($transaction) use (&$runningBalance) {
-            if ($transaction->transaction_type === 'credit') {
-                $runningBalance += $transaction->transaction_amount;
-            } elseif ($transaction->transaction_type === 'debit') {
-                $runningBalance -= $transaction->transaction_amount;
+            if ($transaction->type === 'credit') {
+                $runningBalance += $transaction->amount;
+            } elseif ($transaction->type === 'debit') {
+                $runningBalance -= $transaction->amount;
             }
 
             // Attach the running balance for display
@@ -97,7 +95,7 @@ class CashAccountController extends Controller
      */
     public function edit(string $url_address)
     {
-        $cash_account = Cash_Account::where('url_address', $url_address)->first();
+        $cash_account = CashAccount::where('url_address', $url_address)->first();
 
         if (isset($cash_account)) {
             return view('cash_account.edit', compact(['cash_account']));
@@ -112,7 +110,7 @@ class CashAccountController extends Controller
      */
     public function update(CashAccountRequest $request, string $url_address)
     {
-        $cash_account = Cash_Account::where('url_address', $url_address)->first();
+        $cash_account = CashAccount::where('url_address', $url_address)->first();
 
         if (isset($cash_account)) {
             $cash_account->update($request->validated());
@@ -129,7 +127,7 @@ class CashAccountController extends Controller
      */
     public function destroy(string $url_address)
     {
-        $cash_account = Cash_Account::where('url_address', $url_address)->first();
+        $cash_account = CashAccount::where('url_address', $url_address)->first();
 
         if (isset($cash_account)) {
             // Check if the cash account ID is 1

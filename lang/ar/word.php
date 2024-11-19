@@ -47,7 +47,7 @@ return [
     'report' => 'التقارير',
 
     'income' => 'الايرادات',
-    'expense' => 'سندات الصرف',
+    'expense' => 'المصروفات',
 
     'Customer' => 'الزبائن',
     'users' => 'المستخدمين',
@@ -125,6 +125,7 @@ return [
     'cash_account_id' => 'رقم الصندوق',
     'balance' => 'الرصيد ',
     'account_name' => 'اسم الصندوق',
+    'account_number' => 'رقم الحساب',
 
 
     //nav

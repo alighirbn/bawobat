@@ -3,8 +3,7 @@
         <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
 
         <div class="flex justify-start">
-            @include('payment.nav.navigation')
-            @include('expense.nav.navigation')
+
             @include('cash_account.nav.navigation')
             @include('cash_transfer.nav.navigation')
         </div>
@@ -68,7 +67,7 @@
                             </div>
                         </div>
                         <h2 class="text-xl font-semibold mb-2">{{ __('كشف الحساب للصندوق ') }}
-                            {{ $cashAccount->account_name }}
+                            {{ $cashAccount->name }}
                         </h2>
 
                         <p>الرصيد الحالي: {{ number_format($cashAccount->balance, 0) }} دينار </p>
@@ -98,14 +97,12 @@
                             <tbody>
                                 @foreach ($transactions as $transaction)
                                     <!-- Filter transactions based on the selected period -->
-                                    @if (
-                                        (!isset($startDate) || $transaction->transaction_date >= $startDate) &&
-                                            (!isset($endDate) || $transaction->transaction_date <= $endDate))
+                                    @if ((!isset($startDate) || $transaction->date >= $startDate) && (!isset($endDate) || $transaction->date <= $endDate))
                                         <tr>
                                             <td class="no-print">
                                                 <!-- Button to show polymorphic model details -->
-                                                @if ($transaction->transactionable_type === 'App\Models\Payment\Payment')
-                                                    <a href="{{ route('payment.show', $transaction->transactionable->url_address) }}"
+                                                @if ($transaction->transactionable_type === 'App\Models\Income\Income')
+                                                    <a href="{{ route('income.show', $transaction->transactionable->url_address) }}"
                                                         class="btn btn-custom-show">
                                                         {{ __('عرض ') }}
                                                     </a>
@@ -121,55 +118,42 @@
                                                     </a>
                                                 @endif
                                             </td>
-                                            <td>{{ $transaction->transaction_date }}</td>
+                                            <td>{{ $transaction->date }}</td>
                                             <td>
-                                                @if ($transaction->transactionable_type === 'App\Models\Payment\Payment')
+                                                @if ($transaction->transactionable_type === 'App\Models\Income\Income')
                                                     عدد الدفعة: {{ $transaction->transactionable->id }}
-                                                    ,
-                                                    الاسم:
-                                                    {{ $transaction->transactionable->contract->customer->customer_full_name }}
-                                                    ,
-                                                    @if ($transaction->transactionable->contract_installment)
-                                                        الدفعة:
-                                                        {{ $transaction->transactionable->contract_installment->installment->installment_name }}
-                                                    @else
-                                                    @endif
                                                 @elseif($transaction->transactionable_type === 'App\Models\Cash\Expense')
                                                     عدد الصرف: {{ $transaction->transactionable->id }}
                                                     ,
                                                     النوع:
-                                                    {{ $transaction->transactionable->expense_type->expense_type }}
+                                                    {{ $transaction->transactionable->expense_type->name }}
                                                 @elseif($transaction->transactionable_type === 'App\Models\Cash\CashTransfer')
                                                     تحويل مبلغ من:
-                                                    {{ $transaction->transactionable->fromAccount->account_name }}
+                                                    {{ $transaction->transactionable->fromAccount->name }}
                                                     ,
                                                     الى:
-                                                    {{ $transaction->transactionable->toAccount->account_name }}
+                                                    {{ $transaction->transactionable->toAccount->name }}
                                                 @endif
                                             </td>
                                             <td>
-                                                @if ($transaction->transaction_type === 'credit')
-                                                    {{ number_format($transaction->transaction_amount, 0) }}
+                                                @if ($transaction->type === 'credit')
+                                                    {{ number_format($transaction->amount, 0) }}
                                                 @else
                                                     0
                                                 @endif
                                             </td>
                                             <td>
-                                                @if ($transaction->transaction_type === 'debit')
-                                                    {{ number_format($transaction->transaction_amount, 0) }}
+                                                @if ($transaction->type === 'debit')
+                                                    {{ number_format($transaction->amount, 0) }}
                                                 @else
                                                     0
                                                 @endif
                                             </td>
                                             <td>{{ number_format($transaction->running_balance, 0) }}</td>
                                             <td>
-                                                @if ($transaction->transactionable_type === 'App\Models\Payment\Payment')
-                                                    {{ $transaction->transactionable->payment_note }}
-                                                @elseif($transaction->transactionable_type === 'App\Models\Cash\Expense')
-                                                    {{ $transaction->transactionable->expense_note }}
-                                                @elseif($transaction->transactionable_type === 'App\Models\Cash\CashTransfer')
-                                                    {{ $transaction->transactionable->transfer_note }}
-                                                @endif
+
+                                                {{ $transaction->transactionable->description }}
+
                                             </td>
 
                                         </tr>

@@ -3,8 +3,7 @@
         <!-- app css-->
         <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
         <div class="flex justify-start">
-            @include('payment.nav.navigation')
-            @include('expense.nav.navigation')
+
             @include('cash_account.nav.navigation')
             @include('cash_transfer.nav.navigation')
         </div>
@@ -51,9 +50,17 @@
                             </div>
 
                             <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="account_name" class="w-full mb-1" :value="__('word.account_name')" />
-                                <p id="account_name" class="w-full h-9 block mt-1" type="text" name="account_name">
-                                    {{ $cash_account->account_name }}
+                                <x-input-label for="name" class="w-full mb-1" :value="__('word.name')" />
+                                <p id="name" class="w-full h-9 block mt-1" type="text" name="name">
+                                    {{ $cash_account->name }}
+                                </p>
+                            </div>
+
+                            <div class=" mx-4 my-4 w-full ">
+                                <x-input-label for="account_number" class="w-full mb-1" :value="__('word.account_number')" />
+                                <p id="account_number" class="w-full h-9 block mt-1" type="text"
+                                    name="account_number">
+                                    {{ $cash_account->account_number }}
                                 </p>
                             </div>
 

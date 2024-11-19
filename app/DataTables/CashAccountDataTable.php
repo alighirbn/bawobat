@@ -103,7 +103,8 @@ class CashAccountDataTable extends DataTable
                 ->title(__('word.action'))
                 ->addClass('text-center'),
             Column::make('id')->title(__('word.cash_account_id'))->class('text-center'),
-            Column::make('account_name')->title(__('word.account_name'))->class('text-center'),
+            Column::make('name')->title(__('word.name'))->class('text-center'),
+            Column::make('account_number')->title(__('word.account_number'))->class('text-center'),
             Column::make('balance')->title(__('word.balance'))->class('text-center'),
 
         ];

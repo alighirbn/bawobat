@@ -23,9 +23,10 @@ class CashAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'url_address' => 'required|string|max:255',
+            'url_address' => 'required|string|max:60',
             'balance' => 'numeric',
-            'account_name' => 'required',
+            'name' => 'required',
+            'account_number' => 'required',
 
         ];
     }
