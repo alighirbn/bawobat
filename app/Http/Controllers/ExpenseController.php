@@ -7,8 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ExpenseRequest;
 use App\Models\Cash\Expense;
 use App\Models\Cash\Transaction;
-use App\Models\Cash\Cash_Account;
-use App\Models\Cash\Expense_Type;
+
+use App\Models\Cash\CashAccount;
+
+use App\Models\Cash\ExpenseType;
+use App\Models\Project\Project;
 use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
@@ -27,8 +30,9 @@ class ExpenseController extends Controller
      */
     public function create()
     {
-        $expense_types = Expense_Type::all();
-        return view('expense.create', compact('expense_types'));
+        $projects = Project::all();
+        $expense_types = ExpenseType::all();
+        return view('expense.create', compact(['expense_types', 'projects']));
     }
 
     /**
@@ -51,7 +55,7 @@ class ExpenseController extends Controller
         $expense = Expense::where('url_address', $url_address)->first();
 
         if (isset($expense)) {
-            $cash_accounts = Cash_Account::all();
+            $cash_accounts = CashAccount::all();
             return view('expense.show', compact(['expense', 'cash_accounts']));
         } else {
             $ip = $this->getIPAddress();
@@ -71,7 +75,7 @@ class ExpenseController extends Controller
                 return redirect()->route('expense.index')
                     ->with('error', 'لا يمكن تعديل مصروف تمت الموافقة عليه.');
             }
-            $expense_types = Expense_Type::all();
+            $expense_types = ExpenseType::all();
             return view('expense.edit', compact(['expense', 'expense_types']));
         } else {
             $ip = $this->getIPAddress();
@@ -107,7 +111,7 @@ class ExpenseController extends Controller
         if (isset($expense)) {
             // Adjust cash account balance if necessary
             if ($expense->approved) {
-                $cashAccount = Cash_Account::find(1); // or find based on your logic
+                $cashAccount = CashAccount::find(1); // or find based on your logic
                 $cashAccount->adjustBalance($expense->expense_amount, 'credit');
             }
 
@@ -143,7 +147,7 @@ class ExpenseController extends Controller
 
 
             // Adjust cash account balance
-            $cashAccount = Cash_Account::find($cash_account_id); // or find based on your logic
+            $cashAccount = CashAccount::find($cash_account_id); // or find based on your logic
             $cashAccount->adjustBalance($expense->expense_amount, 'debit');
 
             // Create a transaction for the approved expense

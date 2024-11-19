@@ -22,8 +22,8 @@ class ExpenseDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', 'expense.action')
-            ->addColumn('expense_amount', function ($row) {
-                return number_format($row->expense_amount, 0);
+            ->addColumn('amount', function ($row) {
+                return number_format($row->amount, 0);
             })
             ->addColumn('approved', function ($row) {
                 return $row->approved ? __('word.approved') : __('word.pending');
@@ -48,7 +48,7 @@ class ExpenseDataTable extends DataTable
     public function query(Expense $model): QueryBuilder
     {
         // Get the base query with relationships (if any)
-        $query = $model->newQuery()->with(['expense_type']);
+        $query = $model->newQuery()->with(['expense_type', 'project']);
 
         if ($this->onlyPending) {
             $query->where('approved', false);
@@ -117,10 +117,12 @@ class ExpenseDataTable extends DataTable
                 ->title(__('word.action'))
                 ->addClass('text-center'),
             Column::make('id')->title(__('word.expense_id'))->class('text-center'),
-            Column::make('expense_date')->title(__('word.expense_date'))->class('text-center'),
-            Column::make('expense_type')->title(__('word.expense_type_id'))->data('expense_type.expense_type')->name('expense_type.expense_type')->class('text-center'),
-            Column::make('expense_amount')->title(__('word.expense_amount'))->class('text-center'),
-            Column::make('expense_note')->title(__('word.expense_note'))->class('text-center'),
+            Column::make('date')->title(__('word.date'))->class('text-center'),
+            Column::make('expense_type_id')->title(__('word.expense_type_id'))->data('expense_type.name')->name('expense_type.name')->class('text-center'),
+            Column::make('project_id')->title(__('word.project_id'))->data('project_id')->class('text-center'),
+            Column::make('project_name')->title(__('word.project_name'))->data('project.name')->name('project.name')->class('text-center'),
+            Column::make('amount')->title(__('word.amount'))->class('text-center'),
+            Column::make('description')->title(__('word.description'))->class('text-center'),
             Column::make('approved')
                 ->title(__('word.approve_status'))
                 ->class('text-center')

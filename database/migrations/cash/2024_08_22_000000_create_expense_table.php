@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('project_id')->constrained()->onDelete('cascade'); // New field
             $table->foreignId('expense_type_id')->constrained()->onDelete('restrict');
-            $table->string('category');
+
             $table->decimal('amount', 15, 2);
             $table->text('description')->nullable();
             $table->date('date');
+
             $table->boolean('approved')->default(false); // Add the approved column, default to false
 
             $table->unsignedBigInteger('cash_account_id')->nullable();

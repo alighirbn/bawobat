@@ -23,12 +23,18 @@ class ExpenseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'url_address' => 'required|string|max:255',
-            'expense_type_id' => 'required|exists:expense_types,id', // Ensure this is validated
-            'expense_amount' => 'required|numeric',
-            'expense_date' => 'required|date',
-            'expense_note' => 'nullable|string',
-            'approved' => 'sometimes|boolean',
+            'url_address' => ['required'],
+            'user_id_create' => ['Numeric'],
+            'user_id_update' => ['Numeric'],
+
+            //foreign id and reference
+            'project_id' => ['required'],
+            'expense_type_id' => ['required'],
+
+            //normal fields
+            'date' => ['required', 'date_format:Y-m-d'],
+            'amount' => ['required'],
+            'description' => ['required', 'max:200'],
         ];
     }
 

@@ -19,14 +19,17 @@ class Expense extends Model
      */
     protected $fillable = [
         'url_address',
+
         'project_id',  // Add project_id to fillable
         'expense_type_id', // Add expense_type_id to fillable
-        'cash_account_id', // cash_account
-        'approved', // New field
-        'category',
+
         'amount',
         'description',
         'date',
+
+
+        'cash_account_id', // cash_account
+        'approved', // New field
         'user_id_create',
         'user_id_update',
     ];
@@ -48,7 +51,7 @@ class Expense extends Model
     }
 
     // Relationship with ExpenseType
-    public function expenseType()
+    public function expense_type()
     {
         return $this->belongsTo(ExpenseType::class);
     }

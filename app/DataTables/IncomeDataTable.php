@@ -32,7 +32,12 @@ class IncomeDataTable extends DataTable
             ->setRowId('id');
     }
 
-
+    protected $onlyPending;
+    public function onlyPending($onlyPending = null)
+    {
+        $this->onlyPending = $onlyPending;
+        return $this;
+    }
 
     /**
      * Get query source of dataTable.
@@ -44,6 +49,9 @@ class IncomeDataTable extends DataTable
     {
         // Get the base query with relationships
         $query = $model->newQuery()->with(['income_type', 'project', 'cash_account']);
+        if ($this->onlyPending) {
+            $query->where('approved', false);
+        }
         return $query;
     }
 
@@ -113,6 +121,7 @@ class IncomeDataTable extends DataTable
             Column::make('project_id')->title(__('word.project_id'))->data('project_id')->class('text-center'),
             Column::make('project_name')->title(__('word.project_name'))->data('project.name')->name('project.name')->class('text-center'),
             Column::make('amount')->title(__('word.income_amount'))->class('text-center'),
+            Column::make('description')->title(__('word.description'))->class('text-center'),
             Column::make('approved')
                 ->title(__('word.approve_status'))
                 ->class('text-center')

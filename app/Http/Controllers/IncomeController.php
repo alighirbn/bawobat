@@ -20,7 +20,9 @@ class IncomeController extends Controller
      */
     public function index(IncomeDataTable $dataTable, Request $request)
     {
-        return $dataTable->render('income.index');
+
+        $onlyPending = $request->input('onlyPending');
+        return $dataTable->onlyPending($onlyPending)->render('income.index');
     }
 
     /**

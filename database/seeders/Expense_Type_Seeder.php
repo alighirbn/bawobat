@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Cash\Expense_Type;
+
 use App\Models\Cash\ExpenseType;
-use App\Models\Payment\Payment_Method;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
