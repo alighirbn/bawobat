@@ -38,6 +38,13 @@ class Permission_Seeder extends Seeder
             'customer-delete',
             'customer-statement',
 
+            //**************************investor******************************* */
+
+            'investor-list',
+            'investor-show',
+            'investor-create',
+            'investor-update',
+            'investor-delete',
 
             //**************************income******************************* */
 

@@ -39,8 +39,8 @@ Route::group(['middleware' => 'checkStatus'], function () {
         //customer routes
         require __DIR__ . '/customer.php';
 
-        //service routes
-        require __DIR__ . '/service.php';
+        //investor routes
+        require __DIR__ . '/investor.php';
 
         //project routes
         require __DIR__ . '/project.php';
