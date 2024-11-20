@@ -2,8 +2,8 @@
 
 namespace App\Models\Project;
 
+use App\Models\Account\Transaction;
 use App\Models\Archive;
-use App\Models\Cash\Transaction;
 use App\Models\Investor\Investor;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +22,9 @@ class Project extends Model
         'url_address',
         'name',
         'description',
+
+        'cost_center_id',
+
         'budget',
         'start_date',
         'end_date',

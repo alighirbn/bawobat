@@ -2,10 +2,10 @@
 
 namespace App\Models\Income;
 
+use App\Models\Account\Account;
+use App\Models\Account\CostCenter;
+use App\Models\Account\Transaction;
 use App\Models\Archive;
-use App\Models\Cash\CashAccount;
-use App\Models\Cash\Transaction;
-use App\Models\Project\Project;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,15 +22,17 @@ class Income extends Model
     protected $fillable = [
         'url_address',
 
-        'project_id',  // Add project_id to fillable
-        'income_type_id', // Add income_type_id to fillable
+        'cost_center_id',
 
+        'debit_account_id',
+        'credit_account_id',
+
+        'date',
         'amount',
         'description',
-        'date',
 
         'approved', // New field
-        'cash_account_id', // cash_account
+
         'user_id_create',
         'user_id_update',
     ];
@@ -39,33 +41,31 @@ class Income extends Model
         $this->approved = true;
         $this->save();
     }
-    /**
-     * Relationships
-     */
 
-    // Relationship with Transaction
-    public function project()
-    {
-        return $this->belongsTo(Project::class);
-    }
 
     public function transactions()
     {
         return $this->morphMany(Transaction::class, 'transactionable');
     }
 
-    public function income_type()
-    {
-        return $this->belongsTo(IncomeType::class);
-    }
-    public function cash_account()
-    {
-        return $this->belongsTo(CashAccount::class, 'cash_account_id', 'id');
-    }
 
     public function archives()
     {
         return $this->morphMany(Archive::class, 'archivable');
+    }
+
+    public function cost_center()
+    {
+        return $this->belongsTo(CostCenter::class, 'cost_center_id', 'id');
+    }
+
+    public function debit_account()
+    {
+        return $this->belongsTo(Account::class, 'debit_account_id', 'id');
+    }
+    public function credit_account()
+    {
+        return $this->belongsTo(Account::class, 'credit_account_id', 'id');
     }
     public function user_create()
     {

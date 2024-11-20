@@ -105,16 +105,6 @@
             </div>
         </div>
     @endcan
-    @can('cash_account-list')
-        <div class="item"><a class="sub-btn"> {{ __('word.accountant') }} <i class="bx bx-chevrons-down dropdown"></i>
-            </a>
-            <div class="flex flex-col   sub-menu" style="display: none;">
-
-                @include('cash_account.nav.navigation')
-                @include('cash_transfer.nav.navigation')
-            </div>
-        </div>
-    @endcan
 
     @can('user-list')
         <div class="item"><a class="sub-btn"> {{ __('word.users') }}<i class="bx bx-chevrons-down dropdown"></i> </a>

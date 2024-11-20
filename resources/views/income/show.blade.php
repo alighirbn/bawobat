@@ -16,12 +16,6 @@
                         <a href="{{ url()->previous() }}" class="btn btn-custom-back">
                             {{ __('word.back') }}
                         </a>
-                        @can('project-show')
-                            <a href="{{ route('project.show', $income->project->url_address) }}"
-                                class="btn btn-custom-show">
-                                {{ __('word.project_view') }}
-                            </a>
-                        @endcan
 
                         <button id="print" class="btn btn-custom-print" onclick="window.print();">
                             {{ __('word.print') }}
@@ -43,12 +37,7 @@
                             <form action="{{ route('income.approve', $income->url_address) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
-                                <label for="cash_account_id">الصندوق</label>
-                                <select name="cash_account_id" required>
-                                    @foreach ($cash_accounts as $account)
-                                        <option value="{{ $account->id }}">{{ $account->name }}</option>
-                                    @endforeach
-                                </select>
+
                                 <button type="submit" class="btn btn-custom-edit">
                                     {{ __('word.income_approve') }}</button>
                             </form>
@@ -69,7 +58,7 @@
 
                         <div class="flex">
                             <div class=" mx-2 my-2 w-full ">
-                                {!! QrCode::size(90)->generate($income->project->id) !!}
+                                {!! QrCode::size(90)->generate($income->id) !!}
                             </div>
                             <div class=" mx-2 my-2 w-full ">
                                 <img src="{{ asset('images/yasmine.png') }}" alt="Logo"
@@ -82,7 +71,7 @@
                                 <p><strong>{{ __('عدد الدفعة:') }}</strong>
                                     {{ $income->id }}
                                 </p>
-                                <p><strong>{{ __('تاريخ الدفعة:') }}</strong> {{ $income->income_date }}</p>
+                                <p><strong>{{ __('تاريخ الدفعة:') }}</strong> {{ $income->date }}</p>
 
                             </div>
                         </div>
@@ -91,16 +80,27 @@
                         </div>
                         <div class="flex ">
                             <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="income_id" class="w-full mb-1" :value="__('word.income_id')" />
-                                <p id="income_id" class="w-full h-9 block mt-1" type="text" name="income_id">
-                                    {{ $income->id }}
+                                <x-input-label for="cost_center_id" class="w-full mb-1" :value="__('word.cost_center_id')" />
+                                <p id="cost_center_id" class="w-full h-9 block mt-1" type="text"
+                                    name="cost_center_id">
+                                    {{ $income->cost_center->name }}
                                 </p>
                             </div>
 
                             <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="date" class="w-full mb-1" :value="__('word.date')" />
-                                <p id="date" class="w-full h-9 block mt-1 " type="text" name="date">
-                                    {{ $income->date }}
+                                <x-input-label for="credit_account_id" class="w-full mb-1" :value="__('word.credit_account_id')" />
+                                <p id="credit_account_id" class="w-full h-9 block mt-1" type="text"
+                                    name="credit_account_id">
+                                    {{ $income->credit_account->name }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex ">
+                            <div class=" mx-4 my-4 w-full ">
+                                <x-input-label for="debit_account_id" class="w-full mb-1" :value="__('word.debit_account_id')" />
+                                <p id="debit_account_id" class="w-full h-9 block mt-1" type="text"
+                                    name="debit_account_id">
+                                    {{ $income->debit_account->name }}
                                 </p>
                             </div>
 
@@ -112,32 +112,6 @@
                             </div>
 
                         </div>
-
-                        <div class="flex ">
-
-                            <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="income_type_id" class="w-full mb-1" :value="__('word.income_type_id')" />
-                                <p id="income_type_id" class="w-full h-9 block mt-1" type="text"
-                                    name="income_type_id">
-                                    {{ $income->income_type->name }}
-                                </p>
-                            </div>
-                            <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="project_id" class="w-full mb-1" :value="__('word.project_id')" />
-                                <p id="project_id" class="w-full h-9 block mt-1" type="text" name="project_id">
-                                    {{ $income->project->id }}
-                                </p>
-                            </div>
-
-                            <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="project_date" class="w-full mb-1" :value="__('word.project_date')" />
-                                <p id="project_date" class="w-full h-9 block mt-1 " type="text" name="project_date">
-                                    {{ $income->project->project_date }}
-                                </p>
-                            </div>
-
-                        </div>
-
                         <div class="flex ">
                             <div class=" mx-4 my-4 w-full ">
                                 <x-input-label for="description" class="w-full mb-1" :value="__('word.description')" />

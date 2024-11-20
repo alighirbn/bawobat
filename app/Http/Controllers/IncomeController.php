@@ -5,12 +5,10 @@ namespace App\Http\Controllers;
 use App\DataTables\IncomeDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\IncomeRequest;
-use App\Models\Cash\CashAccount;
-use App\Models\Cash\Transaction;
-
+use App\Models\Account\Account;
+use App\Models\Account\CostCenter;
+use App\Models\Account\Transaction;
 use App\Models\Income\Income;
-use App\Models\Income\IncomeType;
-use App\Models\Project\Project;
 use Illuminate\Http\Request;
 
 class IncomeController extends Controller
@@ -31,10 +29,12 @@ class IncomeController extends Controller
     public function create()
     {
 
-        $projects = Project::all();
-        $income_types = IncomeType::all();
+        $cost_centers = CostCenter::all();
+        $revenueAccounts = Account::where('class', 7)->get();
+        $cashAccounts = Account::where('type', 'asset')->where('class', 5)->get();
 
-        return view('income.create', compact(['projects', 'income_types']));
+
+        return view('income.create', compact(['cost_centers', 'revenueAccounts', 'cashAccounts']));
     }
 
     /**
@@ -53,11 +53,11 @@ class IncomeController extends Controller
      */
     public function show(string $url_address)
     {
-        $income = Income::with(['project', 'income_type', 'archives'])->where('url_address', '=', $url_address)->first();
+        $income = Income::with(['cost_center', 'debit_account', 'credit_account'])->where('url_address', '=', $url_address)->first();
 
         if (isset($income)) {
-            $cash_accounts = CashAccount::all();
-            return view('income.show', compact(['income', 'cash_accounts']));
+
+            return view('income.show', compact(['income']));
         } else {
             $ip = $this->getIPAddress();
             return view('Income.accessdenied', ['ip' => $ip]);
@@ -68,36 +68,44 @@ class IncomeController extends Controller
         $income = Income::where('url_address', '=', $url_address)->first();
 
         if (isset($income)) {
-            // Approve the income
-            $income->approve();
 
-            $cash_account_id = $request->cash_account_id;
-
-            // Update the cash_account_id in the income model
-            $income->cash_account_id = $cash_account_id;
-            $income->save(); // Save the updated income model
-
-            // Get the cash account (assuming main account with ID 1)
-            $cashAccount = CashAccount::find($cash_account_id); // or find based on your logic
-
-            // Adjust the cash account balance by crediting the income amount
-            $cashAccount->adjustBalance($income->amount, 'credit');
 
             // Create a transaction for the approved income
-            Transaction::create([
+            $transaction = Transaction::create([
 
-                'cash_account_id' => $cashAccount->id,
-                'project_id' => $income->project->id,
-                'amount' => $income->amount,
                 'date' => now(),
-                'type' => 'credit', // Since it's a income
+                'description' => '',
                 'transactionable_id' => $income->id,
                 'transactionable_type' => income::class,
             ]);
 
+            $debitAccount = Account::find($income->debit_account_id);
+            $creditAccount = Account::find($income->credit_account_id);
+
+            if (!$debitAccount || !$creditAccount) {
+                return redirect()->route('income.show', $income->url_address)
+                    ->with('error', 'Invalid debit or credit account specified.');
+            }
+
+            $transaction->addEntry(
+                $debitAccount,
+                $income->amount,
+                'debit',
+                $income->cost_center_id ? CostCenter::find($income->cost_center_id) : null
+            );
+
+            $transaction->addEntry(
+                $creditAccount,
+                $income->amount,
+                'credit',
+                $income->cost_center_id ? CostCenter::find($income->cost_center_id) : null
+            );
+
+            // Approve the income
+            $income->approve();
 
 
-            return redirect()->route('project.show', $income->project->url_address)
+            return redirect()->route('income.show', $income->url_address)
                 ->with('success', 'تم قبول الايراد بنجاح وتم تسجيل المعاملة في الحساب النقدي.');
         } else {
             $ip = $this->getIPAddress();
@@ -120,9 +128,12 @@ class IncomeController extends Controller
                 return redirect()->route('income.index')
                     ->with('error', 'لا يمكن تعديل ايراد موافق عليه.');
             }
-            $projects = Project::all();
-            $income_types = IncomeType::all();
-            return view('income.edit', compact(['income', 'projects', 'income_types']));
+
+            $cost_centers = CostCenter::all();
+            $revenueAccounts = Account::where('class', 7)->get();
+            $cashAccounts = Account::where('type', 'asset')->where('class', 5)->get();
+
+            return view('income.edit', compact(['income', 'cost_centers', 'revenueAccounts', 'cashAccounts']));
         } else {
             $ip = $this->getIPAddress();
             return view('Income.accessdenied', ['ip' => $ip]);
@@ -153,9 +164,6 @@ class IncomeController extends Controller
 
         if (isset($income)) {
             if ($income->approved) {
-                // Adjust the cash account balance by debiting the income amount
-                $cashAccount = CashAccount::find($income->cash_account_id); // or find based on your logic
-                $cashAccount->adjustBalance($income->income_amount, 'debit');
 
                 // Delete related transactions
                 $income->transactions()->delete();

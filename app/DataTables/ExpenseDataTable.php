@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Cash\Expense;
+use App\Models\Expense\Expense;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Yajra\DataTables\EloquentDataTable;
@@ -48,7 +48,7 @@ class ExpenseDataTable extends DataTable
     public function query(Expense $model): QueryBuilder
     {
         // Get the base query with relationships (if any)
-        $query = $model->newQuery()->with(['expense_type', 'project']);
+        $query = $model->newQuery()->with(['cost_center', 'debit_account', 'credit_account']);
 
         if ($this->onlyPending) {
             $query->where('approved', false);
@@ -117,17 +117,18 @@ class ExpenseDataTable extends DataTable
                 ->title(__('word.action'))
                 ->addClass('text-center'),
             Column::make('id')->title(__('word.expense_id'))->class('text-center'),
-            Column::make('date')->title(__('word.date'))->class('text-center'),
-            Column::make('expense_type_id')->title(__('word.expense_type_id'))->data('expense_type.name')->name('expense_type.name')->class('text-center'),
+            Column::make('date')->title(__('word.expense_date'))->class('text-center'),
+            Column::make('credit_account_id')->title(__('word.credit_account_id'))->data('credit_account.name')->name('credit_account.name')->class('text-center'),
 
-            Column::make('project_name')->title(__('word.project_name'))->data('project.name')->name('project.name')->class('text-center'),
-            Column::make('amount')->title(__('word.amount'))->class('text-center'),
+            Column::make('cost_center_id')->title(__('word.cost_center_id'))->data('cost_center.name')->name('cost_center.name')->class('text-center'),
+            Column::make('amount')->title(__('word.expense_amount'))->class('text-center'),
             Column::make('description')->title(__('word.description'))->class('text-center'),
             Column::make('approved')
                 ->title(__('word.approve_status'))
                 ->class('text-center')
                 ->orderable(false) // Disable sorting
-                ->searchable(false) // Disable searching
+                ->searchable(false), // Disable searching
+            Column::make('debit_account_id')->title(__('word.debit_account_id'))->data('debit_account.name')->name('debit_account.name')->class('text-center'),
         ];
     }
 

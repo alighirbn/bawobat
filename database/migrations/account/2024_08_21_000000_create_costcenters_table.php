@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('income_types', function (Blueprint $table) {
+        Schema::create('cost_centers', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->text('description')->nullable();
+            $table->string('code')->unique(); // A unique code for the cost center (e.g., "HR", "Sales")
+            $table->string('name'); // The name of the cost center (e.g., "Human Resources", "Sales")
+            $table->text('description')->nullable(); // Optional description for the cost center
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('income_types');
+        Schema::dropIfExists('cost_centers');
     }
 };

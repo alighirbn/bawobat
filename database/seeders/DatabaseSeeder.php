@@ -21,9 +21,8 @@ class DatabaseSeeder extends Seeder
       // General seeders
       Permission_Seeder::class,
       Department_Seeder::class,
-      Expense_Type_Seeder::class,
-      Cash_Account_Seeder::class,
-      Income_Type_Seeder::class,
+      Account_Seeder::class,
+      Cost_Center_Seeder::class,
     ]);
   }
 }

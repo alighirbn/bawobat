@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('incomes', function (Blueprint $table) {
+        Schema::create('expenses', function (Blueprint $table) {
             $table->id(); // Primary key
             $table->string('url_address')->unique(); // Unique URL identifier
 
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('incomes');
+        Schema::dropIfExists('expenses');
     }
 };

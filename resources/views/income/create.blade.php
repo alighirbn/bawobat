@@ -23,44 +23,56 @@
 
                             <div class="flex ">
                                 <div class=" mx-4 my-4 w-full">
-                                    <x-input-label for="project_id" class="w-full mb-1" :value="__('word.building_number')" />
-                                    <select id="project_id" class="js-example-basic-single w-full block mt-1 "
-                                        name="project_id" data-placeholder="ادخل المشروع   ">
+                                    <x-input-label for="cost_center_id" class="w-full mb-1" :value="__('word.cost_center_id')" />
+                                    <select id="cost_center_id" class="js-example-basic-single w-full block mt-1 "
+                                        name="cost_center_id" data-placeholder="ادخل مركز الكلفة   ">
                                         <option value="">
 
                                         </option>
-                                        @foreach ($projects as $project)
-                                            <option value="{{ $project->id }}"
-                                                {{ old('project_id') == $project->id ? 'selected' : '' }}>
-                                                {{ $project->name }}
+                                        @foreach ($cost_centers as $cost_center)
+                                            <option value="{{ $cost_center->id }}"
+                                                {{ old('cost_center_id') == $cost_center->id ? 'selected' : '' }}>
+                                                {{ $cost_center->name }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    <x-input-error :messages="$errors->get('project_id')" class="w-full mt-2" />
+                                    <x-input-error :messages="$errors->get('cost_center_id')" class="w-full mt-2" />
                                 </div>
 
                                 <div class=" mx-4 my-4 w-full">
-                                    <x-input-label for="income_type_id" class="w-full mb-1" :value="__('word.building_number')" />
-                                    <select id="income_type_id" class="js-example-basic-single w-full block mt-1 "
-                                        name="income_type_id" data-placeholder="ادخل الاسم او رقم العقار">
+                                    <x-input-label for="credit_account_id" class="w-full mb-1" :value="__('word.credit_account_id')" />
+                                    <select id="credit_account_id" class="js-example-basic-single w-full block mt-1 "
+                                        name="credit_account_id" data-placeholder="ادخل حساب الارباح   ">
                                         <option value="">
 
                                         </option>
-                                        @foreach ($income_types as $income_type)
-                                            <option value="{{ $income_type->id }}"
-                                                {{ old('income_type_id') == $income_type->id ? 'selected' : '' }}>
-                                                {{ $income_type->name }}
+                                        @foreach ($revenueAccounts as $revenueAccount)
+                                            <option value="{{ $revenueAccount->id }}"
+                                                {{ old('credit_account_id') == $revenueAccount->id ? 'selected' : '' }}>
+                                                {{ $revenueAccount->name }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    <x-input-error :messages="$errors->get('income_type_id')" class="w-full mt-2" />
+                                    <x-input-error :messages="$errors->get('credit_account_id')" class="w-full mt-2" />
                                 </div>
 
-                            </div>
+                                <div class=" mx-4 my-4 w-full">
+                                    <x-input-label for="debit_account_id" class="w-full mb-1" :value="__('word.debit_account_id')" />
+                                    <select id="debit_account_id" class="js-example-basic-single w-full block mt-1 "
+                                        name="debit_account_id" data-placeholder="ادخل حساب النقد   ">
+                                        <option value="">
 
-                            <h2 class="font-semibold underline text-l text-gray-800 leading-tight mx-4  w-full">
-                                {{ __('word.income_card') }}
-                            </h2>
+                                        </option>
+                                        @foreach ($cashAccounts as $cashAccount)
+                                            <option value="{{ $cashAccount->id }}"
+                                                {{ old('debit_account_id') == $cashAccount->id ? 'selected' : '' }}>
+                                                {{ $cashAccount->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <x-input-error :messages="$errors->get('debit_account_id')" class="w-full mt-2" />
+                                </div>
+                            </div>
 
                             <div class="flex">
                                 <div class="mx-4 my-4 w-full">
