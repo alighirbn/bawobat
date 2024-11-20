@@ -39,12 +39,7 @@
                             <form action="{{ route('expense.approve', $expense->url_address) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
-                                <label for="cash_account_id">الصندوق</label>
-                                <select name="cash_account_id" required>
-                                    @foreach ($cash_accounts as $account)
-                                        <option value="{{ $account->id }}">{{ $account->name }}</option>
-                                    @endforeach
-                                </select>
+
                                 <button type="submit" class="btn btn-custom-edit">
                                     {{ __('word.expense_approve') }}</button>
                             </form>
@@ -70,7 +65,7 @@
                                 <p><strong>{{ __('عدد سند الصرف:') }}</strong>
                                     {{ $expense->id }}
                                 </p>
-                                <p><strong>{{ __('تاريخ سند الصرف:') }}</strong> {{ $expense->expense_date }}</p>
+                                <p><strong>{{ __('تاريخ سند الصرف:') }}</strong> {{ $expense->date }}</p>
 
                             </div>
                         </div>
@@ -79,24 +74,28 @@
                         </div>
                         <div class="flex ">
                             <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="expense_id" class="w-full mb-1" :value="__('word.expense_id')" />
-                                <p id="expense_id" class="w-full h-9 block mt-1" type="text" name="expense_id">
-                                    {{ $expense->id }}
+                                <x-input-label for="cost_center_id" class="w-full mb-1" :value="__('word.cost_center_id')" />
+                                <p id="cost_center_id" class="w-full h-9 block mt-1" type="text"
+                                    name="cost_center_id">
+                                    {{ $expense->cost_center->name }}
                                 </p>
                             </div>
 
                             <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="date" class="w-full mb-1" :value="__('word.date')" />
-                                <p id="date" class="w-full h-9 block mt-1 " type="text" name="date">
-                                    {{ $expense->date }}
+                                <x-input-label for="credit_account_id" class="w-full mb-1" :value="__('word.credit_account_id')" />
+                                <p id="credit_account_id" class="w-full h-9 block mt-1" type="text"
+                                    name="credit_account_id">
+                                    {{ $expense->credit_account->name }}
                                 </p>
                             </div>
+                        </div>
 
+                        <div class="flex ">
                             <div class=" mx-4 my-4 w-full ">
-                                <x-input-label for="expense_type_id" class="w-full mb-1" :value="__('word.expense_type_id')" />
-                                <p id="expense_type_id" class="w-full h-9 block mt-1" type="text"
-                                    name="expense_type_id">
-                                    {{ $expense->expense_type->name }}
+                                <x-input-label for="debit_account_id" class="w-full mb-1" :value="__('word.debit_account_id')" />
+                                <p id="debit_account_id" class="w-full h-9 block mt-1" type="text"
+                                    name="debit_account_id">
+                                    {{ $expense->debit_account->name }}
                                 </p>
                             </div>
 

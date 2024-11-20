@@ -34,7 +34,9 @@ return [
     'status' => 'الحالة',
     'date' => 'التاريخ',
     'amount' => 'المبلغ',
-
+    'cost_center_id' => 'مركز الكلفة',
+    'credit_account_id' => 'من حساب',
+    'debit_account_id' => 'الى حساب',
 
 
     // general values

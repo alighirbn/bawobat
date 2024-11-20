@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use App\DataTables\ExpenseDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ExpenseRequest;
-use App\Models\Cash\Expense;
-use App\Models\Cash\Transaction;
-use App\Models\Cash\CashAccount;
-use App\Models\Cash\ExpenseType;
-use App\Models\Project\Project;
+use App\Models\Account\Account;
+use App\Models\Account\CostCenter;
+use App\Models\Account\Transaction;
+use App\Models\Expense\Expense;
 use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
@@ -23,9 +22,11 @@ class ExpenseController extends Controller
 
     public function create()
     {
-        $projects = Project::all();
-        $expense_types = ExpenseType::all();
-        return view('expense.create', compact(['expense_types', 'projects']));
+        $cost_centers = CostCenter::all();
+        $expenseAccounts = Account::where('type', 'expense')->get();
+        $cashAccounts = Account::where('type', 'asset')->where('class', 5)->get();
+
+        return view('expense.create', compact(['cost_centers', 'expenseAccounts', 'cashAccounts']));
     }
 
 
@@ -41,11 +42,11 @@ class ExpenseController extends Controller
 
     public function show(string $url_address)
     {
-        $expense = Expense::where('url_address', $url_address)->first();
+        $expense = Expense::with(['cost_center', 'debit_account', 'credit_account'])->where('url_address', '=', $url_address)->first();
 
         if (isset($expense)) {
-            $cash_accounts = CashAccount::all();
-            return view('expense.show', compact(['expense', 'cash_accounts']));
+
+            return view('expense.show', compact(['expense']));
         } else {
             $ip = $this->getIPAddress();
             return view('expense.accessdenied', ['ip' => $ip]);
@@ -62,9 +63,11 @@ class ExpenseController extends Controller
                 return redirect()->route('expense.index')
                     ->with('error', 'لا يمكن تعديل مصروف تمت الموافقة عليه.');
             }
-            $projects = Project::all();
-            $expense_types = ExpenseType::all();
-            return view('expense.edit', compact(['expense', 'expense_types', 'projects']));
+            $cost_centers = CostCenter::all();
+            $expenseAccounts = Account::where('type', 'expense')->get();
+            $cashAccounts = Account::where('type', 'asset')->where('class', 5)->get();
+
+            return view('expense.edit', compact(['expense', 'cost_centers', 'expenseAccounts', 'cashAccounts']));
         } else {
             $ip = $this->getIPAddress();
             return view('expense.accessdenied', ['ip' => $ip]);
@@ -94,12 +97,9 @@ class ExpenseController extends Controller
         if (isset($expense)) {
             // Adjust cash account balance if necessary
             if ($expense->approved) {
-                $cashAccount = CashAccount::find(1); // or find based on your logic
-                $cashAccount->adjustBalance($expense->expense_amount, 'credit');
+                // Delete related transactions
+                $expense->transactions()->delete();
             }
-
-            // Delete related transactions
-            $expense->transactions()->delete();
 
             // Delete the expense
             $expense->delete();
@@ -118,29 +118,38 @@ class ExpenseController extends Controller
         $expense = Expense::where('url_address', $url_address)->first();
 
         if (isset($expense)) {
+            $transaction = Transaction::create([
+
+                'date' => now(),
+                'description' => '',
+                'transactionable_id' => $expense->id,
+                'transactionable_type' => expense::class,
+            ]);
+
+            $debitAccount = Account::find($expense->debit_account_id);
+            $creditAccount = Account::find($expense->credit_account_id);
+
+            if (!$debitAccount || !$creditAccount) {
+                return redirect()->route('expense.show', $expense->url_address)
+                    ->with('error', 'Invalid debit or credit account specified.');
+            }
+
+            $transaction->addEntry(
+                $debitAccount,
+                $expense->amount,
+                'debit',
+                $expense->cost_center_id ? CostCenter::find($expense->cost_center_id) : null
+            );
+
+            $transaction->addEntry(
+                $creditAccount,
+                $expense->amount,
+                'credit',
+                $expense->cost_center_id ? CostCenter::find($expense->cost_center_id) : null
+            );
+
             // Approve the expense
             $expense->approve();
-
-            $cash_account_id = $request->cash_account_id;
-            $expense->cash_account_id = $cash_account_id;
-            $expense->save(); // Save the updated payment model
-
-
-            // Adjust cash account balance
-            $cashAccount = CashAccount::find($cash_account_id); // or find based on your logic
-            $cashAccount->adjustBalance($expense->amount, 'debit');
-
-            // Create a transaction for the approved expense
-            Transaction::create([
-
-                'cash_account_id' => $cashAccount->id,
-                'project_id' => $expense->project->id,
-                'amount' => $expense->amount,
-                'date' => now(),
-                'type' => 'debit', // Since it's an expense
-                'transactionable_id' => $expense->id,
-                'transactionable_type' => Expense::class,
-            ]);
 
             return redirect()->route('expense.index')
                 ->with('success', 'تمت الموافقة على المصروف وتم تسجيل المعاملة في الحساب النقدي.');
