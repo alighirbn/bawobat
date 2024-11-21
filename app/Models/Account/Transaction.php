@@ -32,8 +32,14 @@ class Transaction extends Model
     // Ensure transaction is balanced (debits == credits)
     public function isBalanced()
     {
-        $debits = $this->accounts()->wherePivot('debit_credit', 'debit')->sum('pivot_amount');
-        $credits = $this->accounts()->wherePivot('debit_credit', 'credit')->sum('pivot_amount');
+        $debits = $this->accounts()
+            ->where('transaction_account.debit_credit', 'debit')
+            ->sum('transaction_account.amount');
+
+        $credits = $this->accounts()
+            ->where('transaction_account.debit_credit', 'credit')
+            ->sum('transaction_account.amount');
+
 
         return $debits == $credits;
     }

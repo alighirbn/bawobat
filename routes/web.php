@@ -47,13 +47,11 @@ Route::group(['middleware' => 'checkStatus'], function () {
         //expense routes
         require __DIR__ . '/expense.php';
 
-        //cash_account routes
-        require __DIR__ . '/cash_account.php';
+        //transaction routes
+        require __DIR__ . '/transaction.php';
 
-        //cash_transfer routes
-        require __DIR__ . '/cash_transfer.php';
-
-
+        //report routes
+        require __DIR__ . '/report.php';
 
         //user routes
         require __DIR__ . '/user.php';

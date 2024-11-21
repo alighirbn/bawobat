@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Cash\CashAccount;
+use App\Models\Account\Transaction;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Yajra\DataTables\EloquentDataTable;
@@ -10,7 +10,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class CashAccountDataTable extends DataTable
+class TransactionDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -21,10 +21,7 @@ class CashAccountDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'cash_account.action')
-            ->addColumn('balance', function ($row) {
-                return number_format($row->balance, 0);
-            })
+            ->addColumn('action', 'transaction.action')
             ->rawColumns(['action'])
             ->setRowId('id');
     }
@@ -33,13 +30,15 @@ class CashAccountDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Cash\Expense $model
+     * @param \App\Models\transaction $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(CashAccount $model): QueryBuilder
+    public function query(Transaction $model): QueryBuilder
     {
-        // Get the base query with relationships (if any)
-        return  $model->newQuery();
+        // Get the base query with relationships
+        $query = $model->newQuery();
+
+        return $query;
     }
 
     /**
@@ -50,41 +49,41 @@ class CashAccountDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('cashaccount-table')
+            ->setTableId('transaction-table')
             ->language([
-                'sUrl' => url('/') . '/../lang/' . __(LaravelLocalization::getCurrentLocale()) . '/datatable.json'
+                'sUrl' =>  url('/') . '/../lang/' . __(LaravelLocalization::getCurrentLocale()) . '/datatable.json'
             ])
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->orderBy(1, 'asc')
-            /* ->parameters([
+            ->parameters([
                 'dom' => 'B<"clear">lfrtip',
                 'scrollX' => false,
                 'buttons' => [
                     [
                         'extend'  => 'print',
                         'className'    => 'btn btn-outline-dark'
-                   ],
-                   [
-                        'extend'  => 'reset',
-                        'className'    => 'btn btn-outline-dark'
-                   ],
-                   [
-                        'extend'  => 'reload',
-                        'className'    => 'btn btn-outline-dark'
-                   ],
-                    [
-                         'extend'  => 'export',
-                         'className'    => 'btn btn-outline-dark',
-                         'buttons' => [
+                    ],
+                    /*[
+                    'extend'  => 'reset',
+                    'className'    => 'btn btn-outline-dark'
+               ],
+               [
+                    'extend'  => 'reload',
+                    'className'    => 'btn btn-outline-dark'
+               ],
+                [
+                     'extend'  => 'export',
+                     'className'    => 'btn btn-outline-dark',
+                     'buttons' => [
                                        'csv',
                                        'excel',
                                        'pdf',
                                   ],
-                    ],
+                ], */
                     'colvis'
                 ]
-            ]) */
+            ])
             ->selectStyleSingle();
     }
 
@@ -102,10 +101,9 @@ class CashAccountDataTable extends DataTable
                 ->width(60)
                 ->title(__('word.action'))
                 ->addClass('text-center'),
-            Column::make('id')->title(__('word.cash_account_id'))->class('text-center'),
-            Column::make('name')->title(__('word.name'))->class('text-center'),
-            Column::make('account_number')->title(__('word.account_number'))->class('text-center'),
-            Column::make('balance')->title(__('word.balance'))->class('text-center'),
+            Column::make('id')->title(__('word.transaction_id'))->class('text-center'),
+            Column::make('date')->title(__('word.date'))->class('text-center'),
+            Column::make('description')->title(__('word.description'))->class('text-center'),
 
         ];
     }
@@ -117,6 +115,6 @@ class CashAccountDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'CashAccount_' . date('YmdHis');
+        return 'Transaction_' . date('YmdHis');
     }
 }

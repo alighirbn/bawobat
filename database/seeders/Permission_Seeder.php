@@ -66,23 +66,13 @@ class Permission_Seeder extends Seeder
             'expense-delete',
             'expense-approve',
 
-            //**************************cash_account******************************* */
+            //**************************report******************************* */
 
-            'cash_account-list',
-            'cash_account-show',
-            'cash_account-create',
-            'cash_account-update',
-            'cash_account-delete',
-
-            //**************************cash_transfer******************************* */
-
-            'cash_transfer-list',
-            'cash_transfer-show',
-            'cash_transfer-create',
-            'cash_transfer-update',
-            'cash_transfer-delete',
-            'cash_transfer-approve',
-
+            'report-list',
+            'report-soa',
+            'report-trialBalance',
+            'report-costCenter',
+            'report-trialBalanceCostCenter',
 
             //**************************user******************************* */
 

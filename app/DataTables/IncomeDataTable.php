@@ -117,9 +117,10 @@ class IncomeDataTable extends DataTable
                 ->addClass('text-center'),
             Column::make('id')->title(__('word.income_id'))->class('text-center'),
             Column::make('date')->title(__('word.income_date'))->class('text-center'),
+            Column::make('cost_center_id')->title(__('word.cost_center_id'))->data('cost_center.name')->name('cost_center.name')->class('text-center'),
             Column::make('credit_account_id')->title(__('word.credit_account_id'))->data('credit_account.name')->name('credit_account.name')->class('text-center'),
 
-            Column::make('cost_center_id')->title(__('word.cost_center_id'))->data('cost_center.name')->name('cost_center.name')->class('text-center'),
+            Column::make('debit_account_id')->title(__('word.debit_account_id'))->data('debit_account.name')->name('debit_account.name')->class('text-center'),
             Column::make('amount')->title(__('word.income_amount'))->class('text-center'),
             Column::make('description')->title(__('word.description'))->class('text-center'),
             Column::make('approved')
@@ -127,7 +128,6 @@ class IncomeDataTable extends DataTable
                 ->class('text-center')
                 ->orderable(false) // Disable sorting
                 ->searchable(false), // Disable searching
-            Column::make('debit_account_id')->title(__('word.debit_account_id'))->data('debit_account.name')->name('debit_account.name')->class('text-center'),
 
         ];
     }

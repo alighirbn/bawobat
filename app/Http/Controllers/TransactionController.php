@@ -14,7 +14,7 @@ class TransactionController extends Controller
     {
         $accounts = Account::all();
         $costCenters = CostCenter::all();
-        return view('transactions.create', compact('accounts', 'costCenters'));
+        return view('transaction.create', compact('accounts', 'costCenters'));
     }
 
     public function store(Request $request)
@@ -69,7 +69,7 @@ class TransactionController extends Controller
 
             DB::commit();  // Commit the transaction
 
-            return redirect()->route('transactions.index')->with('success', 'Transaction created successfully!');
+            return redirect()->route('transaction.index')->with('success', 'Transaction created successfully!');
         } catch (\Exception $e) {
             DB::rollBack();  // Rollback the transaction on failure
             return redirect()->back()->with('error', 'Transaction creation failed.');
