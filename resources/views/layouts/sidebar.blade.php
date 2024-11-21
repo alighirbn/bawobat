@@ -91,6 +91,13 @@
             </div>
         </div>
     @endcan
+    @can('account-list')
+        <div class="item"><a class="sub-btn"> {{ __('word.account') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
+            <div class="flex flex-col   sub-menu" style="display: none;">
+                @include('account.nav.navigation')
+            </div>
+        </div>
+    @endcan
     @can('income-list')
         <div class="item"><a class="sub-btn"> {{ __('word.income') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
             <div class="flex flex-col   sub-menu" style="display: none;">

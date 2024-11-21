@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date')->nullable();
             $table->enum('status', ['pending', 'ongoing', 'completed', 'canceled'])->default('pending');
-            $table->foreignId('cost_center_id')->nullable()->constrained('cost_centers')->nullOnDelete(); // Foreign key for Cost Center
+            $table->foreignId('cost_center_id')->nullable()->constrained('costcenters')->nullOnDelete(); // Foreign key for Cost Center
             $table->timestamps();
             $table->unsignedBigInteger('user_id_create')->nullable();
             $table->foreign('user_id_create')->references('id')->on('users');

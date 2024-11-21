@@ -48,6 +48,7 @@ return [
     'dashboard' => 'الرئيسية',
     'project' => 'المشاريع',
     'investor' => 'المساهمين',
+    'account' => 'الحسابات',
     'accountant' => 'الحسابات',
     'report' => 'التقارير',
 

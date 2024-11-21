@@ -10,10 +10,14 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
+        'url_address',
         'date',
         'description',
-        'transactionable_id',    // Polymorphic ID
+        'transactionable_id',
         'transactionable_type',
+
+        'user_id_create',
+        'user_id_update',
     ];
 
     // Polymorphic relationship
@@ -27,6 +31,12 @@ class Transaction extends Model
     {
         return $this->belongsToMany(Account::class, 'transaction_account')
             ->withPivot('amount', 'debit_credit', 'cost_center_id'); // Include cost center in pivot
+    }
+
+    // Direct relationship with transaction_account pivot table
+    public function transactionAccounts()
+    {
+        return $this->hasMany(TransactionAccount::class, 'transaction_id');
     }
 
     // Ensure transaction is balanced (debits == credits)
@@ -49,7 +59,7 @@ class Transaction extends Model
         $this->accounts()->attach($account->id, [
             'amount' => $amount,
             'debit_credit' => $debitCredit,
-            'cost_center_id' => $costCenter ? $costCenter->id : null, // Attach cost center if provided
+            'cost_center_id' => $costCenter ? $costCenter->id : null,
         ]);
     }
 }

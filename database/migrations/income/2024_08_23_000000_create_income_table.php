@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id(); // Primary key
             $table->string('url_address')->unique(); // Unique URL identifier
 
-            $table->foreignId('cost_center_id')->nullable()->constrained('cost_centers')->nullOnDelete(); // Foreign key for Cost Center
+            $table->foreignId('cost_center_id')->nullable()->constrained('costcenters')->nullOnDelete(); // Foreign key for Cost Center
 
             $table->foreignId('debit_account_id')->nullable()->constrained('accounts')->nullOnDelete(); // Foreign key for Debit Account
             $table->foreignId('credit_account_id')->nullable()->constrained('accounts')->nullOnDelete(); // Foreign key for Credit Account

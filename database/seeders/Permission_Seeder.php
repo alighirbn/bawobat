@@ -25,6 +25,22 @@ class Permission_Seeder extends Seeder
             'account-update',
             'account-delete',
 
+            //**************************costcenter******************************* */
+
+            'costcenter-list',
+            'costcenter-show',
+            'costcenter-create',
+            'costcenter-update',
+            'costcenter-delete',
+
+            //**************************transaction******************************* */
+
+            'transaction-list',
+            'transaction-show',
+            'transaction-create',
+            'transaction-update',
+            'transaction-delete',
+
             //**************************project******************************* */
 
             'project-list',

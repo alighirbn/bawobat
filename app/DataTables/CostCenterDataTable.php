@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Account\Transaction;
+use App\Models\Account\CostCenter;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Yajra\DataTables\EloquentDataTable;
@@ -10,7 +10,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class TransactionDataTable extends DataTable
+class CostCenterDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -21,7 +21,7 @@ class TransactionDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'transaction.action')
+            ->addColumn('action', 'costcenter.action')
             ->rawColumns(['action'])
             ->setRowId('id');
     }
@@ -30,10 +30,10 @@ class TransactionDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\transaction $model
+     * @param \App\Models\costcenter $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Transaction $model): QueryBuilder
+    public function query(CostCenter $model): QueryBuilder
     {
         // Get the base query with relationships
         $query = $model->newQuery();
@@ -49,7 +49,7 @@ class TransactionDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('transaction-table')
+            ->setTableId('costcenter-table')
             ->language([
                 'sUrl' =>  url('/') . '/../lang/' . __(LaravelLocalization::getCurrentLocale()) . '/datatable.json'
             ])
@@ -101,8 +101,8 @@ class TransactionDataTable extends DataTable
                 ->width(60)
                 ->title(__('word.action'))
                 ->addClass('text-center'),
-
-            Column::make('date')->title(__('word.date'))->class('text-center'),
+            Column::make('code')->title(__('word.code'))->class('text-center'),
+            Column::make('name')->title(__('word.name'))->class('text-center'),
             Column::make('description')->title(__('word.description'))->class('text-center'),
 
         ];
@@ -115,6 +115,6 @@ class TransactionDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Transaction_' . date('YmdHis');
+        return 'costcenter_' . date('YmdHis');
     }
 }

@@ -72,7 +72,8 @@ class IncomeController extends Controller
 
             // Create a transaction for the approved income
             $transaction = Transaction::create([
-
+                'url_address' => $this->get_random_string(60),
+                'user_id_create' => auth()->user()->id,
                 'date' => now(),
                 'description' => '',
                 'transactionable_id' => $income->id,

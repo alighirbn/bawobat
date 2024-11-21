@@ -119,7 +119,8 @@ class ExpenseController extends Controller
 
         if (isset($expense)) {
             $transaction = Transaction::create([
-
+                'url_address' => $this->get_random_string(60),
+                'user_id_create' => auth()->user()->id,
                 'date' => now(),
                 'description' => '',
                 'transactionable_id' => $expense->id,
