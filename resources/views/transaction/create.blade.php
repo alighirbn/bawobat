@@ -14,16 +14,7 @@
                             <p>{{ $message }}</p>
                         </div>
                     @endif
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                {{-- Loop through the errors and display each one --}}
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+
                     <div class="container">
                         <h2>Create New Transaction</h2>
 

@@ -22,5 +22,8 @@
 
     <!-- DataTables Script -->
     {!! $dataTable->scripts() !!}
-
+    <script>
+        // Handle DataTable errors gracefully
+        $.fn.dataTable.ext.errMode = 'none';
+    </script>
 </x-app-layout>

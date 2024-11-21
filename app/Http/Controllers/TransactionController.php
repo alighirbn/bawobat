@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\TransactionDataTable;
+use App\Http\Requests\StoreTransactionRequest;
 use App\Models\Account\Transaction;
 use App\Models\Account\Account;
 use App\Models\Account\CostCenter;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;  // Importing DB facade
 
@@ -29,7 +31,14 @@ class TransactionController extends Controller
 
     public function show(string $url_address)
     {
-        $transaction = Transaction::where('url_address', '=', $url_address)->first();
+        // Retrieve the transaction, including its debit and credit entries
+        $transaction = Transaction::with([
+            'debitEntries.account',
+            'debitEntries.costCenter',
+            'creditEntries.account',
+            'creditEntries.costCenter'
+        ])->where('url_address', '=', $url_address)->first();
+
         if (isset($transaction)) {
             return view('transaction.show', compact('transaction'));
         } else {
@@ -47,7 +56,9 @@ class TransactionController extends Controller
 
         $transaction = Transaction::where('url_address', '=', $url_address)->first();
         if (isset($transaction)) {
-            return view('transaction.edit', compact('transaction'));
+            $accounts = Account::all();
+            $costCenters = CostCenter::all();
+            return view('transaction.edit', compact('transaction', 'accounts', 'costCenters'));
         } else {
             $ip = $this->getIPAddress();
             return view('transaction.accessdenied', ['ip' => $ip]);
@@ -67,20 +78,9 @@ class TransactionController extends Controller
             ->with('success', 'تمت تعديل البيانات  بنجاح ');
     }
 
-    public function store(Request $request)
+    public function store(StoreTransactionRequest $request)
     {
-        $request->validate([
-            'description' => 'required|string|max:255',
-            'date' => 'required|date',
-            'debit.*.account_id' => 'required|exists:accounts,id',
-            'debit.*.amount' => 'required|numeric|min:0.01',
-            'debit.*.cost_center_id' => 'nullable|exists:costcenters,id',
-            'credit.*.account_id' => 'required|exists:accounts,id',
-            'credit.*.amount' => 'required|numeric|min:0.01',
-            'credit.*.cost_center_id' => 'nullable|exists:costcenters,id',
-        ]);
-
-        DB::beginTransaction();  // Start a transaction
+        DB::beginTransaction();
 
         try {
             // Create the transaction
@@ -91,32 +91,36 @@ class TransactionController extends Controller
                 'date' => $request->date,
             ]);
 
-            // Add debit entries
-            foreach ($request->debit as $entry) {
-                $transaction->entries()->create([
-                    'account_id' => $entry['account_id'],
-                    'amount' => $entry['amount'],
-                    'type' => 'debit',
-                    'cost_center_id' => $entry['cost_center_id'],
-                ]);
+            // Add debits and credits
+            $this->addEntries($request->debit, $transaction, 'debit');
+            $this->addEntries($request->credit, $transaction, 'credit');
+
+            // Check if the transaction is balanced before committing
+            if (!$transaction->isBalanced()) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'Transaction is not balanced.');
             }
 
-            // Add credit entries
-            foreach ($request->credit as $entry) {
-                $transaction->entries()->create([
-                    'account_id' => $entry['account_id'],
-                    'amount' => $entry['amount'],
-                    'type' => 'credit',
-                    'cost_center_id' => $entry['cost_center_id'],
-                ]);
-            }
-
-            DB::commit();  // Commit the transaction
-
+            DB::commit();
             return redirect()->route('transaction.index')->with('success', 'Transaction created successfully!');
+        } catch (QueryException $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Database error: ' . $e->getMessage());
         } catch (\Exception $e) {
-            DB::rollBack();  // Rollback the transaction on failure
-            return redirect()->back()->with('error', 'Transaction creation failed.');
+            DB::rollBack();
+            return redirect()->back()->with('error', 'An unexpected error occurred.');
+        }
+    }
+
+    private function addEntries($entries, $transaction, $debitCredit)
+    {
+        foreach ($entries as $entry) {
+            $transaction->transactionAccounts()->create([
+                'account_id' => $entry['account_id'],
+                'amount' => $entry['amount'],
+                'debit_credit' => $debitCredit,
+                'cost_center_id' => $entry['cost_center_id'],
+            ]);
         }
     }
 

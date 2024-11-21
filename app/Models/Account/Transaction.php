@@ -62,4 +62,13 @@ class Transaction extends Model
             'cost_center_id' => $costCenter ? $costCenter->id : null,
         ]);
     }
+    public function debitEntries()
+    {
+        return $this->hasMany(TransactionAccount::class)->where('debit_credit', 'debit');
+    }
+
+    public function creditEntries()
+    {
+        return $this->hasMany(TransactionAccount::class)->where('debit_credit', 'credit');
+    }
 }
