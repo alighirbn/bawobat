@@ -34,6 +34,8 @@ Route::group(['middleware' => 'checkStatus'], function () {
             return view('dashboard');
         })->middleware(['auth', 'verified'])->name('dashboard');
 
+        //account routes
+        require __DIR__ . '/account.php';
 
         //investor routes
         require __DIR__ . '/investor.php';

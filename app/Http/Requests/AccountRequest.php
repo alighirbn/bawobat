@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class CashTransferRequest extends FormRequest
+class AccountRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,14 +23,16 @@ class CashTransferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'url_address' => 'required|string|max:60',
+            'id',
+            'url_address' => ['required'],
+            'user_id_create' => ['Numeric'],
+            'user_id_update' => ['Numeric'],
 
-            'from_account_id' => 'required',
-            'to_account_id' => 'required',
-
-            'amount' => 'numeric',
-            'description' => 'required',
-            'date' => 'required',
+            //normal fields
+            'name' => ['max:100', 'required', Rule::unique('accounts')->ignore($this->id),],
+            'code' => ['max:20', 'required'],
+            'type' => ['max:10', 'required'],
+            'class' => ['max:10', 'required'],
         ];
     }
 
@@ -40,15 +42,12 @@ class CashTransferRequest extends FormRequest
         $this->mergeIfMissing(['url_address' => $this->get_random_string(60)]);
 
         //add user_id base on route
-        if (request()->routeIs('cash_transfer.store')) {
+        if (request()->routeIs('account.store')) {
             $this->mergeIfMissing(['user_id_create' => auth()->user()->id]);
-        } elseif (request()->routeIs('cash_transfer.update')) {
+        } elseif (request()->routeIs('account.update')) {
             $this->mergeIfMissing(['user_id_update' =>  auth()->user()->id]);
         }
     }
-
-
-
     function get_random_string($length)
     {
         $array = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');

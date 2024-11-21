@@ -122,37 +122,85 @@ class ReportController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
 
-        // Retrieve assets (debit accounts) and liabilities (credit accounts)
+        // Retrieve assets (debit accounts), liabilities (credit accounts), and equity
         $assets = Account::where('type', 'asset')->with('transactions')->get();
         $liabilities = Account::where('type', 'liability')->with('transactions')->get();
         $equity = Account::where('type', 'equity')->with('transactions')->get();
 
-        // Calculate total assets, liabilities, and equity
-        $totalAssets = $assets->sum(function ($account) use ($startDate, $endDate) {
-            return $account->transactions()
+        // Detailed calculation for assets
+        $assetDetails = $assets->map(function ($account) use ($startDate, $endDate) {
+            $debits = $account->transactions()
                 ->whereBetween('transactions.date', [$startDate, $endDate])
                 ->where('transaction_account.debit_credit', 'debit')
                 ->sum('transaction_account.amount');
-        });
-
-        $totalLiabilities = $liabilities->sum(function ($account) use ($startDate, $endDate) {
-            return $account->transactions()
+            $credits = $account->transactions()
                 ->whereBetween('transactions.date', [$startDate, $endDate])
                 ->where('transaction_account.debit_credit', 'credit')
                 ->sum('transaction_account.amount');
+
+            return [
+                'account_name' => $account->name,
+                'debits' => $debits,
+                'credits' => $credits,
+                'balance' => $debits - $credits,
+            ];
         });
 
-        $totalEquity = $equity->sum(function ($account) use ($startDate, $endDate) {
-            return $account->transactions()
+        // Detailed calculation for liabilities
+        $liabilityDetails = $liabilities->map(function ($account) use ($startDate, $endDate) {
+            $debits = $account->transactions()
+                ->whereBetween('transactions.date', [$startDate, $endDate])
+                ->where('transaction_account.debit_credit', 'debit')
+                ->sum('transaction_account.amount');
+            $credits = $account->transactions()
                 ->whereBetween('transactions.date', [$startDate, $endDate])
                 ->where('transaction_account.debit_credit', 'credit')
                 ->sum('transaction_account.amount');
+
+            return [
+                'account_name' => $account->name,
+                'debits' => $debits,
+                'credits' => $credits,
+                'balance' => $credits - $debits,
+            ];
         });
 
-        // Calculate the balance (Assets = Liabilities + Equity)
+        // Detailed calculation for equity
+        $equityDetails = $equity->map(function ($account) use ($startDate, $endDate) {
+            $debits = $account->transactions()
+                ->whereBetween('transactions.date', [$startDate, $endDate])
+                ->where('transaction_account.debit_credit', 'debit')
+                ->sum('transaction_account.amount');
+            $credits = $account->transactions()
+                ->whereBetween('transactions.date', [$startDate, $endDate])
+                ->where('transaction_account.debit_credit', 'credit')
+                ->sum('transaction_account.amount');
+
+            return [
+                'account_name' => $account->name,
+                'debits' => $debits,
+                'credits' => $credits,
+                'balance' => $credits - $debits,
+            ];
+        });
+
+        // Calculate the total of debits, credits, and balance for each section
+        $totalAssets = $assetDetails->sum('balance');
+        $totalLiabilities = $liabilityDetails->sum('balance');
+        $totalEquity = $equityDetails->sum('balance');
+
+        // Balance check
         $isBalanced = $totalAssets === ($totalLiabilities + $totalEquity);
 
-        // Return the view with the calculated values
-        return view('report.balance_sheet', compact('totalAssets', 'totalLiabilities', 'totalEquity', 'isBalanced'));
+        // Return the view with detailed data
+        return view('report.balance_sheet', compact(
+            'assetDetails',
+            'liabilityDetails',
+            'equityDetails',
+            'totalAssets',
+            'totalLiabilities',
+            'totalEquity',
+            'isBalanced'
+        ));
     }
 }

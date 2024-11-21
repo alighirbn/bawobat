@@ -14,6 +14,10 @@ return new class extends Migration
         // Migration for Chart of Accounts
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
+            $table->string('url_address')->unique(); // Unique URL identifier
+            $table->foreignId('user_id_create')->nullable()->constrained('users')->nullOnDelete(); // Creator user
+            $table->foreignId('user_id_update')->nullable()->constrained('users')->nullOnDelete(); // Updater user
+
             $table->string('code')->unique(); // Account code (e.g., '101' for "Capital")
             $table->string('name');           // Account name (e.g., 'Capital')
             $table->enum('type', [

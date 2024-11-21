@@ -40,7 +40,6 @@ class Transaction extends Model
             ->where('transaction_account.debit_credit', 'credit')
             ->sum('transaction_account.amount');
 
-
         return $debits == $credits;
     }
 

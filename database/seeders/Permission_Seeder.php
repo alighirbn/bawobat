@@ -17,6 +17,13 @@ class Permission_Seeder extends Seeder
         // add Permissions
         $permissions = [
             //dashboard
+            //**************************account******************************* */
+
+            'account-list',
+            'account-show',
+            'account-create',
+            'account-update',
+            'account-delete',
 
             //**************************project******************************* */
 

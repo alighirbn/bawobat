@@ -2,7 +2,7 @@
 
 namespace App\Models\Account;
 
-
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +10,16 @@ class Account extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['code', 'name', 'type', 'class'];
+    protected $fillable = [
+        'url_address',
+        'code',
+        'name',
+        'type',
+        'class',
+
+        'user_id_create',
+        'user_id_update',
+    ];
 
     // Many-to-many relationship with transactions (through transaction_account pivot table)
     public function transactions()
@@ -41,5 +50,14 @@ class Account extends Model
     public function isExpense()
     {
         return $this->type === 'expense';
+    }
+    public function user_create()
+    {
+        return $this->belongsTo(User::class, 'user_id_create', 'id');
+    }
+
+    public function user_update()
+    {
+        return $this->belongsTo(User::class, 'user_id_update', 'id');
     }
 }
