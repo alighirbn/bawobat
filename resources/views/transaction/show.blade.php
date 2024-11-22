@@ -27,7 +27,7 @@
                             </div>
                             <div class=" mx-2 my-2 w-full ">
                                 <img src="{{ asset('images/yasmine.png') }}" alt="الشعار"
-                                    style="h-6;max-width: 100%; height: auto;">
+                                    style="h-6;max-width: 70%; height: auto;">
                             </div>
                             <div class=" mx-2 my-2 w-full ">
                                 <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($transaction->id, 'C39') }}"

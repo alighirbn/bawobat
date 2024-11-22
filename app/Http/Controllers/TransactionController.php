@@ -9,19 +9,21 @@ use App\Models\Account\Account;
 use App\Models\Account\CostCenter;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;  // Importing DB facade
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * عرض قائمة القيود الحسابية.
      */
     public function index(TransactionDataTable $dataTable)
     {
         return $dataTable->render('transaction.index');
     }
 
-
+    /**
+     * عرض صفحة إنشاء قيد حسابي جديد.
+     */
     public function create()
     {
         $accounts = Account::all();
@@ -29,9 +31,11 @@ class TransactionController extends Controller
         return view('transaction.create', compact('accounts', 'costCenters'));
     }
 
+    /**
+     * عرض تفاصيل قيد حسابي محدد.
+     */
     public function show(string $url_address)
     {
-        // Retrieve the transaction, including its debit and credit entries
         $transaction = Transaction::with([
             'debits.account',
             'debits.costCenter',
@@ -47,12 +51,14 @@ class TransactionController extends Controller
         }
     }
 
+    /**
+     * عرض صفحة تعديل قيد حسابي محدد.
+     */
     public function edit(string $url_address)
     {
-        // Retrieve the transaction with its debits and credits
         $transaction = Transaction::with(['debits', 'credits'])->where('url_address', '=', $url_address)->first();
+
         if (isset($transaction)) {
-            // Retrieve all accounts and cost centers to populate the dropdowns
             $accounts = Account::all();
             $costCenters = CostCenter::all();
 
@@ -64,57 +70,53 @@ class TransactionController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * تحديث قيد حسابي محدد.
      */
     public function update(StoreTransactionRequest $request, string $url_address)
     {
         DB::beginTransaction();
 
         try {
-            // Retrieve the existing transaction, including its debits and credits
             $transaction = Transaction::with(['debits', 'credits'])
                 ->where('url_address', '=', $url_address)
                 ->firstOrFail();
 
-            // Update the transaction details (description, date)
             $transaction->update([
                 'description' => $request->description,
                 'date' => $request->date,
             ]);
 
-            // Clear existing entries (debts and credits) before adding new ones
             $transaction->debits()->delete();
             $transaction->credits()->delete();
 
-            // Add new debits and credits from the request
             $this->addEntries($request->debit, $transaction, 'debit');
             $this->addEntries($request->credit, $transaction, 'credit');
 
-            // Check if the transaction is balanced
             if (!$transaction->isBalanced()) {
                 DB::rollBack();
-                return redirect()->back()->with('error', 'The transaction is not balanced.');
+                return redirect()->back()->with('error', 'القيد الحسابي غير متوازن.');
             }
 
             DB::commit();
 
-            return redirect()->route('transaction.index')->with('success', 'The transaction was updated successfully.');
+            return redirect()->route('transaction.index')->with('success', 'تم تحديث القيد الحسابي بنجاح.');
         } catch (QueryException $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Database error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'خطأ في قاعدة البيانات: ' . $e->getMessage());
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'An unexpected error occurred.');
+            return redirect()->back()->with('error', 'حدث خطأ غير متوقع.');
         }
     }
 
-
+    /**
+     * إنشاء قيد حسابي جديد.
+     */
     public function store(StoreTransactionRequest $request)
     {
         DB::beginTransaction();
 
         try {
-            // Create the transaction
             $transaction = Transaction::create([
                 'url_address' => $this->get_random_string(60),
                 'user_id_create' => auth()->user()->id,
@@ -122,25 +124,32 @@ class TransactionController extends Controller
                 'date' => $request->date,
             ]);
 
-            // Add debits and credits
             $this->addEntries($request->debit, $transaction, 'debit');
             $this->addEntries($request->credit, $transaction, 'credit');
 
-            // Check if the transaction is balanced before committing
             if (!$transaction->isBalanced()) {
                 DB::rollBack();
-                return redirect()->back()->with('error', 'Transaction is not balanced.');
+                return redirect()->back()->with('error', 'القيد الحسابي غير متوازن.');
             }
 
             DB::commit();
-            return redirect()->route('transaction.index')->with('success', 'Transaction created successfully!');
+            return redirect()->route('transaction.index')->with('success', 'تم إنشاء القيد الحسابي بنجاح!');
         } catch (QueryException $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Database error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'خطأ في قاعدة البيانات: ' . $e->getMessage());
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'An unexpected error occurred.');
+            return redirect()->back()->with('error', 'حدث خطأ غير متوقع.');
         }
+    }
+
+    /**
+     * حذف قيد حسابي محدد.
+     */
+    public function destroy(string $url_address)
+    {
+        $affected = Transaction::where('url_address', $url_address)->delete();
+        return redirect()->route('transaction.index')->with('success', 'تم حذف القيد الحسابي بنجاح.');
     }
 
     private function addEntries($entries, $transaction, $debitCredit)
@@ -156,39 +165,31 @@ class TransactionController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * استرداد عنوان IP للمستخدم.
      */
-    public function destroy(string $url_address)
-    {
-        $affected = Transaction::where('url_address', $url_address)->delete();
-        return redirect()->route('transaction.index')
-            ->with('success', 'تمت حذف البيانات بنجاح ');
-    }
-
     public function getIPAddress()
     {
-        //whether ip is from the share internet
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
-        }
-        //whether ip is from the proxy
-        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        }
-        //whether ip is from the remote address
-        else {
+        } else {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
         return $ip;
     }
+
+    /**
+     * إنشاء سلسلة عشوائية.
+     */
     function get_random_string($length)
     {
-        $array = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+        $array = array_merge(range(0, 9), range('a', 'z'), range('A', 'Z'));
         $text = "";
         $length = rand(22, $length);
 
         for ($i = 0; $i < $length; $i++) {
-            $random = rand(0, 61);
+            $random = rand(0, count($array) - 1);
             $text .= $array[$random];
         }
         return $text;

@@ -190,6 +190,59 @@
     </div>
 
     <script>
+        $(document).ready(function() {
+
+            // Generate the transaction description
+            function generateDescription() {
+                const debitAccounts = [];
+                const creditAccounts = [];
+                let totalAmount = 0;
+
+                // Collect debit account names
+                $('.debit-entry').each(function() {
+                    const accountName = $(this).find('select[name$="[account_id]"] option:selected').text();
+                    const amount = parseFloat($(this).find('input[name$="[amount]"]').val().replace(/,/g,
+                        '')) || 0;
+
+                    if (accountName && amount) {
+                        debitAccounts.push(accountName.trim());
+                        totalAmount += amount;
+                    }
+                });
+
+                // Collect credit account names
+                $('.credit-entry').each(function() {
+                    const accountName = $(this).find('select[name$="[account_id]"] option:selected').text();
+                    const amount = parseFloat($(this).find('input[name$="[amount]"]').val().replace(/,/g,
+                        '')) || 0;
+
+                    if (accountName && amount) {
+                        creditAccounts.push(accountName.trim());
+                    }
+                });
+
+                // Generate description
+                let description = '';
+                if (creditAccounts.length > 0 && debitAccounts.length > 0) {
+                    description =
+                        `من ${creditAccounts.join(', ')} إلى ${debitAccounts.join(', ')}, المجموع: ${totalAmount}`;
+                }
+
+                // Update the description field
+                $('#description').val(description);
+            }
+
+            // Trigger description generation on any input change
+            $(document).on('change input',
+                '.debit-entry select, .debit-entry input, .credit-entry select, .credit-entry input',
+                generateDescription);
+
+            // Initialize the form
+
+            generateDescription(); // Initial call to generate description
+        });
+
+
         // Function to calculate the total of a given class (debit or credit)
         function calculateTotal(className) {
             let total = 0;
