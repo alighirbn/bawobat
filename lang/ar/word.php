@@ -99,6 +99,28 @@ return [
     //account_info
     'account_info' => 'بيانات الحساب',
 
+    //************************************* costcenter        *******************************************
+    //nav
+
+    'costcenter_add' => 'اضافة مركز كلفة',
+    'costcenter_search' => 'بحث عن مركز كلفة',
+
+
+    //costcenter_info
+    'costcenter_info' => 'بيانات المركز كلفة',
+
+    //************************************* transaction        *******************************************
+    //nav
+
+    'transaction_add' => 'اضافة قيد',
+    'transaction_search' => 'بحث عن قيد',
+
+
+    //transaction_info
+    'transaction_info' => 'بيانات القيد',
+
+
+
     //************************************* income        *******************************************
 
     'income_id' => 'عدد الايراد',
@@ -142,45 +164,6 @@ return [
     'expense_info' => 'بيانات سند الصرف',
     'expense_pending' => 'سندات الصرف غير الموافق عليها',
     'expense_status' => 'حالة الدفع',
-
-
-    //************************************* cash_account        *******************************************
-
-    'cash_account_id' => 'رقم الصندوق',
-    'balance' => 'الرصيد ',
-    'account_name' => 'اسم الصندوق',
-    'account_number' => 'رقم الحساب',
-
-
-    //nav
-    'cash_account_add' => 'اضافة صندوق',
-    'cash_account_search' => 'بحث عن صندوق',
-
-    //cash_account_info
-    'cash_account_info' => 'بيانات الصندوق',
-
-    //************************************* cash_transfer        *******************************************
-
-    'cash_transfer_id' => 'عدد التحويل',
-    'amount' => 'المبلغ ',
-
-    'transfer_date' => 'تأريخ التحويل',
-    'from_account_id' => 'من حساب',
-    'to_account_id' => 'الى حساب',
-    'from_account' => 'من حساب',
-    'to_account' => 'الى حساب',
-
-    'transfer_number' => 'عدد االتحويل',
-    'transfer_note' => ' الملاحظات',
-
-    //nav
-    'cash_transfer_add' => 'اضافة تحويل',
-    'cash_transfer_search' => 'بحث عن تحويل',
-
-    //cash_transfer_info
-    'cash_transfer_info' => 'بيانات الصندوق',
-    'cash_transfer_pending' => 'التحويلات غير الموافق عليها',
-    'cash_transfer_approve' => 'قبول التحويل',
 
 
 

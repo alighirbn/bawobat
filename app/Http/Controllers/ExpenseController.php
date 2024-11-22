@@ -122,7 +122,7 @@ class ExpenseController extends Controller
                 'url_address' => $this->get_random_string(60),
                 'user_id_create' => auth()->user()->id,
                 'date' => now(),
-                'description' => '',
+                'description' => $expense->description,
                 'transactionable_id' => $expense->id,
                 'transactionable_type' => expense::class,
             ]);

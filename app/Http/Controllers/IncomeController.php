@@ -75,7 +75,7 @@ class IncomeController extends Controller
                 'url_address' => $this->get_random_string(60),
                 'user_id_create' => auth()->user()->id,
                 'date' => now(),
-                'description' => '',
+                'description' => $income->description,
                 'transactionable_id' => $income->id,
                 'transactionable_type' => income::class,
             ]);

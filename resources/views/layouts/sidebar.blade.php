@@ -95,23 +95,15 @@
         <div class="item"><a class="sub-btn"> {{ __('word.account') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
             <div class="flex flex-col   sub-menu" style="display: none;">
                 @include('account.nav.navigation')
-            </div>
-        </div>
-    @endcan
-    @can('income-list')
-        <div class="item"><a class="sub-btn"> {{ __('word.income') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
-            <div class="flex flex-col   sub-menu" style="display: none;">
                 @include('income.nav.navigation')
-            </div>
-        </div>
-    @endcan
-    @can('expense-list')
-        <div class="item"><a class="sub-btn"> {{ __('word.expense') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
-            <div class="flex flex-col   sub-menu" style="display: none;">
                 @include('expense.nav.navigation')
+                @include('costcenter.nav.navigation')
+                @include('transaction.nav.navigation')
+
             </div>
         </div>
     @endcan
+
     @can('report-list')
         <div class="item"><a class="sub-btn"> {{ __('word.report') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
             <div class="flex flex-col   sub-menu" style="display: none;">

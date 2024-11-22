@@ -4,7 +4,11 @@
         <link rel="stylesheet" type="text/css" href="{{ url('/css/select2.min.css') }}" />
         <script src="{{ asset('js/select2.min.js') }}"></script>
         <div class="flex justify-start">
+            @include('account.nav.navigation')
             @include('income.nav.navigation')
+            @include('expense.nav.navigation')
+            @include('costcenter.nav.navigation')
+            @include('transaction.nav.navigation')
 
         </div>
 

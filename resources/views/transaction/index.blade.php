@@ -1,6 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
-        @include('transaction.nav.navigation')
+        <div class="flex justify-start">
+            @include('account.nav.navigation')
+            @include('income.nav.navigation')
+            @include('expense.nav.navigation')
+            @include('costcenter.nav.navigation')
+            @include('transaction.nav.navigation')
+        </div>
     </x-slot>
 
     <div class="py-4">
