@@ -63,7 +63,48 @@
                         </div>
 
                         <div class="flex space-x-3">
-
+                            <div class="card mx-1 w-full shadow-sm">
+                                <div class="card-header bg-gray-100 p-2 rounded-t-md">
+                                    <h5 class="text-md font-semibold text-gray-800">{{ __('الإدخالات الدائنة') }}</h5>
+                                </div>
+                                <div class="card-body bg-gray-50 p-2">
+                                    <div id="credit_entries">
+                                        @php
+                                            $totalCredit = 0;
+                                        @endphp
+                                        @foreach ($transaction->credits as $credit)
+                                            <div class="credit-entry p-2 border rounded-md mb-2 bg-white">
+                                                <div class="flex">
+                                                    <div class="mb-1 mx-1 w-full">
+                                                        <strong
+                                                            class="text-xs font-medium text-gray-700">{{ __('الحساب:') }}</strong>
+                                                        <p class="text-sm">{{ $credit->account->name }}
+                                                            ({{ $credit->account->code }})
+                                                        </p>
+                                                    </div>
+                                                    <div class="mb-1 mx-1 w-full">
+                                                        <strong
+                                                            class="text-xs font-medium text-gray-700">{{ __('المبلغ:') }}</strong>
+                                                        <p class="text-sm">{{ number_format($credit->amount, 0) }}</p>
+                                                    </div>
+                                                    <div class="mb-1 mx-1 w-full">
+                                                        <strong
+                                                            class="text-xs font-medium text-gray-700">{{ __('مركز التكلفة:') }}</strong>
+                                                        <p class="text-sm">{{ $credit->costCenter->name }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @php
+                                                $totalCredit += $credit->amount;
+                                            @endphp
+                                        @endforeach
+                                    </div>
+                                    <div class="mt-2 font-semibold text-sm text-gray-700">
+                                        <strong>{{ __('إجمالي الدائن:') }}</strong>
+                                        {{ number_format($totalCredit, 0) }}
+                                    </div>
+                                </div>
+                            </div>
                             <div class="card mx-1 w-full shadow-sm">
                                 <div class="card-header bg-gray-100 p-2 rounded-t-md">
                                     <h5 class="text-md font-semibold text-gray-800">{{ __('الإدخالات المدينة') }}</h5>
@@ -73,7 +114,7 @@
                                         @php
                                             $totalDebit = 0;
                                         @endphp
-                                        @foreach ($transaction->debitEntries as $debit)
+                                        @foreach ($transaction->debits as $debit)
                                             <div class="debit-entry p-2 border rounded-md mb-2 bg-white">
                                                 <div class="flex">
                                                     <div class="mb-1 mx-1 w-full">
@@ -107,48 +148,6 @@
                                 </div>
                             </div>
 
-                            <div class="card mx-1 w-full shadow-sm">
-                                <div class="card-header bg-gray-100 p-2 rounded-t-md">
-                                    <h5 class="text-md font-semibold text-gray-800">{{ __('الإدخالات الدائنة') }}</h5>
-                                </div>
-                                <div class="card-body bg-gray-50 p-2">
-                                    <div id="credit_entries">
-                                        @php
-                                            $totalCredit = 0;
-                                        @endphp
-                                        @foreach ($transaction->creditEntries as $credit)
-                                            <div class="credit-entry p-2 border rounded-md mb-2 bg-white">
-                                                <div class="flex">
-                                                    <div class="mb-1 mx-1 w-full">
-                                                        <strong
-                                                            class="text-xs font-medium text-gray-700">{{ __('الحساب:') }}</strong>
-                                                        <p class="text-sm">{{ $credit->account->name }}
-                                                            ({{ $credit->account->code }})
-                                                        </p>
-                                                    </div>
-                                                    <div class="mb-1 mx-1 w-full">
-                                                        <strong
-                                                            class="text-xs font-medium text-gray-700">{{ __('المبلغ:') }}</strong>
-                                                        <p class="text-sm">{{ number_format($credit->amount, 0) }}</p>
-                                                    </div>
-                                                    <div class="mb-1 mx-1 w-full">
-                                                        <strong
-                                                            class="text-xs font-medium text-gray-700">{{ __('مركز التكلفة:') }}</strong>
-                                                        <p class="text-sm">{{ $credit->costCenter->name }}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @php
-                                                $totalCredit += $credit->amount;
-                                            @endphp
-                                        @endforeach
-                                    </div>
-                                    <div class="mt-2 font-semibold text-sm text-gray-700">
-                                        <strong>{{ __('إجمالي الدائن:') }}</strong>
-                                        {{ number_format($totalCredit, 0) }}
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                     </div>

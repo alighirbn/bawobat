@@ -33,10 +33,10 @@ class TransactionController extends Controller
     {
         // Retrieve the transaction, including its debit and credit entries
         $transaction = Transaction::with([
-            'debitEntries.account',
-            'debitEntries.costCenter',
-            'creditEntries.account',
-            'creditEntries.costCenter'
+            'debits.account',
+            'debits.costCenter',
+            'credits.account',
+            'credits.costCenter'
         ])->where('url_address', '=', $url_address)->first();
 
         if (isset($transaction)) {
@@ -47,17 +47,15 @@ class TransactionController extends Controller
         }
     }
 
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $url_address)
     {
-
-        $transaction = Transaction::where('url_address', '=', $url_address)->first();
+        // Retrieve the transaction with its debits and credits
+        $transaction = Transaction::with(['debits', 'credits'])->where('url_address', '=', $url_address)->first();
         if (isset($transaction)) {
+            // Retrieve all accounts and cost centers to populate the dropdowns
             $accounts = Account::all();
             $costCenters = CostCenter::all();
+
             return view('transaction.edit', compact('transaction', 'accounts', 'costCenters'));
         } else {
             $ip = $this->getIPAddress();
@@ -68,15 +66,48 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $url_address)
+    public function update(StoreTransactionRequest $request, string $url_address)
     {
-        // insert the user input into model and lareval insert it into the database.
-        Transaction::where('url_address', $url_address)->update($request->validated());
+        DB::beginTransaction();
 
-        //inform the user
-        return redirect()->route('transaction.index')
-            ->with('success', 'تمت تعديل البيانات  بنجاح ');
+        try {
+            // Retrieve the existing transaction, including its debits and credits
+            $transaction = Transaction::with(['debits', 'credits'])
+                ->where('url_address', '=', $url_address)
+                ->firstOrFail();
+
+            // Update the transaction details (description, date)
+            $transaction->update([
+                'description' => $request->description,
+                'date' => $request->date,
+            ]);
+
+            // Clear existing entries (debts and credits) before adding new ones
+            $transaction->debits()->delete();
+            $transaction->credits()->delete();
+
+            // Add new debits and credits from the request
+            $this->addEntries($request->debit, $transaction, 'debit');
+            $this->addEntries($request->credit, $transaction, 'credit');
+
+            // Check if the transaction is balanced
+            if (!$transaction->isBalanced()) {
+                DB::rollBack();
+                return redirect()->back()->with('error', 'The transaction is not balanced.');
+            }
+
+            DB::commit();
+
+            return redirect()->route('transaction.index')->with('success', 'The transaction was updated successfully.');
+        } catch (QueryException $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Database error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'An unexpected error occurred.');
+        }
     }
+
 
     public function store(StoreTransactionRequest $request)
     {
@@ -115,7 +146,7 @@ class TransactionController extends Controller
     private function addEntries($entries, $transaction, $debitCredit)
     {
         foreach ($entries as $entry) {
-            $transaction->transactionAccounts()->create([
+            $transaction->entries()->create([
                 'account_id' => $entry['account_id'],
                 'amount' => $entry['amount'],
                 'debit_credit' => $debitCredit,

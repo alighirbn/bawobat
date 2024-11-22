@@ -34,7 +34,7 @@ class Transaction extends Model
     }
 
     // Direct relationship with transaction_account pivot table
-    public function transactionAccounts()
+    public function entries()
     {
         return $this->hasMany(TransactionAccount::class, 'transaction_id');
     }
@@ -62,12 +62,12 @@ class Transaction extends Model
             'cost_center_id' => $costCenter ? $costCenter->id : null,
         ]);
     }
-    public function debitEntries()
+    public function debits()
     {
         return $this->hasMany(TransactionAccount::class)->where('debit_credit', 'debit');
     }
 
-    public function creditEntries()
+    public function credits()
     {
         return $this->hasMany(TransactionAccount::class)->where('debit_credit', 'credit');
     }

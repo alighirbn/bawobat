@@ -29,7 +29,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
             $table->foreignId('account_id')->constrained()->onDelete('cascade');
-            $table->decimal('amount', 15, 2); // Debit or Credit amount
+            $table->decimal('amount', 15, 0); // Debit or Credit amount
             $table->enum('debit_credit', ['debit', 'credit']); // Debit or Credit
             $table->foreignId('cost_center_id')->nullable()->constrained('costcenters')->onDelete('set null'); // Link to a specific cost center
             $table->timestamps();
