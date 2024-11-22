@@ -18,6 +18,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->text('address')->nullable();
+
+            $table->unsignedBigInteger('account_id')->nullable();
+            $table->foreign('account_id')->references('id')->on('accounts');
+
             $table->unsignedBigInteger('user_id_create')->nullable();
             $table->foreign('user_id_create')->references('id')->on('users');
 

@@ -26,6 +26,8 @@ return new class extends Migration
                 'income',
                 'expense'
             ]); // Account type (Asset, Liability, Expense, Income)
+            $table->unsignedBigInteger('parent_id')->nullable(); // Add the parent_id column
+            $table->foreign('parent_id')->references('id')->on('accounts')->onDelete('cascade');
             $table->integer('class');         // Class (1, 2, 3, etc. from PCG)
             $table->timestamps();
         });

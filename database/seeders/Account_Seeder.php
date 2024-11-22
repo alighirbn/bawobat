@@ -34,6 +34,7 @@ class Account_Seeder extends Seeder
             ['url_address' => $this->get_random_string(60), 'code' => '402', 'name' => 'الموردين', 'type' => 'liability', 'class' => 4],
             ['url_address' => $this->get_random_string(60), 'code' => '403', 'name' => 'الحسابات المدينة قصيرة الأجل', 'type' => 'asset', 'class' => 4],
             ['url_address' => $this->get_random_string(60), 'code' => '404', 'name' => 'الحسابات الدائنة قصيرة الأجل', 'type' => 'liability', 'class' => 4],
+            ['url_address' => $this->get_random_string(60), 'code' => '455', 'name' => 'الحسابات الجارية للمساهمين / المستثمرين', 'type' => 'liability', 'class' => 4],
 
             // الفصل 5 - النقد والبنك (Cash and Bank)
             ['url_address' => $this->get_random_string(60), 'code' => '501', 'name' => 'الصندوق', 'type' => 'asset', 'class' => 5],

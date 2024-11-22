@@ -16,7 +16,7 @@ class Account extends Model
         'name',
         'type',
         'class',
-
+        'parent_id',  // Added parent_id field
         'user_id_create',
         'user_id_update',
     ];
@@ -51,11 +51,26 @@ class Account extends Model
     {
         return $this->type === 'expense';
     }
+
+    // Relationship: Child accounts (the ones that belong to this parent)
+    public function children()
+    {
+        return $this->hasMany(Account::class, 'parent_id');
+    }
+
+    // Relationship: Parent account (if this account has a parent)
+    public function parent()
+    {
+        return $this->belongsTo(Account::class, 'parent_id');
+    }
+
+    // Relationship with the user who created the account
     public function user_create()
     {
         return $this->belongsTo(User::class, 'user_id_create', 'id');
     }
 
+    // Relationship with the user who updated the account
     public function user_update()
     {
         return $this->belongsTo(User::class, 'user_id_update', 'id');

@@ -26,7 +26,11 @@ class TransactionController extends Controller
      */
     public function create()
     {
-        $accounts = Account::all();
+        $accounts = Account::whereNotNull('parent_id')
+            ->orderBy('parent_id')
+            ->orderBy('code') // Additional sorting by 'code'
+            ->get();
+
         $costCenters = CostCenter::all();
         return view('transaction.create', compact('accounts', 'costCenters'));
     }
@@ -59,7 +63,11 @@ class TransactionController extends Controller
         $transaction = Transaction::with(['debits', 'credits'])->where('url_address', '=', $url_address)->first();
 
         if (isset($transaction)) {
-            $accounts = Account::all();
+            $accounts = Account::whereNotNull('parent_id')
+                ->orderBy('parent_id')
+                ->orderBy('code') // Additional sorting by 'code'
+                ->get();
+
             $costCenters = CostCenter::all();
 
             return view('transaction.edit', compact('transaction', 'accounts', 'costCenters'));

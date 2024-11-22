@@ -2,6 +2,7 @@
 
 namespace App\Models\Investor;
 
+use App\Models\Account\Account;
 use App\Models\Project\Project;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,7 @@ class Investor extends Model
         'email',
         'phone',
         'address',
+        'account_id',
         'user_id_create',
         'user_id_update',
     ];
@@ -44,5 +46,35 @@ class Investor extends Model
     public function user_update()
     {
         return $this->belongsTo(User::class, 'user_id_update', 'id');
+    }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($investor) {
+            $account = Account::create([
+                'url_address' => $investor->get_random_string(60),
+                'code' => '455' . $investor->id,
+                'name' => 'حساب ' . $investor->name,
+                'parent_id' => 18,
+                'type' => 'liability', // Assuming investments are liabilities
+                'class' => '4',
+                'user_id_create' => auth()->id(),
+            ]);
+
+            $investor->update(['account_id' => $account->id]);
+        });
+    }
+    function get_random_string($length)
+    {
+        $array = array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+        $text = "";
+        $length = rand(22, $length);
+
+        for ($i = 0; $i < $length; $i++) {
+            $random = rand(0, 61);
+            $text .= $array[$random];
+        }
+        return $text;
     }
 }
