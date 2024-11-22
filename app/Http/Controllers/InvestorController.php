@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\InvestorDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InvestorRequest;
+use App\Models\Account\Account;
 use App\Models\Investor\Investor;
 
 
@@ -87,9 +88,23 @@ class InvestorController extends Controller
      */
     public function destroy(string $url_address)
     {
-        $affected = Investor::where('url_address', $url_address)->delete();
+        // Find the investor by URL address
+        $investor = Investor::where('url_address', $url_address)->first();
+        // Access the associated account
+        $account = $investor->account;
+        // Check if the account has related transactions
+        if ($account && $account->transactions()->exists()) {
+            return redirect()->route('investor.index')
+                ->with('error', 'المساهم مرتبط بعدة قيود محاسبية لا يمكن الحذف');
+        }
+        $investor->delete();
+        // Delete the investor and account
+        if ($account) {
+            $account->delete();
+        }
+
         return redirect()->route('investor.index')
-            ->with('success', 'تمت حذف البيانات بنجاح ');
+            ->with('success', 'تمت حذف البيانات بنجاح');
     }
 
     public function getIPAddress()

@@ -12,17 +12,11 @@
                             <p>{{ $message }}</p>
                         </div>
                     @endif
-
-                    <div class="row mb-2">
-                        <div class="col-md-4">
-                            <input type="text" id="filter-investor" class="form-control"
-                                placeholder="{{ __('ابحث عن اسم زبون') }}">
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
                         </div>
-                        <div class="col-md-4">
-                            <input type="text" id="filter-phone" class="form-control"
-                                placeholder="{{ __('ابحث عن رقم الموبايل') }}">
-                        </div>
-                    </div>
+                    @endif
 
                     <!-- DataTable -->
                     {!! $dataTable->table(['class' => 'table table-bordered table-striped'], true) !!}
@@ -35,24 +29,7 @@
     {!! $dataTable->scripts() !!}
 
     <script>
-        $(document).ready(function() {
-            var table = $('#investor-table').DataTable();
-
-            // Custom filters
-            $('#filter-investor').on('keyup', function() {
-                table.column(1).search(this.value).draw(); // Adjust index if needed
-            });
-            $('#filter-phone').on('keyup', function() {
-                table.column(2).search(this.value).draw(); // Adjust index if needed
-            });
-        });
-
         // Handle DataTable errors gracefully
         $.fn.dataTable.ext.errMode = 'none';
-
-        // Log if there's an error in AJAX call
-        $('#investor-table').on('error.dt', function(e, settings, techNote, message) {
-            console.log('An error has been reported by DataTables: ', message);
-        });
     </script>
 </x-app-layout>

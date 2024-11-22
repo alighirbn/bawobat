@@ -97,6 +97,7 @@ class Permission_Seeder extends Seeder
             'report-costCenter',
             'report-trialBalanceCostCenter',
 
+
             //**************************user******************************* */
 
             'user-list',

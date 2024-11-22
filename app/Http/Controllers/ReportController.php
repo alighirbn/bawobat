@@ -39,9 +39,20 @@ class ReportController extends Controller
      */
     public function trialBalance()
     {
-        $accounts = Account::with('transactions')->get();
+        // Retrieve all accounts along with their children (if any)
+        $accounts = Account::with('transactions', 'children')->get();
 
-        $trialBalance = $accounts->map(function ($account) {
+        // Prepare an array to store the trial balance data
+        $trialBalance = [];
+
+        // Iterate through each account to prepare the trial balance data
+        foreach ($accounts as $account) {
+            // Skip the account if it is a child (we will handle children in the parent row)
+            if ($account->parent_id) {
+                continue;
+            }
+
+            // Get total debits and credits for the main account
             $debits = $account->transactions()
                 ->where('transaction_account.debit_credit', 'debit')
                 ->sum('transaction_account.amount');
@@ -49,20 +60,58 @@ class ReportController extends Controller
                 ->where('transaction_account.debit_credit', 'credit')
                 ->sum('transaction_account.amount');
 
-            return [
+            // Calculate the balance for the main account
+            $balance = $credits - $debits;
+
+            // Initialize an array to store children of the main account
+            $children = [];
+
+            // If the account has children, include them in the trial balance
+            if ($account->children->isNotEmpty()) {
+                foreach ($account->children as $child) {
+                    // Sum the debits, credits, and balance for each child account
+                    $childDebits = $child->transactions()
+                        ->where('transaction_account.debit_credit', 'debit')
+                        ->sum('transaction_account.amount');
+                    $childCredits = $child->transactions()
+                        ->where('transaction_account.debit_credit', 'credit')
+                        ->sum('transaction_account.amount');
+
+                    // Add the child account to the children array
+                    $children[] = [
+                        'account_name' => $child->name,
+                        'debits' => $childDebits,
+                        'credits' => $childCredits,
+                        'balance' => $childCredits - $childDebits,
+                    ];
+
+                    // Add the child's debits and credits to the parent's totals
+                    $debits += $childDebits;
+                    $credits += $childCredits;
+                    $balance += ($childCredits - $childDebits);
+                }
+            }
+
+            // Add the main account along with its children (if any)
+            $trialBalance[] = [
                 'account_name' => $account->name,
                 'debits' => $debits,
                 'credits' => $credits,
-                'balance' => $credits - $debits,
+                'balance' => $balance,
+                'children' => $children,  // Store children here
             ];
-        });
+        }
 
-        $totalDebits = $trialBalance->sum('debits');
-        $totalCredits = $trialBalance->sum('credits');
+        // Calculate the total debits and credits
+        $totalDebits = collect($trialBalance)->sum('debits');
+        $totalCredits = collect($trialBalance)->sum('credits');
         $isBalanced = $totalDebits === $totalCredits;
 
+        // Pass the trial balance data to the view
         return view('report.trial_balance', compact('trialBalance', 'totalDebits', 'totalCredits', 'isBalanced'));
     }
+
+
 
     /**
      * Generate Cost Center Report.
@@ -95,112 +144,149 @@ class ReportController extends Controller
      */
     public function trialBalanceByCostCenter()
     {
+        // Fetch all accounts with parent-child relationships and transactions
+        $accounts = Account::with('children', 'transactions')->get();
+
+        // Fetch all cost centers
         $costCenters = CostCenter::with('transactions')->get();
 
-        $trialBalanceByCostCenter = $costCenters->map(function ($costCenter) {
-            $debits = $costCenter->transactions()
+        // Map accounts into a hierarchical structure with balances
+        $accountHierarchy = $accounts->map(function ($account) {
+            $debits = $account->transactions()
                 ->where('transaction_account.debit_credit', 'debit')
                 ->sum('transaction_account.amount');
-            $credits = $costCenter->transactions()
+
+            $credits = $account->transactions()
                 ->where('transaction_account.debit_credit', 'credit')
                 ->sum('transaction_account.amount');
 
             return [
-                'cost_center_name' => $costCenter->name,
+                'account_name' => $account->name,
+                'parent_id' => $account->parent_id,
                 'debits' => $debits,
                 'credits' => $credits,
                 'balance' => $credits - $debits,
+                'children' => $account->children->map(function ($child) {
+                    $childDebits = $child->transactions()
+                        ->where('transaction_account.debit_credit', 'debit')
+                        ->sum('transaction_account.amount');
+
+                    $childCredits = $child->transactions()
+                        ->where('transaction_account.debit_credit', 'credit')
+                        ->sum('transaction_account.amount');
+
+                    return [
+                        'account_name' => $child->name,
+                        'debits' => $childDebits,
+                        'credits' => $childCredits,
+                        'balance' => $childCredits - $childDebits,
+                    ];
+                }),
             ];
         });
 
-        return view('report.trial_balance_cost_center', compact('trialBalanceByCostCenter'));
+        return view('report.trial_balance_cost_center', compact('accountHierarchy', 'costCenters'));
     }
 
-    public function balanceSheet(Request $request)
+
+
+    public function balanceSheet()
     {
-        // Define the start and end dates
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
+        // Retrieve only the accounts that are of type 'Asset', 'Liability', or 'Equity'
+        $accounts = Account::with('transactions', 'children')
+            ->whereIn('type', ['asset', 'liability', 'equity'])  // Filter only Asset, Liability, and Equity accounts
+            ->get();
 
-        // Retrieve assets (debit accounts), liabilities (credit accounts), and equity
-        $assets = Account::where('type', 'asset')->with('transactions')->get();
-        $liabilities = Account::where('type', 'liability')->with('transactions')->get();
-        $equity = Account::where('type', 'equity')->with('transactions')->get();
+        // Initialize arrays to store the balance sheet data for each section
+        $assets = [];
+        $liabilities = [];
+        $equity = [];
 
-        // Detailed calculation for assets
-        $assetDetails = $assets->map(function ($account) use ($startDate, $endDate) {
+        // Iterate through each account to prepare the balance sheet data
+        foreach ($accounts as $account) {
+            // Skip the account if it is a child (we will handle children in the parent row)
+            if ($account->parent_id) {
+                continue;
+            }
+
+            // Get total debits and credits for the main account
             $debits = $account->transactions()
-                ->whereBetween('transactions.date', [$startDate, $endDate])
                 ->where('transaction_account.debit_credit', 'debit')
                 ->sum('transaction_account.amount');
             $credits = $account->transactions()
-                ->whereBetween('transactions.date', [$startDate, $endDate])
                 ->where('transaction_account.debit_credit', 'credit')
                 ->sum('transaction_account.amount');
 
-            return [
+            // Calculate the balance for the main account
+            $balance = $credits - $debits;
+
+            // Initialize an array to store children of the main account
+            $children = [];
+
+            // If the account has children, include them in the balance sheet
+            if ($account->children->isNotEmpty()) {
+                foreach ($account->children as $child) {
+                    // Sum the debits, credits, and balance for each child account
+                    $childDebits = $child->transactions()
+                        ->where('transaction_account.debit_credit', 'debit')
+                        ->sum('transaction_account.amount');
+                    $childCredits = $child->transactions()
+                        ->where('transaction_account.debit_credit', 'credit')
+                        ->sum('transaction_account.amount');
+
+                    // Add the child account to the children array
+                    $children[] = [
+                        'account_name' => $child->name,
+                        'debits' => $childDebits,
+                        'credits' => $childCredits,
+                        'balance' => $childCredits - $childDebits,
+                    ];
+
+                    // Add the child's debits and credits to the parent's totals
+                    $debits += $childDebits;
+                    $credits += $childCredits;
+                    $balance += ($childCredits - $childDebits);
+                }
+            }
+
+            // Add the main account along with its children (if any) to the correct section of the balance sheet
+            $accountData = [
                 'account_name' => $account->name,
                 'debits' => $debits,
                 'credits' => $credits,
-                'balance' => $debits - $credits,
+                'balance' => $balance,
+                'children' => $children,  // Store children here
             ];
-        });
 
-        // Detailed calculation for liabilities
-        $liabilityDetails = $liabilities->map(function ($account) use ($startDate, $endDate) {
-            $debits = $account->transactions()
-                ->whereBetween('transactions.date', [$startDate, $endDate])
-                ->where('transaction_account.debit_credit', 'debit')
-                ->sum('transaction_account.amount');
-            $credits = $account->transactions()
-                ->whereBetween('transactions.date', [$startDate, $endDate])
-                ->where('transaction_account.debit_credit', 'credit')
-                ->sum('transaction_account.amount');
+            // Assign the account data to the appropriate section based on account type
+            switch ($account->type) {
+                case 'asset':
+                    $assets[] = $accountData;
+                    break;
+                case 'liability':
+                    $liabilities[] = $accountData;
+                    break;
+                case 'equity':
+                    $equity[] = $accountData;
+                    break;
+            }
+        }
 
-            return [
-                'account_name' => $account->name,
-                'debits' => $debits,
-                'credits' => $credits,
-                'balance' => $credits - $debits,
-            ];
-        });
+        // Calculate the total for each section
+        $totalAssets = collect($assets)->sum('balance');
+        $totalLiabilities = collect($liabilities)->sum('balance');
+        $totalEquity = collect($equity)->sum('balance');
 
-        // Detailed calculation for equity
-        $equityDetails = $equity->map(function ($account) use ($startDate, $endDate) {
-            $debits = $account->transactions()
-                ->whereBetween('transactions.date', [$startDate, $endDate])
-                ->where('transaction_account.debit_credit', 'debit')
-                ->sum('transaction_account.amount');
-            $credits = $account->transactions()
-                ->whereBetween('transactions.date', [$startDate, $endDate])
-                ->where('transaction_account.debit_credit', 'credit')
-                ->sum('transaction_account.amount');
 
-            return [
-                'account_name' => $account->name,
-                'debits' => $debits,
-                'credits' => $credits,
-                'balance' => $credits - $debits,
-            ];
-        });
-
-        // Calculate the total of debits, credits, and balance for each section
-        $totalAssets = $assetDetails->sum('balance');
-        $totalLiabilities = $liabilityDetails->sum('balance');
-        $totalEquity = $equityDetails->sum('balance');
-
-        // Balance check
-        $isBalanced = $totalAssets === ($totalLiabilities + $totalEquity);
-
-        // Return the view with detailed data
+        // Pass the balance sheet data to the view
         return view('report.balance_sheet', compact(
-            'assetDetails',
-            'liabilityDetails',
-            'equityDetails',
+            'assets',
+            'liabilities',
+            'equity',
             'totalAssets',
             'totalLiabilities',
-            'totalEquity',
-            'isBalanced'
+            'totalEquity'
+
         ));
     }
 }

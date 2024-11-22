@@ -11,5 +11,5 @@ Route::group(['prefix' => 'report'], function () {
     Route::get('/trial-balance', [ReportController::class, 'trialBalance'])->middleware(['auth', 'verified', 'permission:report-trialBalance'])->name('report.trialBalance');
     Route::get('/cost-center/{costCenterId}', [ReportController::class, 'costCenterReport'])->middleware(['auth', 'verified', 'permission:report-costCenter'])->name('report.costCenter');
     Route::get('/trial-balance-cost-center', [ReportController::class, 'trialBalanceByCostCenter'])->middleware(['auth', 'verified', 'permission:report-trialBalanceCostCenter'])->name('report.trialBalanceCostCenter'); // balanceSheet
-    Route::get('/balance-Sheet', [ReportController::class, 'balanceSheet'])->middleware(['auth', 'verified', 'permission:report-trialBalanceCostCenter'])->name('report.balanceSheet'); // balanceSheet
+    Route::get('/balance-Sheet', [ReportController::class, 'balanceSheet'])->middleware(['auth', 'verified', 'permission:report-trialBalanceCostCenter'])->name('report.balance-Sheet'); // balanceSheet
 });

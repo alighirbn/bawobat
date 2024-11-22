@@ -1,111 +1,99 @@
-<div class="container">
-    <h1>Detailed Balance Sheet</h1>
+<x-app-layout>
+    <x-slot name="header">
+        <h2>Balance Sheet</h2>
+    </x-slot>
 
-    <!-- Display Assets -->
-    <h3>Assets</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Account Name</th>
-                <th>Debits</th>
-                <th>Credits</th>
-                <th>Balance</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($assetDetails as $asset)
-                <tr>
-                    <td>{{ $asset['account_name'] }}</td>
-                    <td>{{ number_format($asset['debits'], 2) }}</td>
-                    <td>{{ number_format($asset['credits'], 2) }}</td>
-                    <td>{{ number_format($asset['balance'], 2) }}</td>
-                </tr>
-            @endforeach
-            <tr>
-                <td><strong>Total Assets</strong></td>
-                <td>{{ number_format($totalAssets, 2) }}</td>
-                <td>-</td>
-                <td>{{ number_format($totalAssets, 2) }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="bg-custom py-6">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8">
+            <div class="overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
 
-    <!-- Display Liabilities -->
-    <h3>Liabilities</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Account Name</th>
-                <th>Debits</th>
-                <th>Credits</th>
-                <th>Balance</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($liabilityDetails as $liability)
-                <tr>
-                    <td>{{ $liability['account_name'] }}</td>
-                    <td>{{ number_format($liability['debits'], 2) }}</td>
-                    <td>{{ number_format($liability['credits'], 2) }}</td>
-                    <td>{{ number_format($liability['balance'], 2) }}</td>
-                </tr>
-            @endforeach
-            <tr>
-                <td><strong>Total Liabilities</strong></td>
-                <td>-</td>
-                <td>{{ number_format($totalLiabilities, 2) }}</td>
-                <td>{{ number_format($totalLiabilities, 2) }}</td>
-            </tr>
-        </tbody>
-    </table>
+                    <!-- Assets Section -->
+                    <h3>Assets</h3>
+                    <table class="table bordered table-striped" border="1" cellspacing="0" cellpadding="5">
+                        <thead>
+                            <tr>
+                                <th>Account Name</th>
+                                <th>Children Balance</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($assets as $asset)
+                                <tr>
+                                    <td>{{ $asset['account_name'] }}</td>
+                                    <td>
+                                        @foreach ($asset['children'] as $child)
+                                            <div>{{ $child['account_name'] }}: {{ number_format($child['balance'], 2) }}
+                                            </div>
+                                        @endforeach
+                                    </td>
+                                    <td>{{ number_format($asset['balance'], 2) }}</td>
 
-    <!-- Display Equity -->
-    <h3>Equity</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Account Name</th>
-                <th>Debits</th>
-                <th>Credits</th>
-                <th>Balance</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($equityDetails as $equityItem)
-                <tr>
-                    <td>{{ $equityItem['account_name'] }}</td>
-                    <td>{{ number_format($equityItem['debits'], 2) }}</td>
-                    <td>{{ number_format($equityItem['credits'], 2) }}</td>
-                    <td>{{ number_format($equityItem['balance'], 2) }}</td>
-                </tr>
-            @endforeach
-            <tr>
-                <td><strong>Total Equity</strong></td>
-                <td>-</td>
-                <td>{{ number_format($totalEquity, 2) }}</td>
-                <td>{{ number_format($totalEquity, 2) }}</td>
-            </tr>
-        </tbody>
-    </table>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div><strong>Total Assets: {{ number_format($totalAssets, 2) }}</strong></div>
 
-    <!-- Balance Sheet Summary -->
-    <h3>Balance Sheet Summary</h3>
-    <table class="table">
-        <tr>
-            <td><strong>Total Assets</strong></td>
-            <td>{{ number_format($totalAssets, 2) }}</td>
-        </tr>
-        <tr>
-            <td><strong>Total Liabilities</strong></td>
-            <td>{{ number_format($totalLiabilities, 2) }}</td>
-        </tr>
-        <tr>
-            <td><strong>Total Equity</strong></td>
-            <td>{{ number_format($totalEquity, 2) }}</td>
-        </tr>
-        <tr>
-            <td><strong>Is the Balance Sheet Balanced?</strong></td>
-            <td>{{ $isBalanced ? 'Yes' : 'No' }}</td>
-        </tr>
-    </table>
-</div>
+                    <!-- Liabilities Section -->
+                    <h3>Liabilities</h3>
+                    <table class="table bordered table-striped" border="1" cellspacing="0" cellpadding="5">
+                        <thead>
+                            <tr>
+                                <th>Account Name</th>
+                                <th>Children Balance</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($liabilities as $liability)
+                                <tr>
+                                    <td>{{ $liability['account_name'] }}</td>
+                                    <td>
+                                        @foreach ($liability['children'] as $child)
+                                            <div>{{ $child['account_name'] }}: {{ number_format($child['balance'], 2) }}
+                                            </div>
+                                        @endforeach
+                                    </td>
+                                    <td>{{ number_format($liability['balance'], 2) }}</td>
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div><strong>Total Liabilities: {{ number_format($totalLiabilities, 2) }}</strong></div>
+
+                    <!-- Equity Section -->
+                    <h3>Equity</h3>
+                    <table class="table bordered table-striped" border="1" cellspacing="0" cellpadding="5">
+                        <thead>
+                            <tr>
+                                <th>Account Name</th>
+                                <th>Children Balance</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($equity as $equityItem)
+                                <tr>
+                                    <td>{{ $equityItem['account_name'] }}</td>
+                                    <td>
+                                        @foreach ($equityItem['children'] as $child)
+                                            <div>{{ $child['account_name'] }}:
+                                                {{ number_format($child['balance'], 2) }}</div>
+                                        @endforeach
+                                    </td>
+                                    <td>{{ number_format($equityItem['balance'], 2) }}</td>
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div><strong>Total Equity: {{ number_format($totalEquity, 2) }}</strong></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

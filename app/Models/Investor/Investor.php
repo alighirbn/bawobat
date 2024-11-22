@@ -43,6 +43,11 @@ class Investor extends Model
         return $this->belongsTo(User::class, 'user_id_create', 'id');
     }
 
+    public function account()
+    {
+        return $this->belongsTo(Account::class, 'account_id', 'id');
+    }
+
     public function user_update()
     {
         return $this->belongsTo(User::class, 'user_id_update', 'id');
@@ -52,9 +57,11 @@ class Investor extends Model
         parent::boot();
 
         static::created(function ($investor) {
+            $parent_account = Account::findorfail(18);
+
             $account = Account::create([
                 'url_address' => $investor->get_random_string(60),
-                'code' => '455' . $investor->id,
+                'code' => '455' . $parent_account->children->count() + 1,
                 'name' => 'حساب ' . $investor->name,
                 'parent_id' => 18,
                 'type' => 'liability', // Assuming investments are liabilities

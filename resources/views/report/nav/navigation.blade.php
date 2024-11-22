@@ -30,3 +30,10 @@
         {{ __('word.report_trialBalanceCostCenter') }}
     </a>
 @endcan
+
+@can('report-trialBalanceCostCenter')
+    <a href="{{ route('report.balance-Sheet') }}"
+        class="me-3 {{ request()->routeIs('report.balance-Sheet') ? 'underline-active' : '' }}">
+        {{ __('word.report_balance_sheet') }}
+    </a>
+@endcan

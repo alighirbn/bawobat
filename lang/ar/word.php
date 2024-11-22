@@ -26,7 +26,7 @@ return [
     'phone' => 'رقم الموبايل',
     'email' => 'عنوان البريد الالكتروني',
     'address' => 'عنوان السكن',
-
+    'close' => 'غلق',
     'description' => 'الملاحظات',
     'budget' => 'الميزانية',
     'start_date' => 'تاريخ البدء',
@@ -171,12 +171,12 @@ return [
 
 
     //nav
-    'investor_add' => 'اضافة مستثمر',
-    'investor_search' => 'بحث عن مستثمر',
+    'investor_add' => 'اضافة مساهم',
+    'investor_search' => 'بحث عن مساهم',
     'investment_amount' => 'مبلغ الاستثمار',
     'investment_percentage' => 'نسبة الاستثمار',
     //investor_info
-    'investor_info' => 'بيانات المستثمر',
+    'investor_info' => 'بيانات المساهم',
 
 
     //************************************* stage        *******************************************
