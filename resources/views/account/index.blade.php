@@ -20,12 +20,12 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Action</th>
-                                <th>Account Number</th>
-                                <th>Account Name</th>
-                                <th>Child Accounts</th>
-                                <th>Type</th>
-                                <th>Class</th>
+                                <th>{{ __('word.add') }}</th>
+                                <th>{{ __('word.code') }}</th>
+                                <th>{{ __('word.catogery') }}</th>
+                                <th>{{ __('word.name') }}</th>
+                                <th>{{ __('word.type') }}</th>
+                                <th>{{ __('word.class') }}</th>
                             </tr>
                         </thead>
                         <tbody>

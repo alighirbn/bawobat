@@ -87,9 +87,9 @@ return [
     'code' => 'رقم الحساب',
     'type' => 'نوع الحساب ',
     'class' => 'الصنف',
-
+    'catogery' => 'الفئة',
     'account_add' => 'اضافة حساب',
-    'account_search' => 'بحث عن حساب',
+    'chart_of_account' => 'شجرة الحسابات',
 
     'liability' => 'اعباء',
     'asset' => 'اصول',

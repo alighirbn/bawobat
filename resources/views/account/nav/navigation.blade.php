@@ -18,12 +18,6 @@
 </style>
 @can('account-list')
     <a href="{{ route('account.index') }}" class="me-3 {{ request()->routeIs('account.index') ? 'underline-active' : '' }}">
-        {{ __('word.account_search') }}
-    </a>
-@endcan
-
-@can('account-create')
-    <a href="{{ route('account.create') }}" class="me-3 {{ request()->routeIs('account.create') ? 'underline-active' : '' }}">
-        {{ __('word.account_add') }}
+        {{ __('word.chart_of_account') }}
     </a>
 @endcan
