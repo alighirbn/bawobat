@@ -30,9 +30,18 @@ class IncomeController extends Controller
     {
 
         $cost_centers = CostCenter::all();
-        $revenueAccounts = Account::where('class', 7)->get();
-        $cashAccounts = Account::where('type', 'asset')->where('class', 5)->get();
 
+        $revenueAccounts = Account::whereNotNull('parent_id')
+            ->where('type', 'income')
+            ->orderBy('parent_id')
+            ->orderBy('code') // Additional sorting by 'code'
+            ->get();
+        $cashAccounts = Account::whereNotNull('parent_id')
+            ->where('type', 'asset')
+            ->where('class', 5)
+            ->orderBy('parent_id')
+            ->orderBy('code') // Additional sorting by 'code'
+            ->get();
 
         return view('income.create', compact(['cost_centers', 'revenueAccounts', 'cashAccounts']));
     }
@@ -131,8 +140,17 @@ class IncomeController extends Controller
             }
 
             $cost_centers = CostCenter::all();
-            $revenueAccounts = Account::where('class', 7)->get();
-            $cashAccounts = Account::where('type', 'asset')->where('class', 5)->get();
+            $revenueAccounts = Account::whereNotNull('parent_id')
+                ->where('type', 'income')
+                ->orderBy('parent_id')
+                ->orderBy('code') // Additional sorting by 'code'
+                ->get();
+            $cashAccounts = Account::whereNotNull('parent_id')
+                ->where('type', 'asset')
+                ->where('class', 5)
+                ->orderBy('parent_id')
+                ->orderBy('code') // Additional sorting by 'code'
+                ->get();
 
             return view('income.edit', compact(['income', 'cost_centers', 'revenueAccounts', 'cashAccounts']));
         } else {

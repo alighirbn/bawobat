@@ -23,8 +23,17 @@ class ExpenseController extends Controller
     public function create()
     {
         $cost_centers = CostCenter::all();
-        $expenseAccounts = Account::where('type', 'expense')->get();
-        $cashAccounts = Account::where('type', 'asset')->where('class', 5)->get();
+        $expenseAccounts = Account::whereNotNull('parent_id')
+            ->where('type', 'expense')
+            ->orderBy('parent_id')
+            ->orderBy('code') // Additional sorting by 'code'
+            ->get();
+        $cashAccounts = Account::whereNotNull('parent_id')
+            ->where('type', 'asset')
+            ->where('class', 5)
+            ->orderBy('parent_id')
+            ->orderBy('code') // Additional sorting by 'code'
+            ->get();
 
         return view('expense.create', compact(['cost_centers', 'expenseAccounts', 'cashAccounts']));
     }
@@ -64,8 +73,17 @@ class ExpenseController extends Controller
                     ->with('error', 'لا يمكن تعديل مصروف تمت الموافقة عليه.');
             }
             $cost_centers = CostCenter::all();
-            $expenseAccounts = Account::where('type', 'expense')->get();
-            $cashAccounts = Account::where('type', 'asset')->where('class', 5)->get();
+            $expenseAccounts = Account::whereNotNull('parent_id')
+                ->where('type', 'expense')
+                ->orderBy('parent_id')
+                ->orderBy('code') // Additional sorting by 'code'
+                ->get();
+            $cashAccounts = Account::whereNotNull('parent_id')
+                ->where('type', 'asset')
+                ->where('class', 5)
+                ->orderBy('parent_id')
+                ->orderBy('code') // Additional sorting by 'code'
+                ->get();
 
             return view('expense.edit', compact(['expense', 'cost_centers', 'expenseAccounts', 'cashAccounts']));
         } else {

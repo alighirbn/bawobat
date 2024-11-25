@@ -71,7 +71,7 @@
                                         @foreach ($cashAccounts as $cashAccount)
                                             <option value="{{ $cashAccount->id }}"
                                                 {{ old('credit_account_id') == $cashAccount->id ? 'selected' : '' }}>
-                                                {{ $cashAccount->name }}
+                                                {{ $cashAccount->name }} ({{ $cashAccount->code }})
                                             </option>
                                         @endforeach
                                     </select>
@@ -87,7 +87,7 @@
                                         @foreach ($expenseAccounts as $expenseAccount)
                                             <option value="{{ $expenseAccount->id }}"
                                                 {{ old('debit_account_id') == $expenseAccount->id ? 'selected' : '' }}>
-                                                {{ $expenseAccount->name }}
+                                                {{ $expenseAccount->name }} ({{ $expenseAccount->code }})
                                             </option>
                                         @endforeach
                                     </select>
