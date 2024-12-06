@@ -17,6 +17,19 @@
     }
 </style>
 
+{{-- @can('report-soa')
+    <a href="{{ route('report.soa') }}" class="me-3 {{ request()->routeIs('report.soa') ? 'underline-active' : '' }}">
+        {{ __('word.report_soa') }}
+    </a>
+@endcan --}}
+
+@can('report-costCenter')
+    <a href="{{ route('report.costCenter') }}"
+        class="me-3 {{ request()->routeIs('report.costCenter') ? 'underline-active' : '' }}">
+        {{ __('word.report_costCenter') }}
+    </a>
+@endcan
+
 @can('report-trialBalance')
     <a href="{{ route('report.trialBalance') }}"
         class="me-3 {{ request()->routeIs('report.trialBalance') ? 'underline-active' : '' }}">

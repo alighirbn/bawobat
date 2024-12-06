@@ -63,6 +63,27 @@ return [
             ]) : [],
         ],
 
+        // Yasmin database connection
+        'yasmin' => [
+            'driver' => 'mysql',
+            'url' => env('YASMIN_DATABASE_URL'),
+            'host' => env('YASMIN_DB_HOST', '127.0.0.1'),
+            'port' => env('YASMIN_DB_PORT', '3306'),
+            'database' => env('YASMIN_DB_DATABASE', 'forge_yasmin'),
+            'username' => env('YASMIN_DB_USERNAME', 'forge_yasmin'),
+            'password' => env('YASMIN_DB_PASSWORD', ''),
+            'unix_socket' => env('YASMIN_DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('YASMIN_MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),

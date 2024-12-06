@@ -8,6 +8,7 @@ use App\Models\Project\Project;
 use App\Models\Project\ProjectStage;
 use App\Models\Cash\Transaction;
 use App\Models\Investor\Investor;
+use App\Models\Yasmin\YasminPayment;
 use App\Services\WiaScanner;
 use Exception;
 use Illuminate\Http\JsonResponse;

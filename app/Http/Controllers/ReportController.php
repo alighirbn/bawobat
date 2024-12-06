@@ -111,33 +111,15 @@ class ReportController extends Controller
         return view('report.trial_balance', compact('trialBalance', 'totalDebits', 'totalCredits', 'isBalanced'));
     }
 
-
-
     /**
      * Generate Cost Center Report.
      */
-    public function costCenterReport(Request $request, $costCenterId)
+    public function costCenterReport(Request $request, $costCenterId = null)
     {
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
-
-        $costCenter = CostCenter::findOrFail($costCenterId);
-
-        $transactions = $costCenter->transactions()
-            ->whereBetween('transactions.date', [$startDate, $endDate])
-            ->orderBy('transactions.date')
-            ->get();
-
-        $totalDebits = $transactions
-            ->where('transaction_account.debit_credit', 'debit')
-            ->sum('transaction_account.amount');
-        $totalCredits = $transactions
-            ->where('transaction_account.debit_credit', 'credit')
-            ->sum('transaction_account.amount');
-        $balance = $totalCredits - $totalDebits;
-
-        return view('report.cost_center_report', compact('costCenter', 'transactions', 'totalDebits', 'totalCredits', 'balance'));
+        return view('report.cost_center_report');
     }
+
+
 
     /**
      * Generate Trial Balance by Cost Center.

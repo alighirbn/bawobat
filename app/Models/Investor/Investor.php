@@ -62,7 +62,7 @@ class Investor extends Model
             $account = Account::create([
                 'url_address' => $investor->get_random_string(60),
                 'code' => '455' . $parent_account->children->count() + 1,
-                'name' => 'حساب ' . $investor->name,
+                'name' => 'مستثمر ' . $investor->name,
                 'parent_id' => 18,
                 'type' => 'liability', // Assuming investments are liabilities
                 'class' => '4',
