@@ -38,6 +38,7 @@ class accountController extends Controller
             'url_address' => $this->get_random_string(60), // Parent's URL Address
             'code' => $parentAccount->code . $parentAccount->children()->count() + 1, // Parent's Code
             'type' => $parentAccount->type, // Parent's Type
+            'category' => $parentAccount->category, // Parent's category
             'class' => $parentAccount->class, // Parent's Class
             'parent_id' => $request->parent_id, // Set the parent ID for the new child account
             'user_id_create' => auth()->id(), // ID of the user creating the account

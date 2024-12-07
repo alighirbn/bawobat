@@ -33,6 +33,14 @@ class Permission_Seeder extends Seeder
             'costcenter-update',
             'costcenter-delete',
 
+            //**************************period******************************* */
+
+            'period-list',
+            'period-show',
+            'period-create',
+            'period-update',
+            'period-delete',
+
             //**************************transaction******************************* */
 
             'transaction-list',

@@ -21,11 +21,18 @@ return new class extends Migration
             $table->string('code')->unique(); // Account code (e.g., '101' for "Capital")
             $table->string('name');           // Account name (e.g., 'Capital')
             $table->enum('type', [
-                'asset',
-                'liability',
-                'income',
-                'expense'
-            ]); // Account type (Asset, Liability, Expense, Income)
+                'Asset',
+                'Liability',
+                'Equity',
+                'Income',
+                'Expense'
+            ]); // Account type (Asset, Liability, Equity, Expense, Income)
+            $table->enum('category', [
+                'Current',
+                'Non-Current',
+                'Operating',
+                'Non-Operating'
+            ]); // Account category (Current, Non-Current, Operating, Non-Operating)
             $table->unsignedBigInteger('parent_id')->nullable(); // Add the parent_id column
             $table->foreign('parent_id')->references('id')->on('accounts')->onDelete('cascade');
             $table->integer('class');         // Class (1, 2, 3, etc. from PCG)

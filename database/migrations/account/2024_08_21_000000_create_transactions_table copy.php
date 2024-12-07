@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('url_address')->unique(); // Unique URL identifier
             $table->foreignId('user_id_create')->nullable()->constrained('users')->nullOnDelete(); // Creator user
             $table->foreignId('user_id_update')->nullable()->constrained('users')->nullOnDelete(); // Updater user
-
+            $table->foreignId('period_id')->constrained('periods')->cascadeOnDelete();
             $table->date('date');
             $table->text('description');
             $table->unsignedBigInteger('transactionable_id')->nullable();

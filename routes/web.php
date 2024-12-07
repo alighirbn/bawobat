@@ -40,6 +40,9 @@ Route::group(['middleware' => 'checkStatus'], function () {
         //costcenter routes
         require __DIR__ . '/costcenter.php';
 
+        //period routes
+        require __DIR__ . '/period.php';
+
         //investor routes
         require __DIR__ . '/investor.php';
 

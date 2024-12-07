@@ -176,7 +176,7 @@ class ReportController extends Controller
     {
         // Retrieve only the accounts that are of type 'Asset', 'Liability', or 'Equity'
         $accounts = Account::with('transactions', 'children')
-            ->whereIn('type', ['asset', 'liability', 'equity'])  // Filter only Asset, Liability, and Equity accounts
+            ->whereIn('type', ['Asset', 'Liability', 'Equity']) // Filter only Asset, Liability, and Equity accounts
             ->get();
 
         // Initialize arrays to store the balance sheet data for each section
@@ -199,8 +199,11 @@ class ReportController extends Controller
                 ->where('transaction_account.debit_credit', 'credit')
                 ->sum('transaction_account.amount');
 
-            // Calculate the balance for the main account
-            $balance = $credits - $debits;
+            // Calculate the balance based on the account type
+            $balance = match ($account->type) {
+                'Asset' => $debits - $credits, // Asset: Debit - Credit
+                default => $credits - $debits, // Liability/Equity: Credit - Debit
+            };
 
             // Initialize an array to store children of the main account
             $children = [];
@@ -216,18 +219,25 @@ class ReportController extends Controller
                         ->where('transaction_account.debit_credit', 'credit')
                         ->sum('transaction_account.amount');
 
+                    // Calculate the child's balance based on the account type
+                    $childBalance = match ($account->type) {
+                        'Asset' => $childDebits - $childCredits, // Asset: Debit - Credit
+                        default => $childCredits - $childDebits, // Liability/Equity: Credit - Debit
+                    };
+
                     // Add the child account to the children array
                     $children[] = [
                         'account_name' => $child->name,
                         'debits' => $childDebits,
                         'credits' => $childCredits,
-                        'balance' => $childCredits - $childDebits,
+                        'balance' => $childBalance,
+                        'category' => $child->category, // Add category for children
                     ];
 
-                    // Add the child's debits and credits to the parent's totals
+                    // Add the child's debits, credits, and balance to the parent's totals
                     $debits += $childDebits;
                     $credits += $childCredits;
-                    $balance += ($childCredits - $childDebits);
+                    $balance += $childBalance;
                 }
             }
 
@@ -237,38 +247,50 @@ class ReportController extends Controller
                 'debits' => $debits,
                 'credits' => $credits,
                 'balance' => $balance,
-                'children' => $children,  // Store children here
+                'category' => $account->category, // Add category for main account
+                'children' => $children, // Store children here
             ];
 
             // Assign the account data to the appropriate section based on account type
             switch ($account->type) {
-                case 'asset':
+                case 'Asset':
                     $assets[] = $accountData;
                     break;
-                case 'liability':
+                case 'Liability':
                     $liabilities[] = $accountData;
                     break;
-                case 'equity':
+                case 'Equity':
                     $equity[] = $accountData;
                     break;
             }
         }
 
-        // Calculate the total for each section
+        // Group assets, liabilities, and equity by current and non-current categories
+        $assetsCurrent = collect($assets)->where('category', 'Current');
+        $assetsNonCurrent = collect($assets)->where('category', 'Non-Current');
+
+        $liabilitiesCurrent = collect($liabilities)->where('category', 'Current');
+        $liabilitiesNonCurrent = collect($liabilities)->where('category', 'Non-Current');
+
+        $equityCurrent = collect($equity)->where('category', 'Current');
+        $equityNonCurrent = collect($equity)->where('category', 'Non-Current');
+
+        // Calculate totals for each section
         $totalAssets = collect($assets)->sum('balance');
         $totalLiabilities = collect($liabilities)->sum('balance');
         $totalEquity = collect($equity)->sum('balance');
 
-
-        // Pass the balance sheet data to the view
+        // Pass the grouped data to the view
         return view('report.balance_sheet', compact(
-            'assets',
-            'liabilities',
-            'equity',
+            'assetsCurrent',
+            'assetsNonCurrent',
+            'liabilitiesCurrent',
+            'liabilitiesNonCurrent',
+            'equityCurrent',
+            'equityNonCurrent',
             'totalAssets',
             'totalLiabilities',
             'totalEquity'
-
         ));
     }
 }

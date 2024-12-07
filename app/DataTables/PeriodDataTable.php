@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Account\Transaction;
+use App\Models\Account\Period;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Yajra\DataTables\EloquentDataTable;
@@ -10,7 +10,7 @@ use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class TransactionDataTable extends DataTable
+class PeriodDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -21,28 +21,27 @@ class TransactionDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', 'transaction.action')
-            ->editColumn('date', function ($row) {
-                return \Carbon\Carbon::parse($row->date)->format('Y-m-d'); // Format start_date
-            })
-            ->editColumn('id', function ($row) {
-                return $row->period->name . '-' . $row->id; // Assuming 'period' is a relationship
-            })
+            ->addColumn('action', 'period.action')
             ->rawColumns(['action'])
-            ->setRowId('id');
+            ->setRowId('id')
+            ->editColumn('start_date', function ($period) {
+                return \Carbon\Carbon::parse($period->start_date)->format('Y-m-d'); // Format start_date
+            })
+            ->editColumn('end_date', function ($period) {
+                return \Carbon\Carbon::parse($period->end_date)->format('Y-m-d'); // Format end_date
+            });
     }
-
 
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\transaction $model
+     * @param \App\Models\Period $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Transaction $model): QueryBuilder
+    public function query(Period $model): QueryBuilder
     {
         // Get the base query with relationships
-        $query = $model->newQuery()->with(['period']);
+        $query = $model->newQuery();
 
         return $query;
     }
@@ -55,9 +54,9 @@ class TransactionDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('transaction-table')
+            ->setTableId('period-table')
             ->language([
-                'sUrl' =>  url('/') . '/../lang/' . __(LaravelLocalization::getCurrentLocale()) . '/datatable.json'
+                'sUrl' => url('/') . '/../lang/' . __(LaravelLocalization::getCurrentLocale()) . '/datatable.json'
             ])
             ->columns($this->getColumns())
             ->minifiedAjax()
@@ -68,25 +67,8 @@ class TransactionDataTable extends DataTable
                 'buttons' => [
                     [
                         'extend'  => 'print',
-                        'className'    => 'btn btn-outline-dark'
+                        'className' => 'btn btn-outline-dark'
                     ],
-                    /*[
-                    'extend'  => 'reset',
-                    'className'    => 'btn btn-outline-dark'
-               ],
-               [
-                    'extend'  => 'reload',
-                    'className'    => 'btn btn-outline-dark'
-               ],
-                [
-                     'extend'  => 'export',
-                     'className'    => 'btn btn-outline-dark',
-                     'buttons' => [
-                                       'csv',
-                                       'excel',
-                                       'pdf',
-                                  ],
-                ], */
                     'colvis'
                 ]
             ])
@@ -107,13 +89,9 @@ class TransactionDataTable extends DataTable
                 ->width(60)
                 ->title(__('word.action'))
                 ->addClass('text-center'),
-
-
-            Column::make('id')->title(__('word.id'))->class('text-center'),
-            Column::make('date')->title(__('word.date'))->class('text-center'),
-
-            Column::make('description')->title(__('word.description'))->class('text-center'),
-
+            Column::make('name')->title(__('word.name'))->class('text-center'),
+            Column::make('start_date')->title(__('word.start_date'))->class('text-center'),
+            Column::make('end_date')->title(__('word.end_date'))->class('text-center'),
         ];
     }
 
@@ -124,6 +102,6 @@ class TransactionDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Transaction_' . date('YmdHis');
+        return 'period_' . date('YmdHis');
     }
 }

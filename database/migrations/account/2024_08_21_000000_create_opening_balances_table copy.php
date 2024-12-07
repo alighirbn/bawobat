@@ -11,13 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('costcenters', function (Blueprint $table) {
+        // Migration for opening balances
+        Schema::create('opening_balances', function (Blueprint $table) {
             $table->id();
             $table->string('url_address')->unique(); // Unique URL identifier
+            $table->unsignedBigInteger('account_id'); // Foreign key to accounts table
+            $table->unsignedBigInteger('period_id'); // Foreign key to periods table
+            $table->decimal('balance', 15, 0); // Opening balance value
+            $table->foreign('account_id')->references('id')->on('accounts');
+            $table->foreign('period_id')->references('id')->on('periods');
 
-            $table->string('code')->unique(); // A unique code for the cost center (e.g., "HR", "Sales")
-            $table->string('name'); // The name of the cost center (e.g., "Human Resources", "Sales")
-            $table->text('description')->nullable(); // Optional description for the cost center
             $table->foreignId('user_id_create')->nullable()->constrained('users')->nullOnDelete(); // Creator user
             $table->foreignId('user_id_update')->nullable()->constrained('users')->nullOnDelete(); // Updater user
             $table->timestamps();
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('costcenters');
+        Schema::dropIfExists('opening_balances');
     }
 };

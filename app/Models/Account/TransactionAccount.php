@@ -9,7 +9,7 @@ class TransactionAccount extends Model
 {
     use HasFactory;
 
-    protected $table = 'transaction_account'; // Define the table name explicitly
+    protected $table = 'transaction_account';
 
     protected $fillable = [
         'transaction_id',
@@ -19,21 +19,33 @@ class TransactionAccount extends Model
         'cost_center_id',
     ];
 
-    // Relationship with Transaction
+    const DEBIT = 'debit';
+    const CREDIT = 'credit';
+
+    // Relationships
     public function transaction()
     {
         return $this->belongsTo(Transaction::class);
     }
 
-    // Relationship with Account
     public function account()
     {
         return $this->belongsTo(Account::class);
     }
 
-    // Relationship with CostCenter (optional)
     public function costCenter()
     {
         return $this->belongsTo(CostCenter::class);
+    }
+
+    // Query Scopes
+    public function scopeDebits($query)
+    {
+        return $query->where('debit_credit', self::DEBIT);
+    }
+
+    public function scopeCredits($query)
+    {
+        return $query->where('debit_credit', self::CREDIT);
     }
 }

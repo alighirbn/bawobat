@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTransactionRequest;
 use App\Models\Account\Transaction;
 use App\Models\Account\Account;
 use App\Models\Account\CostCenter;
+use App\Models\Account\Period;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -32,6 +33,7 @@ class TransactionController extends Controller
             ->get();
 
         $costCenters = CostCenter::all();
+
         return view('transaction.create', compact('accounts', 'costCenters'));
     }
 
@@ -85,13 +87,15 @@ class TransactionController extends Controller
         DB::beginTransaction();
 
         try {
+            $periodId = $request->period_id ?? $this->getActivePeriodId();
             $transaction = Transaction::with(['debits', 'credits'])
-                ->where('url_address', '=', $url_address)
+                ->where('url_address', $url_address)
                 ->firstOrFail();
 
             $transaction->update([
                 'description' => $request->description,
                 'date' => $request->date,
+                'period_id' => $periodId, // Update the period_id if allowed
             ]);
 
             $transaction->debits()->delete();
@@ -125,11 +129,13 @@ class TransactionController extends Controller
         DB::beginTransaction();
 
         try {
+            $periodId = $request->period_id ?? $this->getActivePeriodId();
             $transaction = Transaction::create([
-                'url_address' => $this->get_random_string(60),
-                'user_id_create' => auth()->user()->id,
+                'url_address' => $this->generateRandomString(60),
+                'user_id_create' => auth()->id(),
                 'description' => $request->description,
                 'date' => $request->date,
+                'period_id' => $periodId, // Set period_id
             ]);
 
             $this->addEntries($request->debit, $transaction, 'debit');
@@ -141,6 +147,7 @@ class TransactionController extends Controller
             }
 
             DB::commit();
+
             return redirect()->route('transaction.index')->with('success', 'تم إنشاء القيد الحسابي بنجاح!');
         } catch (QueryException $e) {
             DB::rollBack();
@@ -157,6 +164,7 @@ class TransactionController extends Controller
     public function destroy(string $url_address)
     {
         $affected = Transaction::where('url_address', $url_address)->delete();
+
         return redirect()->route('transaction.index')->with('success', 'تم حذف القيد الحسابي بنجاح.');
     }
 
@@ -173,6 +181,15 @@ class TransactionController extends Controller
     }
 
     /**
+     * Retrieve the currently active period ID.
+     */
+    protected function getActivePeriodId()
+    {
+        $activePeriod = Period::where('is_active', true)->first();
+        return $activePeriod ? $activePeriod->id : null;
+    }
+
+    /**
      * استرداد عنوان IP للمستخدم.
      */
     public function getIPAddress()
@@ -184,13 +201,14 @@ class TransactionController extends Controller
         } else {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
+
         return $ip;
     }
 
     /**
      * إنشاء سلسلة عشوائية.
      */
-    function get_random_string($length)
+    public function generateRandomString($length)
     {
         $array = array_merge(range(0, 9), range('a', 'z'), range('A', 'Z'));
         $text = "";
@@ -200,6 +218,7 @@ class TransactionController extends Controller
             $random = rand(0, count($array) - 1);
             $text .= $array[$random];
         }
+
         return $text;
     }
 }

@@ -11,16 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('costcenters', function (Blueprint $table) {
+        // Migration for Chart of Accounts
+        Schema::create('periods', function (Blueprint $table) {
             $table->id();
             $table->string('url_address')->unique(); // Unique URL identifier
-
-            $table->string('code')->unique(); // A unique code for the cost center (e.g., "HR", "Sales")
-            $table->string('name'); // The name of the cost center (e.g., "Human Resources", "Sales")
-            $table->text('description')->nullable(); // Optional description for the cost center
+            $table->string('name'); // Period name (e.g., '2024-Q1', '2024-Jan')
+            $table->date('start_date'); // Start date of the period
+            $table->date('end_date'); // End date of the period
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
             $table->foreignId('user_id_create')->nullable()->constrained('users')->nullOnDelete(); // Creator user
             $table->foreignId('user_id_update')->nullable()->constrained('users')->nullOnDelete(); // Updater user
-            $table->timestamps();
         });
     }
 
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('costcenters');
+        Schema::dropIfExists('periods');
     }
 };

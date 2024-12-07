@@ -36,7 +36,10 @@
                                 <p><strong>{{ __('عدد القيد:') }}</strong>
                                     {{ $transaction->id }}
                                 </p>
-                                <p><strong>{{ __('تاريخ القيد:') }}</strong> {{ $transaction->date }}</p>
+                                <p><strong>{{ __('تاريخ القيد:') }}</strong> {{ $transaction->date->format('Y-m-d') }}
+                                </p>
+                                <p><strong>{{ __('الفترة المحاسبية :') }}</strong> {{ $transaction->period->name }}
+                                </p>
 
                             </div>
                         </div>
@@ -56,7 +59,7 @@
                                     </div>
                                     <div class="mb-1 mx-1 w-full">
                                         <strong class="text-sm font-medium text-gray-700">{{ __('التاريخ:') }}</strong>
-                                        <p class="text-sm">{{ $transaction->date }}</p>
+                                        <p class="text-sm">{{ $transaction->date->format('Y-m-d') }}</p>
                                     </div>
                                 </div>
                             </div>

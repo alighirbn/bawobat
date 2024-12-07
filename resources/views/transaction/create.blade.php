@@ -241,7 +241,7 @@
                 let description = '';
                 if (creditAccounts.length > 0 && debitAccounts.length > 0) {
                     description =
-                        `من ${creditAccounts.join(', ')} إلى ${debitAccounts.join(', ')}, المجموع: ${totalAmount}`;
+                        `المبلغ: ${totalAmount.toLocaleString('en-US')} -- من ${creditAccounts.join(', ')} إلى ${debitAccounts.join(', ')}`;
                 }
 
                 // Update the description field

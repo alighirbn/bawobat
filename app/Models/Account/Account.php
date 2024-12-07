@@ -16,63 +16,53 @@ class Account extends Model
         'name',
         'type',
         'class',
-        'parent_id',  // Added parent_id field
+        'parent_id',
         'user_id_create',
         'user_id_update',
     ];
 
-    // Many-to-many relationship with transactions (through transaction_account pivot table)
+    // Relationships
     public function transactions()
     {
         return $this->belongsToMany(Transaction::class, 'transaction_account')
-            ->withPivot('amount', 'debit_credit', 'cost_center_id'); // Include cost center in pivot
+            ->withPivot('amount', 'debit_credit', 'cost_center_id')
+            ->withTimestamps();
     }
 
-    // Method to check if account is an asset
-    public function isAsset()
-    {
-        return $this->type === 'asset';
-    }
-
-    // Method to check if account is a liability
-    public function isLiability()
-    {
-        return $this->type === 'liability';
-    }
-
-    // Method to check if account is an income account
-    public function isIncome()
-    {
-        return $this->type === 'income';
-    }
-
-    // Method to check if account is an expense account
-    public function isExpense()
-    {
-        return $this->type === 'expense';
-    }
-
-    // Relationship: Child accounts (the ones that belong to this parent)
     public function children()
     {
         return $this->hasMany(Account::class, 'parent_id');
     }
 
-    // Relationship: Parent account (if this account has a parent)
     public function parent()
     {
         return $this->belongsTo(Account::class, 'parent_id');
     }
 
-    // Relationship with the user who created the account
     public function user_create()
     {
         return $this->belongsTo(User::class, 'user_id_create', 'id');
     }
 
-    // Relationship with the user who updated the account
     public function user_update()
     {
         return $this->belongsTo(User::class, 'user_id_update', 'id');
+    }
+
+    // Query Scopes
+    public function scopeOfType($query, $type)
+    {
+        return $query->where('type', $type);
+    }
+
+    // Helper Methods
+    public function calculateBalance()
+    {
+        $transactions = $this->transactions()->sum('transaction_account.amount');
+        $childrenBalance = $this->children->sum(function ($child) {
+            return $child->calculateBalance();
+        });
+
+        return $transactions + $childrenBalance;
     }
 }

@@ -37,7 +37,7 @@ return [
     'cost_center_id' => 'مركز الكلفة',
     'credit_account_id' => 'من حساب',
     'debit_account_id' => 'الى حساب',
-
+    'id' => 'الرمز',
 
     // general values
     'year' => 'سنة',
@@ -91,10 +91,11 @@ return [
     'account_add' => 'اضافة حساب',
     'chart_of_account' => 'شجرة الحسابات',
 
-    'liability' => 'اعباء',
-    'asset' => 'اصول',
-    'expense' => 'صرف',
-    'income' => 'ايراد',
+    'Liability' => 'اعباء',
+    'Asset' => 'اصول',
+    'Expense' => 'صرف',
+    'Income' => 'ايراد',
+    'Equity' => 'حقوق الملكية',
 
     //account_info
     'account_info' => 'بيانات الحساب',
@@ -108,6 +109,16 @@ return [
 
     //costcenter_info
     'costcenter_info' => 'بيانات المركز كلفة',
+
+    //************************************* period        *******************************************
+    //nav
+
+    'period_add' => 'اضافة فترة محاسبية',
+    'period_search' => 'بحث عن فترة محاسبية',
+
+
+    //period_info
+    'period_info' => 'بيانات الفترة محاسبية',
 
     //************************************* transaction        *******************************************
     //nav

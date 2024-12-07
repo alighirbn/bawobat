@@ -15,45 +15,43 @@ class Transaction extends Model
         'description',
         'transactionable_id',
         'transactionable_type',
-
+        'period_id',
         'user_id_create',
         'user_id_update',
     ];
-
-    // Polymorphic relationship
+    protected $casts = [
+        'date' => 'datetime', // Ensure that the 'date' field is a datetime type
+    ];
+    // Polymorphic Relationship
     public function transactionable()
     {
         return $this->morphTo();
     }
 
-    // Many-to-many relationship with accounts (debits and credits)
+    // Relationships
     public function accounts()
     {
         return $this->belongsToMany(Account::class, 'transaction_account')
-            ->withPivot('amount', 'debit_credit', 'cost_center_id'); // Include cost center in pivot
+            ->withPivot('amount', 'debit_credit', 'cost_center_id')
+            ->withTimestamps();
     }
 
-    // Direct relationship with transaction_account pivot table
     public function entries()
     {
         return $this->hasMany(TransactionAccount::class, 'transaction_id');
     }
 
-    // Ensure transaction is balanced (debits == credits)
+    // Helper Methods
     public function isBalanced()
     {
-        $debits = $this->accounts()
-            ->where('transaction_account.debit_credit', 'debit')
-            ->sum('transaction_account.amount');
+        $totals = $this->entries()
+            ->selectRaw('SUM(CASE WHEN debit_credit = "debit" THEN amount ELSE 0 END) as total_debits, 
+                         SUM(CASE WHEN debit_credit = "credit" THEN amount ELSE 0 END) as total_credits')
+            ->first();
 
-        $credits = $this->accounts()
-            ->where('transaction_account.debit_credit', 'credit')
-            ->sum('transaction_account.amount');
-
-        return $debits == $credits;
+        return $totals->total_debits == $totals->total_credits;
     }
 
-    // Add an entry (debit/credit) to a transaction and link it to a cost center
     public function addEntry(Account $account, $amount, $debitCredit, CostCenter $costCenter = null)
     {
         $this->accounts()->attach($account->id, [
@@ -70,5 +68,10 @@ class Transaction extends Model
     public function credits()
     {
         return $this->hasMany(TransactionAccount::class)->where('debit_credit', 'credit');
+    }
+
+    public function period()
+    {
+        return $this->belongsTo(Period::class);
     }
 }
