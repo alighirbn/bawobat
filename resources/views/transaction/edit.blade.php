@@ -41,17 +41,39 @@
                                     <h5>تفاصيل القيد</h5>
                                 </div>
                                 <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="description">الوصف</label>
-                                        <input type="text" name="description" id="description" class="form-control"
-                                            value="{{ old('description', $transaction->description) }}" required>
+                                    <div class="flex">
+                                        <div class=" mx-2 my-2 w-full">
+                                            <x-input-label for="description" class=" mb-1" :value="__('word.description')" />
+                                            <x-text-input id="description" class="w-full block mt-1" type="text"
+                                                value="{{ old('description', $transaction->description) }}"
+                                                name="description" />
+                                            <x-input-error :messages="$errors->get('description')" class="w-full mt-2" />
+                                        </div>
+                                    </div>
+                                    <div class="flex">
+                                        <div class=" mx-2 my-2 w-full">
+                                            <x-input-label for="date" class=" mb-1" :value="__('word.date')" />
+                                            <x-text-input id="date" class="w-full block mt-1" type="date"
+                                                value="{{ old('date', isset($transaction->date) ? $transaction->date->format('Y-m-d') : '') }}"
+                                                name="date" />
+                                            <x-input-error :messages="$errors->get('date')" class="w-full mt-2" />
+                                        </div>
+
+                                        <div class=" mx-2 my-2 w-full">
+                                            <x-input-label for="period_id" class="w-full mb-1" :value="__('word.period_id')" />
+                                            <select id="period_id" class="w-full block mt-1 " name="period_id">
+                                                @foreach ($activePeriods as $activePeriod)
+                                                    <option value="{{ $activePeriod->id }}"
+                                                        {{ old('period_id', $transaction->period_id) == $activePeriod->id ? 'selected' : '' }}>
+                                                        {{ $activePeriod->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            <x-input-error :messages="$errors->get('period_id')" class="w-full mt-2" />
+                                        </div>
+
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="date">التاريخ</label>
-                                        <input type="date" name="date" id="date" class="form-control"
-                                            value="{{ old('date', $transaction->date) }}" required>
-                                    </div>
                                 </div>
                             </div>
 
@@ -65,10 +87,10 @@
                                     <div class="card-body" id="credit_entries">
                                         @foreach ($transaction->credits as $index => $credit)
                                             <div class="credit-entry p-3 border rounded mb-3 bg-white text-gray-900">
-                                                <div class="form-group">
+                                                <div class="mx-2 my-2 w-full">
                                                     <label for="credit_account_id[]">الحساب</label>
                                                     <select name="credit[{{ $index }}][account_id]"
-                                                        class="" required>
+                                                        class="w-full block mt-1" required>
                                                         <option value="" disabled selected>اختر الحساب</option>
                                                         @foreach ($accounts as $account)
                                                             <option value="{{ $account->id }}"
@@ -79,18 +101,18 @@
                                                     </select>
                                                 </div>
 
-                                                <div class="form-group">
+                                                <div class="mx-2 my-2 w-full">
                                                     <label for="credit_amount[]">المبلغ</label>
                                                     <input type="text" name="credit[{{ $index }}][amount]"
-                                                        class="form-control credit-amount"
+                                                        class="w-full block mt-1 credit-amount"
                                                         value="{{ old("credit.$index.amount", $credit->amount) }}"
                                                         required>
                                                 </div>
 
-                                                <div class="form-group">
+                                                <div class="mx-2 my-2 w-full">
                                                     <label for="credit_cost_center_id[]">مركز التكلفة </label>
                                                     <select name="credit[{{ $index }}][cost_center_id]" required
-                                                        class="">
+                                                        class="w-full block mt-1">
                                                         <option value="" disabled selected>اختر مركز التكلفة
                                                         </option>
                                                         @foreach ($costCenters as $costCenter)
@@ -117,10 +139,10 @@
                                     <div class="card-body" id="debit_entries">
                                         @foreach ($transaction->debits as $index => $debit)
                                             <div class="debit-entry p-3 border rounded mb-3 bg-white text-gray-900">
-                                                <div class="form-group">
+                                                <div class="mx-2 my-2 w-full">
                                                     <label for="debit_account_id[]">الحساب</label>
                                                     <select name="debit[{{ $index }}][account_id]"
-                                                        class="" required>
+                                                        class="w-full block mt-1" required>
                                                         <option value="" disabled selected>اختر الحساب</option>
                                                         @foreach ($accounts as $account)
                                                             <option value="{{ $account->id }}"
@@ -131,18 +153,18 @@
                                                     </select>
                                                 </div>
 
-                                                <div class="form-group">
+                                                <div class="mx-2 my-2 w-full">
                                                     <label for="debit_amount[]">المبلغ</label>
                                                     <input type="text" name="debit[{{ $index }}][amount]"
-                                                        class="form-control debit-amount"
+                                                        class="w-full block mt-1 debit-amount"
                                                         value="{{ old("debit.$index.amount", $debit->amount) }}"
                                                         required>
                                                 </div>
 
-                                                <div class="form-group">
+                                                <div class="mx-2 my-2 w-full">
                                                     <label for="debit_cost_center_id[]">مركز التكلفة </label>
                                                     <select name="debit[{{ $index }}][cost_center_id]" required
-                                                        class="">
+                                                        class="w-full block mt-1">
                                                         <option value="" disabled selected>اختر مركز التكلفة
                                                         </option>
                                                         @foreach ($costCenters as $costCenter)
@@ -269,9 +291,9 @@
         function addEntry(type) {
             let entryHtml = `
                 <div class="${type}-entry p-3 border rounded mb-3 bg-white text-gray-900">
-                    <div class="form-group">
+                    <div class="mx-2 my-2 w-full">
                         <label for="${type}_account_id[]">الحساب</label>
-                        <select name="${type}[new][account_id]" required>
+                        <select name="${type}[new][account_id]" class="w-full block mt-1" required>
                             <option value="" disabled selected>اختر الحساب</option>
                             @foreach ($accounts as $account)
                                 <option value="{{ $account->id }}">{{ $account->name }} ({{ $account->code }})</option>
@@ -279,14 +301,14 @@
                         </select>
                     </div>
     
-                    <div class="form-group">
+                    <div class="mx-2 my-2 w-full">
                         <label for="${type}_amount[]">المبلغ</label>
-                        <input type="text" name="${type}[new][amount]" class="form-control ${type}-amount" required>
+                        <input type="text" name="${type}[new][amount]" class="w-full block mt-1 ${type}-amount" required>
                     </div>
     
-                    <div class="form-group">
+                    <div class="mx-2 my-2 w-full">
                         <label for="${type}_cost_center_id[]">مركز التكلفة</label>
-                        <select name="${type}[new][cost_center_id]" required>
+                        <select name="${type}[new][cost_center_id]" class="w-full block mt-1" required>
                             <option value="" disabled selected>اختر مركز التكلفة</option>
                             @foreach ($costCenters as $costCenter)
                                 <option value="{{ $costCenter->id }}">{{ $costCenter->name }}</option>

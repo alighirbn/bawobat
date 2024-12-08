@@ -38,6 +38,7 @@ return [
     'credit_account_id' => 'من حساب',
     'debit_account_id' => 'الى حساب',
     'id' => 'الرمز',
+    'period_id' => 'الفترة المحاسبية',
 
     // general values
     'year' => 'سنة',

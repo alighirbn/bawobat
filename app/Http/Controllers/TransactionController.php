@@ -33,8 +33,9 @@ class TransactionController extends Controller
             ->get();
 
         $costCenters = CostCenter::all();
+        $activePeriods = Period::where('is_active', true)->get(); // Fetch the active period
 
-        return view('transaction.create', compact('accounts', 'costCenters'));
+        return view('transaction.create', compact('accounts', 'costCenters', 'activePeriods'));
     }
 
     /**
@@ -71,8 +72,9 @@ class TransactionController extends Controller
                 ->get();
 
             $costCenters = CostCenter::all();
+            $activePeriods = Period::where('is_active', true)->get(); // Fetch the active period
 
-            return view('transaction.edit', compact('transaction', 'accounts', 'costCenters'));
+            return view('transaction.edit', compact('transaction', 'accounts', 'costCenters', 'activePeriods'));
         } else {
             $ip = $this->getIPAddress();
             return view('transaction.accessdenied', ['ip' => $ip]);

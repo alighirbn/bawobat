@@ -16,6 +16,7 @@ class StoreTransactionRequest extends FormRequest
         return [
             'description' => 'required|string|max:255',
             'date' => 'required|date',
+            'period_id' => 'required',
             'debit.*.account_id' => 'required|exists:accounts,id',
             'debit.*.amount' => 'required|numeric|min:0.01',
             'debit.*.cost_center_id' => 'nullable|exists:costcenters,id',
