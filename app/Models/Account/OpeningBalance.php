@@ -17,31 +17,20 @@ class OpeningBalance extends Model
      */
     protected $table = 'opening_balances';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'url_address',
-        'account_id',
         'period_id',
-        'balance',
+        'name',
+        'date',
         'user_id_create',
         'user_id_update',
     ];
 
-    /**
-     * Relationship: The account associated with this opening balance.
-     */
-    public function account()
+    public function accounts()
     {
-        return $this->belongsTo(Account::class);
+        return $this->hasMany(OpeningBalanceAccount::class);
     }
 
-    /**
-     * Relationship: The period associated with this opening balance.
-     */
     public function period()
     {
         return $this->belongsTo(Period::class);
@@ -49,11 +38,16 @@ class OpeningBalance extends Model
 
     public function user_create()
     {
-        return $this->belongsTo(User::class, 'user_id_create', 'id');
+        return $this->belongsTo(User::class, 'user_id_create');
     }
 
     public function user_update()
     {
-        return $this->belongsTo(User::class, 'user_id_update', 'id');
+        return $this->belongsTo(User::class, 'user_id_update');
+    }
+
+    public function transaction()
+    {
+        return $this->morphOne(Transaction::class, 'transactionable');
     }
 }
