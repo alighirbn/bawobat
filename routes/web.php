@@ -52,6 +52,9 @@ Route::group(['middleware' => 'checkStatus'], function () {
         //income routes
         require __DIR__ . '/income.php';
 
+        //opening_balance routes
+        require __DIR__ . '/opening_balance.php';
+
         //expense routes
         require __DIR__ . '/expense.php';
 

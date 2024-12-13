@@ -12,11 +12,14 @@ class OpeningBalanceAccount extends Model
     protected $fillable = [
         'opening_balance_id',
         'account_id',
-        'debit',
-        'credit',
+        'amount',
+        'debit_credit',
     ];
 
-    public function opening_balance()
+    /**
+     * Relationships
+     */
+    public function openingBalance()
     {
         return $this->belongsTo(OpeningBalance::class);
     }

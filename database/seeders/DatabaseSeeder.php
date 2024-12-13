@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
       Department_Seeder::class,
       Account_Seeder::class,
       Cost_Center_Seeder::class,
+      Period_Seeder::class,
     ]);
   }
 }

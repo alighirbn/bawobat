@@ -8,6 +8,7 @@ use App\Models\Account\Account;
 use App\Models\Account\OpeningBalance;
 use App\Services\OpeningBalanceService;
 use Illuminate\Http\Request;
+use App\Models\Account\Period;
 
 class OpeningBalanceController extends Controller
 {
@@ -45,8 +46,9 @@ class OpeningBalanceController extends Controller
      */
     public function create()
     {
+        $periods = Period::all();
         $accounts = Account::all();
-        return view('opening_balance.create', compact('accounts'));
+        return view('opening_balance.create', compact('periods', 'accounts'));
     }
 
     /**
@@ -98,35 +100,5 @@ class OpeningBalanceController extends Controller
 
         return redirect()->route('opening_balance.index')
             ->with('success', 'Opening balance deleted successfully.');
-    }
-
-    /**
-     * Utility: Get the client's IP address.
-     */
-    public function getIPAddress()
-    {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            return $_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            return $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else {
-            return $_SERVER['REMOTE_ADDR'];
-        }
-    }
-
-    /**
-     * Utility: Generate a random string.
-     */
-    function get_random_string($length)
-    {
-        $array = array_merge(range(0, 9), range('a', 'z'), range('A', 'Z'));
-        $text = '';
-        $length = rand(22, $length);
-
-        for ($i = 0; $i < $length; $i++) {
-            $random = rand(0, count($array) - 1);
-            $text .= $array[$random];
-        }
-        return $text;
     }
 }
