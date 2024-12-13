@@ -1,129 +1,189 @@
 <x-app-layout>
     <x-slot name="header">
+        <!-- app css-->
+        <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
         <div class="flex justify-start">
             @include('opening_balance.nav.navigation')
         </div>
     </x-slot>
+
     <div class="py-4">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form action="{{ route('opening_balance.store') }}" method="POST">
-                        @csrf
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success">
+                            <p>{{ $message }}</p>
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Left Column -->
-                            <div class="space-y-4">
-                                <div>
-                                    <label for="name"
-                                        class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                                    <input type="text" name="name"
-                                        class="w-full rounded-md shadow-sm border-gray-300 @error('name') border-red-500 @enderror"
-                                        required>
-                                    @error('name')
-                                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                    @enderror
+                    <div class="container a4-width p-4 bg-white mx-auto">
+                        <div style="text-align: center; margin: 0.8rem auto; font-size: 1.2rem; font-weight: bold;">
+                            <p>Create Opening Balance</p>
+                        </div>
+
+                        <form action="{{ route('opening_balance.store') }}" method="POST">
+                            @csrf
+                            <div class="card shadow-sm mb-3">
+                                <div class="card-header">
+                                    <h5>Opening Balance Details</h5>
                                 </div>
+                                <div class="card-body">
+                                    <div class="flex">
+                                        <div class="mx-2 my-2 w-full">
+                                            <x-input-label for="name" class="mb-1" :value="__('Name')" />
+                                            <x-text-input id="name" class="w-full block mt-1" type="text"
+                                                name="name" required />
+                                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                                        </div>
+                                    </div>
+                                    <div class="flex">
+                                        <div class="mx-2 my-2 w-full">
+                                            <x-input-label for="date" class="mb-1" :value="__('Date')" />
+                                            <x-text-input id="date" class="w-full block mt-1" type="date"
+                                                name="date" required />
+                                            <x-input-error :messages="$errors->get('date')" class="mt-2" />
+                                        </div>
 
-                                <div>
-                                    <label for="date"
-                                        class="block text-sm font-medium text-gray-700 mb-1">Date</label>
-                                    <input type="date" name="date"
-                                        class="w-full rounded-md shadow-sm border-gray-300 @error('date') border-red-500 @enderror"
-                                        required>
-                                    @error('date')
-                                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-                                <div>
-                                    <label for="period_id"
-                                        class="block text-sm font-medium text-gray-700 mb-1">Period</label>
-                                    <select name="period_id"
-                                        class="w-full rounded-md shadow-sm border-gray-300 @error('period_id') border-red-500 @enderror"
-                                        required>
-                                        @foreach ($periods as $period)
-                                            <option value="{{ $period->id }}">{{ $period->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('period_id')
-                                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <!-- Right Column -->
-                            <div>
-                                <div id="accounts-container" class="space-y-4">
-                                    <h3 class="text-lg font-medium text-gray-900">Accounts</h3>
-                                    <div class="account-entry p-4 border rounded-lg bg-gray-50">
-                                        <select name="accounts[0][account_id]"
-                                            class="w-full rounded-md shadow-sm border-gray-300 mb-2" required>
-                                            @foreach ($accounts as $account)
-                                                <option value="{{ $account->id }}">{{ $account->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        <input type="number" name="accounts[0][amount]"
-                                            class="w-full rounded-md shadow-sm border-gray-300 mb-2"
-                                            placeholder="Amount" required>
-
-                                        <select name="accounts[0][debit_credit]"
-                                            class="w-full rounded-md shadow-sm border-gray-300 mb-2" required>
-                                            <option value="debit">Debit</option>
-                                            <option value="credit">Credit</option>
-                                        </select>
+                                        <div class="mx-2 my-2 w-full">
+                                            <x-input-label for="period_id" class="mb-1" :value="__('Period')" />
+                                            <select id="period_id" class="w-full block mt-1" name="period_id" required>
+                                                @foreach ($periods as $period)
+                                                    <option value="{{ $period->id }}">{{ $period->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            <x-input-error :messages="$errors->get('period_id')" class="mt-2" />
+                                        </div>
                                     </div>
                                 </div>
-
-                                <button type="button"
-                                    class="mt-4 inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                                    onclick="addAccountField()">
-                                    Add Another Account
-                                </button>
                             </div>
-                        </div>
 
-                        <div class="mt-6 flex items-center space-x-4">
-                            <button type="submit"
-                                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Create Opening Balance
-                            </button>
-                            <a href="{{ route('opening_balance.index') }}"
-                                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Cancel
-                            </a>
-                        </div>
-                    </form>
+                            <div class="flex space-x-3">
+                                <div class="card mx-1 w-full shadow-sm">
+                                    <div class="card-header">
+                                        <h5>Account Entries</h5>
+                                    </div>
+                                    <div class="card-body" id="accounts-container">
+                                        <div class="account-entry p-3 border rounded mb-3 bg-white text-gray-900">
+                                            <div class="mx-2 my-2 w-full">
+                                                <label>Account</label>
+                                                <select name="accounts[0][account_id]" class="w-full block mt-1"
+                                                    required>
+                                                    @foreach ($accounts as $account)
+                                                        <option value="{{ $account->id }}">{{ $account->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="mx-2 my-2 w-full">
+                                                <label>Amount</label>
+                                                <input type="text" name="accounts[0][amount]"
+                                                    class="w-full block mt-1" required>
+                                            </div>
+                                            <div class="mx-2 my-2 w-full">
+                                                <label>Type</label>
+                                                <select name="accounts[0][debit_credit]" class="w-full block mt-1"
+                                                    required>
+                                                    <option value="debit">Debit</option>
+                                                    <option value="credit">Credit</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-custom-show" id="add-account-btn">Add Another
+                                        Account</button>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-custom-add">Create Opening Balance</button>
+                                <a href="{{ route('opening_balance.index') }}" class="btn btn-custom-delete">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let accountCount = 1;
+        $(document).ready(function() {
+            let accountCount = 1;
 
-        function addAccountField() {
-            const container = document.getElementById('accounts-container');
-            const div = document.createElement('div');
-            div.className = 'account-entry p-4 border rounded-lg bg-gray-50 mt-4';
-            div.innerHTML = `
-                <select name="accounts[${accountCount}][account_id]" class="w-full rounded-md shadow-sm border-gray-300 mb-2" required>
-                    @foreach ($accounts as $account)
-                        <option value="{{ $account->id }}">{{ $account->name }}</option>
-                    @endforeach
-                </select>
-                <input type="number" name="accounts[${accountCount}][amount]" 
-                    class="w-full rounded-md shadow-sm border-gray-300 mb-2"
-                    placeholder="Amount" required>
-                <select name="accounts[${accountCount}][debit_credit]" 
-                    class="w-full rounded-md shadow-sm border-gray-300 mb-2" required>
-                    <option value="debit">Debit</option>
-                    <option value="credit">Credit</option>
-                </select>
-            `;
-            container.appendChild(div);
-            accountCount++;
-        }
+            // Format amount inputs
+            $(document).on('input', 'input[name$="[amount]"]', function() {
+                const input = $(this);
+                let value = input.val();
+
+                // Remove any non-numeric characters except for "." (for decimals)
+                value = value.replace(/[^0-9.]/g, '');
+
+                // Split the value into whole and decimal parts
+                const parts = value.split('.');
+                parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add commas to the whole part
+
+                // Join the formatted parts
+                const formattedValue = parts.join('.');
+                input.val(formattedValue);
+            });
+
+            // Add new account entry
+            $('#add-account-btn').on('click', function() {
+                const container = $('#accounts-container');
+                const newAccountEntry = `
+                    <div class="account-entry p-3 border rounded mb-3 bg-white text-gray-900">
+                        <div class="mx-2 my-2 w-full">
+                            <label>Account</label>
+                            <select name="accounts[${accountCount}][account_id]" class="w-full block mt-1" required>
+                                @foreach ($accounts as $account)
+                                    <option value="{{ $account->id }}">{{ $account->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mx-2 my-2 w-full">
+                            <label>Amount</label>
+                            <input type="text" name="accounts[${accountCount}][amount]" class="w-full block mt-1" required>
+                        </div>
+                        <div class="mx-2 my-2 w-full">
+                            <label>Type</label>
+                            <select name="accounts[${accountCount}][debit_credit]" class="w-full block mt-1" required>
+                                <option value="debit">Debit</option>
+                                <option value="credit">Credit</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-custom-delete remove-entry mt-3">Delete</button>
+                    </div>
+                `;
+                container.append(newAccountEntry);
+                accountCount++;
+            });
+
+            // Add event listener for removing entries
+            $(document).on('click', '.remove-entry', function() {
+                $(this).closest('.account-entry').remove();
+            });
+
+            // Form submission validation - convert formatted numbers back to plain numbers
+            $('form').on('submit', function(event) {
+                $('input[name$="[amount]"]').each(function() {
+                    let amount = $(this).val().replace(/,/g, ''); // Remove commas
+                    $(this).val(parseFloat(amount) || 0); // Set the input value to a valid number
+                });
+            });
+        });
     </script>
-
 </x-app-layout>

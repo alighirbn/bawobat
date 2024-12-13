@@ -17,11 +17,20 @@ class OpeningBalanceRequest extends FormRequest
             'period_id' => 'required|exists:periods,id',
             'name' => 'required|string|max:255',
             'date' => 'required|date',
-            'url_address' => 'nullable|url|max:255',  // Added validation for URL
+            'url_address' => 'nullable|string|max:60',
             'accounts' => 'required|array',
             'accounts.*.account_id' => 'required|exists:accounts,id',
-            'accounts.*.debit_credit' => 'required|in:debit,credit', // Ensure debit_credit is present and valid
-            'accounts.*.amount' => 'nullable|numeric|min:0', // Validation for amount field
+            'accounts.*.debit_credit' => 'required|in:debit,credit',
+            'accounts.*.amount' => 'nullable|numeric|min:0',
+            // Custom validation for balancing debits and credits
+            'accounts' => ['required', function ($attribute, $value, $fail) {
+                $debits = collect($value)->where('debit_credit', 'debit')->sum('amount');
+                $credits = collect($value)->where('debit_credit', 'credit')->sum('amount');
+
+                if ($debits !== $credits) {
+                    $fail('The total of debits must equal the total of credits.');
+                }
+            }],
         ];
     }
 }

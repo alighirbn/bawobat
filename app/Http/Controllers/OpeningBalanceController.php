@@ -69,15 +69,17 @@ class OpeningBalanceController extends Controller
     {
         $openingBalance = $this->openingBalanceService->findByUrlAddress($url_address);
         $accounts = Account::all();
+        $periods = Period::all();
         $openingBalance->load('accounts');
-        return view('opening_balance.edit', compact('openingBalance', 'accounts'));
+        return view('opening_balance.edit', compact('openingBalance', 'accounts', 'periods'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(OpeningBalanceRequest $request, OpeningBalance $openingBalance)
+    public function update(OpeningBalanceRequest $request, string $url_address)
     {
+        $openingBalance = $this->openingBalanceService->findByUrlAddress($url_address);
         $this->openingBalanceService->update($openingBalance, $request->validated());
 
         return redirect()->route('opening_balance.index')

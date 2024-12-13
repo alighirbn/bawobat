@@ -100,6 +100,13 @@ return [
 
     //account_info
     'account_info' => 'بيانات الحساب',
+    'opening_balance' => 'الرصيد الافتتاحي',
+    'opening_balance_date' => 'تاريخ الرصيد الافتتاحي',
+    'opening_balance_amount' => 'مبلغ الرصيد الافتتاحي',
+    'opening_balance_type' => 'نوع الرصيد الافتتاحي',
+    'opening_balance_note' => 'ملاحظات الرصيد الافتتاحي',
+    'opening_balance_add' => 'اضافة رصيد افتتاحي',
+    'opening_balance_search' => 'بحث عن رصيد افتتاحي',
 
     //************************************* costcenter        *******************************************
     //nav
