@@ -92,14 +92,23 @@
         </div>
     @endcan
     @can('account-list')
-        <div class="item"><a class="sub-btn"> {{ __('word.account') }} <i class="bx bx-chevrons-down dropdown"></i> </a>
+        <div class="item"><a class="sub-btn"> {{ __('word.financial_management') }} <i
+                    class="bx bx-chevrons-down dropdown"></i> </a>
             <div class="flex flex-col   sub-menu" style="display: none;">
                 @include('account.nav.navigation')
+                @include('costcenter.nav.navigation')
+                @include('period.nav.navigation')
+                @include('opening_balance.nav.navigation')
+            </div>
+        </div>
+    @endcan
+    @can('account-list')
+        <div class="item"><a class="sub-btn"> {{ __('word.finance_operations') }} <i
+                    class="bx bx-chevrons-down dropdown"></i> </a>
+            <div class="flex flex-col   sub-menu" style="display: none;">
                 @include('income.nav.navigation')
                 @include('expense.nav.navigation')
-                @include('costcenter.nav.navigation')
                 @include('transaction.nav.navigation')
-
             </div>
         </div>
     @endcan

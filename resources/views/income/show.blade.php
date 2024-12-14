@@ -3,10 +3,8 @@
         <!-- app css-->
         <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
         <div class="flex justify-start">
-            @include('account.nav.navigation')
             @include('income.nav.navigation')
             @include('expense.nav.navigation')
-            @include('costcenter.nav.navigation')
             @include('transaction.nav.navigation')
 
         </div>

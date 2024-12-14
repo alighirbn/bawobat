@@ -50,7 +50,8 @@ return [
     'project' => 'المشاريع',
     'investor' => 'المساهمين',
     'account' => 'الحسابات',
-    'accountant' => 'الحسابات',
+    'financial_management' => 'الادارة المالية',
+    'finance_operations' => 'العمليات المالية',
     'report' => 'التقارير',
 
     'income' => 'الايرادات',

@@ -28,7 +28,7 @@ class OpeningBalanceController extends Controller
 
         if (!$openingBalance) {
             return redirect()->route('opening_balance.index')
-                ->with('error', 'Opening balance not found.');
+                ->with('error', 'لم يتم العثور على الرصيد الافتتاحي');
         }
 
         return view('opening_balance.show', compact('openingBalance'));
@@ -59,7 +59,7 @@ class OpeningBalanceController extends Controller
         $openingBalance = $this->openingBalanceService->store($request->validated());
 
         return redirect()->route('opening_balance.index')
-            ->with('success', 'Opening balance created successfully.');
+            ->with('success', 'تم إنشاء الرصيد الافتتاحي بنجاح');
     }
 
     /**
@@ -83,7 +83,7 @@ class OpeningBalanceController extends Controller
         $this->openingBalanceService->update($openingBalance, $request->validated());
 
         return redirect()->route('opening_balance.index')
-            ->with('success', 'Opening balance updated successfully.');
+            ->with('success', 'تم تحديث الرصيد الافتتاحي بنجاح');
     }
 
     /**
@@ -95,12 +95,12 @@ class OpeningBalanceController extends Controller
 
         if (!$openingBalance) {
             return redirect()->route('opening_balance.index')
-                ->with('error', 'Opening balance not found.');
+                ->with('error', 'لم يتم العثور على الرصيد الافتتاحي');
         }
 
         $this->openingBalanceService->destroy($openingBalance);
 
         return redirect()->route('opening_balance.index')
-            ->with('success', 'Opening balance deleted successfully.');
+            ->with('success', 'تم حذف الرصيد الافتتاحي والقيد المحاسبي الخاص به بنجاح');
     }
 }

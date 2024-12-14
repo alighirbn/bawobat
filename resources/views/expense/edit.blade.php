@@ -8,10 +8,8 @@
             <!-- select2 css and js-->
             <link rel="stylesheet" type="text/css" href="{{ url('/css/select2.min.css') }}" />
             <script src="{{ asset('js/select2.min.js') }}"></script>
-            @include('account.nav.navigation')
             @include('income.nav.navigation')
             @include('expense.nav.navigation')
-            @include('costcenter.nav.navigation')
             @include('transaction.nav.navigation')
 
         </div>

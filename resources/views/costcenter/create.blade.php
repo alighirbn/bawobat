@@ -3,10 +3,9 @@
     <x-slot name="header">
         <div class="flex justify-start">
             @include('account.nav.navigation')
-            @include('income.nav.navigation')
-            @include('expense.nav.navigation')
             @include('costcenter.nav.navigation')
-            @include('transaction.nav.navigation')
+            @include('period.nav.navigation')
+            @include('opening_balance.nav.navigation')
         </div>
     </x-slot>
 

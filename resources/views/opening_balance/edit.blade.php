@@ -3,6 +3,9 @@
         <!-- app css-->
         <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
         <div class="flex justify-start">
+            @include('account.nav.navigation')
+            @include('costcenter.nav.navigation')
+            @include('period.nav.navigation')
             @include('opening_balance.nav.navigation')
         </div>
     </x-slot>
@@ -204,7 +207,8 @@
                 const container = $('#accounts-container');
                 const newAccountEntry = `
                     <div class="account-entry p-3 border rounded mb-3 bg-white text-gray-900">
-                        <div class="mx-2 my-2 w-full">
+                        <div class="flex">
+                            <div class="mx-2 my-2 w-full">
                             <label>Account</label>
                             <select name="accounts[${accountCount}][account_id]" class="w-full block mt-1" required>
                                 @foreach ($accounts as $account)
@@ -223,6 +227,7 @@
                                 <option value="credit">Credit</option>
                             </select>
                         </div>
+                        </div>
                         <button type="button" class="btn btn-custom-delete remove-entry mt-3">Delete</button>
                     </div>
                 `;
@@ -238,6 +243,12 @@
                 updateTotals(); // Update totals after removing an entry
             });
 
+            $('form').on('submit', function(event) {
+                $('input[name$="[amount]"]').each(function() {
+                    let amount = $(this).val().replace(/,/g, ''); // Remove commas
+                    $(this).val(parseFloat(amount) || 0); // Set the input value to a valid number
+                });
+            });
             // Initial call to update totals
             updateTotals();
         });
