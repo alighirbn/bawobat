@@ -31,7 +31,7 @@
                         </div>
                     @endif
 
-                    <div class="container a4-width p-4 bg-white mx-auto">
+                    <div class="container  p-4 bg-white mx-auto">
                         <div style="text-align: center; margin: 0.8rem auto; font-size: 1.2rem; font-weight: bold;">
                             <p>Edit Opening Balance</p>
                         </div>
@@ -43,6 +43,7 @@
                             <input type="hidden" id="id" name="id" value="{{ $openingBalance->id }}">
                             <input type="hidden" id="url_address" name="url_address"
                                 value="{{ $openingBalance->url_address }}">
+
                             <div class="card shadow-sm mb-3">
                                 <div class="card-header">
                                     <h5>Opening Balance Details</h5>
@@ -88,35 +89,38 @@
                                     <div class="card-body" id="accounts-container">
                                         @foreach ($openingBalance->accounts as $index => $account)
                                             <div class="account-entry p-3 border rounded mb-3 bg-white text-gray-900">
-                                                <div class="mx-2 my-2 w-full">
-                                                    <label>Account</label>
-                                                    <select name="accounts[{{ $index }}][account_id]"
-                                                        class="w-full block mt-1" required>
-                                                        @foreach ($accounts as $acc)
-                                                            <option value="{{ $acc->id }}"
-                                                                {{ $account->account_id == $acc->id ? 'selected' : '' }}>
-                                                                {{ $acc->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="mx-2 my-2 w-full">
-                                                    <label>Amount</label>
-                                                    <input type="text" name="accounts[{{ $index }}][amount]"
-                                                        value="{{ number_format($account->amount, 2) }}"
-                                                        class="w-full block mt-1" required>
-                                                </div>
-                                                <div class="mx-2 my-2 w-full">
-                                                    <label>Type</label>
-                                                    <select name="accounts[{{ $index }}][debit_credit]"
-                                                        class="w-full block mt-1" required>
-                                                        <option value="debit"
-                                                            {{ $account->debit_credit == 'debit' ? 'selected' : '' }}>
-                                                            Debit</option>
-                                                        <option value="credit"
-                                                            {{ $account->debit_credit == 'credit' ? 'selected' : '' }}>
-                                                            Credit</option>
-                                                    </select>
+                                                <div class="flex">
+                                                    <div class="mx-2 my-2 w-full">
+                                                        <label>Account</label>
+                                                        <select name="accounts[{{ $index }}][account_id]"
+                                                            class="w-full block mt-1" required>
+                                                            @foreach ($accounts as $acc)
+                                                                <option value="{{ $acc->id }}"
+                                                                    {{ $account->account_id == $acc->id ? 'selected' : '' }}>
+                                                                    {{ $acc->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="mx-2 my-2 w-full">
+                                                        <label>Amount</label>
+                                                        <input type="text"
+                                                            name="accounts[{{ $index }}][amount]"
+                                                            value="{{ number_format($account->amount, 0) }}"
+                                                            class="w-full block mt-1" required>
+                                                    </div>
+                                                    <div class="mx-2 my-2 w-full">
+                                                        <label>Type</label>
+                                                        <select name="accounts[{{ $index }}][debit_credit]"
+                                                            class="w-full block mt-1" required>
+                                                            <option value="debit"
+                                                                {{ $account->debit_credit == 'debit' ? 'selected' : '' }}>
+                                                                Debit</option>
+                                                            <option value="credit"
+                                                                {{ $account->debit_credit == 'credit' ? 'selected' : '' }}>
+                                                                Credit</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                                 @if (!$loop->first)
                                                     <button type="button"
@@ -130,7 +134,13 @@
                                 </div>
                             </div>
 
+                            <!-- Display totals -->
                             <div class="mt-4">
+                                <div>
+                                    <p><strong>Total Debit:</strong> <span id="total-debit">0.00</span></p>
+                                    <p><strong>Total Credit:</strong> <span id="total-credit">0.00</span></p>
+                                    <p><strong>Balance:</strong> <span id="balance">0.00</span></p>
+                                </div>
                                 <button type="submit" class="btn btn-custom-add">Update Opening Balance</button>
                                 <a href="{{ route('opening_balance.index') }}" class="btn btn-custom-delete">Cancel</a>
                             </div>
@@ -143,7 +153,32 @@
 
     <script>
         $(document).ready(function() {
-            let accountCount = 1;
+            let accountCount = {{ count($openingBalance->accounts) }};
+
+            // Function to update totals
+            function updateTotals() {
+                let totalDebit = 0;
+                let totalCredit = 0;
+
+                $('input[name$="[amount]"]').each(function() {
+                    const amount = parseFloat($(this).val().replace(/,/g, '') || 0);
+                    const type = $(this).closest('.account-entry').find('select[name$="[debit_credit]"]')
+                        .val();
+
+                    if (type === 'debit') {
+                        totalDebit += amount;
+                    } else if (type === 'credit') {
+                        totalCredit += amount;
+                    }
+                });
+
+                const balance = totalDebit - totalCredit;
+
+                // Update the totals on the page
+                $('#total-debit').text(number_format(totalDebit, 0));
+                $('#total-credit').text(number_format(totalCredit, 0));
+                $('#balance').text(number_format(balance, 0));
+            }
 
             // Format amount inputs
             $(document).on('input', 'input[name$="[amount]"]', function() {
@@ -160,6 +195,8 @@
                 // Join the formatted parts
                 const formattedValue = parts.join('.');
                 input.val(formattedValue);
+
+                updateTotals(); // Update totals on input change
             });
 
             // Add new account entry
@@ -191,20 +228,27 @@
                 `;
                 container.append(newAccountEntry);
                 accountCount++;
+
+                updateTotals(); // Update totals after adding new entry
             });
 
             // Add event listener for removing entries
             $(document).on('click', '.remove-entry', function() {
                 $(this).closest('.account-entry').remove();
+                updateTotals(); // Update totals after removing an entry
             });
 
-            // Form submission validation - convert formatted numbers back to plain numbers
-            $('form').on('submit', function(event) {
-                $('input[name$="[amount]"]').each(function() {
-                    let amount = $(this).val().replace(/,/g, ''); // Remove commas
-                    $(this).val(parseFloat(amount) || 0); // Set the input value to a valid number
-                });
-            });
+            // Initial call to update totals
+            updateTotals();
         });
+
+        // Number formatting function
+        function number_format(number, decimals) {
+            const fixed = number.toFixed(decimals);
+            const parts = fixed.split('.');
+            const wholePart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            const decimalPart = parts[1] ? '.' + parts[1] : '';
+            return wholePart + decimalPart;
+        }
     </script>
 </x-app-layout>
