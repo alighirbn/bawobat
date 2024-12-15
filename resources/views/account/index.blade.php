@@ -14,12 +14,22 @@
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="container">
-
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success">
+                            <p>{{ $message }}</p>
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     <!-- Loop through all accounts -->
                     <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>{{ __('word.add') }}</th>
+                                <th>{{ __('word.soa') }}</th>
                                 <th>{{ __('word.code') }}</th>
                                 <th>{{ __('word.catogery') }}</th>
                                 <th>{{ __('word.name') }}</th>
@@ -46,7 +56,18 @@
                                             <ul class="list-group">
                                                 @foreach ($account->children as $child)
                                                     <li class="list-group-item">
-                                                        {{ $child->name . ' ( ' . $child->code . ' )' }}</li>
+                                                        {{ $child->name . ' ( ' . $child->code . ' )' }}
+
+                                                        <a href="{{ route('account.soa', [
+                                                            'account_id' => $child->id,
+                                                            'start_date' => $startDate,
+                                                            'end_date' => $endDate,
+                                                        ]) }}"
+                                                            class="btn btn-info btn-sm">
+                                                            {{ __('word.soa') }}
+                                                        </a>
+
+                                                    </li>
                                                 @endforeach
                                             </ul>
                                         @else

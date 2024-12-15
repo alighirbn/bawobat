@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Account\Account;
+use App\Models\Account\Period;
+use App\Models\Account\TransactionAccount;
 use Illuminate\Http\Request;
 
 class accountController extends Controller
@@ -16,9 +18,22 @@ class accountController extends Controller
     {
         // Get all top-level accounts with their children (eager loading)
         $accounts = Account::with('children')->whereNull('parent_id')->get();
+        // Retrieve the active period
+        $activePeriod = Period::where('is_active', 1)->first(); // Ensure you have the 'is_active' column
 
-        return view('account.index', compact('accounts'));
+        // Check if there's an active period
+        if (!$activePeriod) {
+            return back()->with('error', 'No active period found.');
+        }
+
+        // Pass the active period dates to the view
+        return view('account.index', [
+            'accounts' => $accounts,
+            'startDate' => $activePeriod->start_date->format('Y-m-d'),
+            'endDate' => $activePeriod->end_date->format('Y-m-d')
+        ]);
     }
+
 
     // Store a new account (with parent)
     public function store(Request $request)
@@ -48,6 +63,76 @@ class accountController extends Controller
         // Redirect back to the accounts page
         return redirect()->route('account.index');
     }
+
+    public function getSOA(Request $request)
+    {
+        // Fetch all available accounts for the select dropdown
+        $accounts = Account::whereNotNull('parent_id')
+            ->orderBy('parent_id')
+            ->orderBy('code')
+            ->get();
+
+        // Retrieve the active period (ensure there is one active period)
+        $activePeriod = Period::where('is_active', 1)->first(); // Assuming 'is_active' is used to mark the active period
+
+        if (!$activePeriod) {
+            return back()->with('error', 'No active period found.');
+        }
+
+        // Set the default period dates if the request does not provide them
+        $startDate = $request->input('start_date', $activePeriod->start_date->format('Y-m-d'));
+        $endDate = $request->input('end_date', $activePeriod->end_date->format('Y-m-d'));
+
+        // If the form is submitted, validate the data
+        if ($request->isMethod('get') && $request->has('account_id')) {
+            try {
+                // Validate input on form submission
+                $validated = $request->validate([
+                    'account_id' => 'required|integer|exists:accounts,id',
+                    'start_date' => 'required|date',
+                    'end_date' => 'required|date|after_or_equal:start_date',
+                ]);
+
+                // Get filter values after validation
+                $accountId = $validated['account_id'];
+                $startDate = $validated['start_date'];
+                $endDate = $validated['end_date'];
+
+                // Fetch account details
+                $account = Account::findOrFail($accountId);
+                $accountName = null;
+
+                $accountName = $account ? $account->name : null;
+
+
+                // Fetch SOA with filters
+                $soa = TransactionAccount::getStatementOfAccount($accountId, $startDate, $endDate);
+
+                // Return the view with filtered SOA
+                return view('account.soa', [
+                    'soa' => $soa,
+                    'account' => $account,
+                    'startDate' => $startDate,
+                    'endDate' => $endDate,
+                    'accounts' => $accounts, // Pass accounts to the view
+                    'accountName' => $accountName,
+                ]);
+            } catch (\Exception $e) {
+                // Catch general errors
+                return back()->with('error', 'Error generating statement of account: ' . $e->getMessage());
+            }
+        }
+
+        // If the form has not been submitted, just return the view with empty filter fields
+        return view('account.soa', [
+            'accounts' => $accounts, // Pass accounts to the view
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ]);
+    }
+
+
+
 
     public function getIPAddress()
     {

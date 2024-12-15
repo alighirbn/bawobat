@@ -39,7 +39,15 @@ return [
     'debit_account_id' => 'الى حساب',
     'id' => 'الرمز',
     'period_id' => 'الفترة المحاسبية',
-
+    'soa' => 'كشف  ',
+    'filters_applied' => 'المراجعات المطبقة',
+    'account_id' => 'الحساب',
+    'period' => 'الفترة',
+    'to' => 'الى',
+    'date' => 'التاريخ',
+    'description' => 'الوصف',
+    'debit' => 'المدين',
+    'credit' => 'الدائن',
     // general values
     'year' => 'سنة',
     'month' => 'شهر',
