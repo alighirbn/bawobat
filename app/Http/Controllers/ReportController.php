@@ -11,28 +11,7 @@ class ReportController extends Controller
     /**
      * Generate Statement of Account for a specific account.
      */
-    public function statementOfAccount(Request $request, $accountId)
-    {
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
 
-        $account = Account::findOrFail($accountId);
-
-        $transactions = $account->transactions()
-            ->whereBetween('transactions.date', [$startDate, $endDate])
-            ->orderBy('transactions.date')
-            ->get();
-
-        $totalDebits = $transactions
-            ->where('transaction_account.debit_credit', 'debit')
-            ->sum('transaction_account.amount');
-        $totalCredits = $transactions
-            ->where('transaction_account.debit_credit', 'credit')
-            ->sum('transaction_account.amount');
-        $balance = $totalCredits - $totalDebits;
-
-        return view('report.statement_of_account', compact('account', 'transactions', 'totalDebits', 'totalCredits', 'balance'));
-    }
 
     /**
      * Generate Trial Balance report.
@@ -172,8 +151,11 @@ class ReportController extends Controller
 
 
 
-    public function balanceSheet()
+    public function balanceSheet(Request $request)
     {
+        // Default to today's date if no date is provided
+        $asOfDate = $request->input('as_of_date', now()->toDateString());
+
         // Retrieve only the accounts that are of type 'Asset', 'Liability', or 'Equity'
         $accounts = Account::with('transactions', 'children')
             ->whereIn('type', ['Asset', 'Liability', 'Equity']) // Filter only Asset, Liability, and Equity accounts
@@ -191,12 +173,14 @@ class ReportController extends Controller
                 continue;
             }
 
-            // Get total debits and credits for the main account
+            // Get total debits and credits for the main account up to the specified date
             $debits = $account->transactions()
                 ->where('transaction_account.debit_credit', 'debit')
+                ->whereDate('transactions.date', '<=', $asOfDate)
                 ->sum('transaction_account.amount');
             $credits = $account->transactions()
                 ->where('transaction_account.debit_credit', 'credit')
+                ->whereDate('transactions.date', '<=', $asOfDate)
                 ->sum('transaction_account.amount');
 
             // Calculate the balance based on the account type
@@ -211,12 +195,14 @@ class ReportController extends Controller
             // If the account has children, include them in the balance sheet
             if ($account->children->isNotEmpty()) {
                 foreach ($account->children as $child) {
-                    // Sum the debits, credits, and balance for each child account
+                    // Sum the debits, credits, and balance for each child account up to the specified date
                     $childDebits = $child->transactions()
                         ->where('transaction_account.debit_credit', 'debit')
+                        ->whereDate('transactions.date', '<=', $asOfDate)
                         ->sum('transaction_account.amount');
                     $childCredits = $child->transactions()
                         ->where('transaction_account.debit_credit', 'credit')
+                        ->whereDate('transactions.date', '<=', $asOfDate)
                         ->sum('transaction_account.amount');
 
                     // Calculate the child's balance based on the account type
@@ -227,6 +213,7 @@ class ReportController extends Controller
 
                     // Add the child account to the children array
                     $children[] = [
+                        'account_code' => $child->code,
                         'account_name' => $child->name,
                         'debits' => $childDebits,
                         'credits' => $childCredits,
@@ -243,6 +230,7 @@ class ReportController extends Controller
 
             // Add the main account along with its children (if any) to the correct section of the balance sheet
             $accountData = [
+                'account_code' => $account->code,
                 'account_name' => $account->name,
                 'debits' => $debits,
                 'credits' => $credits,
@@ -282,6 +270,7 @@ class ReportController extends Controller
 
         // Pass the grouped data to the view
         return view('report.balance_sheet', compact(
+            'asOfDate',
             'assetsCurrent',
             'assetsNonCurrent',
             'liabilitiesCurrent',
