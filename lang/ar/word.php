@@ -64,6 +64,8 @@ return [
 
     // Main Categories
     'assets' => 'الأصول',
+    'select_cost_center' => 'اختر مركز التكلفة',
+    'cost_center' => 'مركز التكلفة',
     'current_assets' => 'الأصول المتداولة',
     'non_current_assets' => 'الأصول غير المتداولة',
     'liabilities' => 'الخصوم',

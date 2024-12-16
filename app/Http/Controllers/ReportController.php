@@ -156,6 +156,12 @@ class ReportController extends Controller
         // Default to today's date if no date is provided
         $asOfDate = $request->input('as_of_date', now()->toDateString());
 
+        // Accept the cost center filter (if any)
+        $costCenterId = $request->input('cost_center_id', null);
+
+        // Fetch the available cost centers (ensure that you have a CostCenter model and data)
+        $costCenters = CostCenter::all();  // or use appropriate logic to get the list of cost centers
+
         // Retrieve only the accounts that are of type 'Asset', 'Liability', or 'Equity'
         $accounts = Account::with('transactions', 'children')
             ->whereIn('type', ['Asset', 'Liability', 'Equity']) // Filter only Asset, Liability, and Equity accounts
@@ -173,12 +179,19 @@ class ReportController extends Controller
                 continue;
             }
 
-            // Get total debits and credits for the main account up to the specified date
+            // Get total debits and credits for the main account up to the specified date, with optional cost center filter
             $debits = $account->transactions()
+                ->when($costCenterId, function ($query) use ($costCenterId) {
+                    return $query->where('transaction_account.cost_center_id', $costCenterId);
+                })
                 ->where('transaction_account.debit_credit', 'debit')
                 ->whereDate('transactions.date', '<=', $asOfDate)
                 ->sum('transaction_account.amount');
+
             $credits = $account->transactions()
+                ->when($costCenterId, function ($query) use ($costCenterId) {
+                    return $query->where('transaction_account.cost_center_id', $costCenterId);
+                })
                 ->where('transaction_account.debit_credit', 'credit')
                 ->whereDate('transactions.date', '<=', $asOfDate)
                 ->sum('transaction_account.amount');
@@ -195,12 +208,19 @@ class ReportController extends Controller
             // If the account has children, include them in the balance sheet
             if ($account->children->isNotEmpty()) {
                 foreach ($account->children as $child) {
-                    // Sum the debits, credits, and balance for each child account up to the specified date
+                    // Sum the debits, credits, and balance for each child account up to the specified date, with optional cost center filter
                     $childDebits = $child->transactions()
+                        ->when($costCenterId, function ($query) use ($costCenterId) {
+                            return $query->where('transaction_account.cost_center_id', $costCenterId);
+                        })
                         ->where('transaction_account.debit_credit', 'debit')
                         ->whereDate('transactions.date', '<=', $asOfDate)
                         ->sum('transaction_account.amount');
+
                     $childCredits = $child->transactions()
+                        ->when($costCenterId, function ($query) use ($costCenterId) {
+                            return $query->where('transaction_account.cost_center_id', $costCenterId);
+                        })
                         ->where('transaction_account.debit_credit', 'credit')
                         ->whereDate('transactions.date', '<=', $asOfDate)
                         ->sum('transaction_account.amount');
@@ -271,6 +291,7 @@ class ReportController extends Controller
         // Pass the grouped data to the view
         return view('report.balance_sheet', compact(
             'asOfDate',
+            'costCenters', // Make sure this is passed to the view
             'assetsCurrent',
             'assetsNonCurrent',
             'liabilitiesCurrent',
@@ -279,7 +300,8 @@ class ReportController extends Controller
             'equityNonCurrent',
             'totalAssets',
             'totalLiabilities',
-            'totalEquity'
+            'totalEquity',
+            'costCenterId' // Pass the cost center filter to the view
         ));
     }
 }

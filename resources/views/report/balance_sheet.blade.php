@@ -8,10 +8,25 @@
             <!-- Date Filter Form -->
             <form method="GET" action="{{ route('report.balance-Sheet') }}" class="mb-6">
                 <div class="flex items-center gap-4">
+                    <!-- As of Date Filter -->
                     <label for="asOfDate" class="font-semibold text-gray-700">{{ __('word.as_of_date') }}</label>
                     <input type="date" id="asOfDate" name="as_of_date" value="{{ request('as_of_date', $asOfDate) }}"
                         class="border border-gray-300 rounded px-2 py-1" />
-                    <button type="submit" class="bg-blue-500 text-white px-1 py-1 text-sm  rounded">
+
+                    <!-- Cost Center Filter -->
+                    <label for="costCenter" class="font-semibold text-gray-700">{{ __('word.cost_center') }}</label>
+                    <select id="costCenter" name="cost_center_id" class="border border-gray-300 rounded px-2 py-1">
+                        <option value="">{{ __('word.select_cost_center') }}</option>
+                        @foreach ($costCenters as $costCenter)
+                            <option value="{{ $costCenter->id }}"
+                                {{ request('cost_center_id') == $costCenter->id ? 'selected' : '' }}>
+                                {{ $costCenter->name }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="bg-blue-500 text-white px-1 py-1 text-sm rounded">
                         {{ __('word.filter') }}
                     </button>
                 </div>
