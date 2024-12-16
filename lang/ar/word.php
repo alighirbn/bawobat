@@ -48,6 +48,48 @@ return [
     'description' => 'الوصف',
     'debit' => 'المدين',
     'credit' => 'الدائن',
+    // Headers and Labels
+    'as_of_date' => 'كما في تاريخ:',
+    'filter' => 'تصفية',
+    'balance_sheet' => 'الميزانية العمومية',
+    'balance_sheet_as_of' => 'الميزانية العمومية (كما في :date)',
+
+    // Table Headers
+    'category' => 'الفئة',
+    'account_code' => 'رمز الحساب',
+    'account_name' => 'اسم الحساب',
+    'debits' => 'المدين',
+    'credits' => 'الدائن',
+    'balance' => 'الرصيد',
+
+    // Main Categories
+    'assets' => 'الأصول',
+    'current_assets' => 'الأصول المتداولة',
+    'non_current_assets' => 'الأصول غير المتداولة',
+    'liabilities' => 'الخصوم',
+    'current_liabilities' => 'الخصوم المتداولة',
+    'non_current_liabilities' => 'الخصوم غير المتداولة',
+    'equity' => 'حقوق الملكية',
+    'current_equity' => 'حقوق الملكية المتداولة',
+    'non_current_equity' => 'حقوق الملكية غير المتداولة',
+
+    // Totals Section
+    'totals' => 'المجاميع',
+    'total_assets' => 'مجموع الأصول',
+    'total_liabilities' => 'مجموع الخصوم',
+    'total_equity' => 'مجموع حقوق الملكية',
+
+    // Accounting Equation
+    'accounting_equation' => 'المعادلة المحاسبية',
+    'assets_equation' => 'الأصول = الخصوم + حقوق الملكية',
+    'liabilities_plus_equity' => 'الخصوم + حقوق الملكية',
+
+    // Balance Status Messages
+    'balance_sheet_balanced' => 'الميزانية العمومية متوازنة!',
+    'balance_sheet_not_balanced' => 'الميزانية العمومية غير متوازنة. الفرق هو :difference.',
+    'adjusting_equity' => 'تعديل مجموع حقوق الملكية لموازنة الميزانية بمقدار :amount.',
+    'updated_total_equity' => 'مجموع حقوق الملكية المحدث',
+
     // general values
     'year' => 'سنة',
     'month' => 'شهر',
