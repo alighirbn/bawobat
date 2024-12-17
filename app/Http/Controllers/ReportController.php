@@ -16,79 +16,151 @@ class ReportController extends Controller
     /**
      * Generate Trial Balance report.
      */
-    public function trialBalance()
+    // public function trialBalance()
+    // {
+    //     // Retrieve all accounts along with their children (if any)
+    //     $accounts = Account::with('transactions', 'children')->get();
+
+    //     // Prepare an array to store the trial balance data
+    //     $trialBalance = [];
+
+    //     // Iterate through each account to prepare the trial balance data
+    //     foreach ($accounts as $account) {
+    //         // Skip the account if it is a child (we will handle children in the parent row)
+    //         if ($account->parent_id) {
+    //             continue;
+    //         }
+
+    //         // Get total debits and credits for the main account
+    //         $debits = $account->transactions()
+    //             ->where('transaction_account.debit_credit', 'debit')
+    //             ->sum('transaction_account.amount');
+    //         $credits = $account->transactions()
+    //             ->where('transaction_account.debit_credit', 'credit')
+    //             ->sum('transaction_account.amount');
+
+    //         // Calculate the balance for the main account
+    //         $balance = $credits - $debits;
+
+    //         // Initialize an array to store children of the main account
+    //         $children = [];
+
+    //         // If the account has children, include them in the trial balance
+    //         if ($account->children->isNotEmpty()) {
+    //             foreach ($account->children as $child) {
+    //                 // Sum the debits, credits, and balance for each child account
+    //                 $childDebits = $child->transactions()
+    //                     ->where('transaction_account.debit_credit', 'debit')
+    //                     ->sum('transaction_account.amount');
+    //                 $childCredits = $child->transactions()
+    //                     ->where('transaction_account.debit_credit', 'credit')
+    //                     ->sum('transaction_account.amount');
+
+    //                 // Add the child account to the children array
+    //                 $children[] = [
+    //                     'account_name' => $child->name,
+    //                     'debits' => $childDebits,
+    //                     'credits' => $childCredits,
+    //                     'balance' => $childCredits - $childDebits,
+    //                 ];
+
+    //                 // Add the child's debits and credits to the parent's totals
+    //                 $debits += $childDebits;
+    //                 $credits += $childCredits;
+    //                 $balance += ($childCredits - $childDebits);
+    //             }
+    //         }
+
+    //         // Add the main account along with its children (if any)
+    //         $trialBalance[] = [
+    //             'account_name' => $account->name,
+    //             'debits' => $debits,
+    //             'credits' => $credits,
+    //             'balance' => $balance,
+    //             'children' => $children,  // Store children here
+    //         ];
+    //     }
+
+    //     // Calculate the total debits and credits
+    //     $totalDebits = collect($trialBalance)->sum('debits');
+    //     $totalCredits = collect($trialBalance)->sum('credits');
+    //     $isBalanced = $totalDebits === $totalCredits;
+
+    //     // Pass the trial balance data to the view
+    //     return view('report.trial_balance', compact('trialBalance', 'totalDebits', 'totalCredits', 'isBalanced'));
+    // }
+    public function trialBalance(Request $request)
     {
-        // Retrieve all accounts along with their children (if any)
-        $accounts = Account::with('transactions', 'children')->get();
+        // Fetch input filters from the request
+        $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
+        $endDate = $request->input('end_date', now()->toDateString());
+        $costCenterId = $request->input('cost_center_id', null);
+        $fromAccount = $request->input('from_account', null);
+        $toAccount = $request->input('to_account', null);
 
-        // Prepare an array to store the trial balance data
-        $trialBalance = [];
+        // Fetch available cost centers (ensure you have a CostCenter model)
+        $costCenters = CostCenter::all();
 
-        // Iterate through each account to prepare the trial balance data
+        // Retrieve accounts, optionally filtering by the 'from' and 'to' account range
+        $accounts = Account::with('transactions')
+            ->when($fromAccount && $toAccount, function ($query) use ($fromAccount, $toAccount) {
+                return $query->whereBetween('code', [$fromAccount, $toAccount]);
+            })
+            ->orderBy('code') // Sort by account code
+            ->get();
+
+        // Initialize array to store trial balance data
+        $trialBalanceData = [];
+
+        // Iterate through each account and calculate balances
         foreach ($accounts as $account) {
-            // Skip the account if it is a child (we will handle children in the parent row)
-            if ($account->parent_id) {
-                continue;
-            }
-
-            // Get total debits and credits for the main account
+            // Get total debits and credits for the account within the date range and optional cost center filter
             $debits = $account->transactions()
+                ->when($costCenterId, function ($query) use ($costCenterId) {
+                    return $query->where('transaction_account.cost_center_id', $costCenterId);
+                })
                 ->where('transaction_account.debit_credit', 'debit')
+                ->whereBetween('transactions.date', [$startDate, $endDate])
                 ->sum('transaction_account.amount');
+
             $credits = $account->transactions()
+                ->when($costCenterId, function ($query) use ($costCenterId) {
+                    return $query->where('transaction_account.cost_center_id', $costCenterId);
+                })
                 ->where('transaction_account.debit_credit', 'credit')
+                ->whereBetween('transactions.date', [$startDate, $endDate])
                 ->sum('transaction_account.amount');
 
-            // Calculate the balance for the main account
-            $balance = $credits - $debits;
-
-            // Initialize an array to store children of the main account
-            $children = [];
-
-            // If the account has children, include them in the trial balance
-            if ($account->children->isNotEmpty()) {
-                foreach ($account->children as $child) {
-                    // Sum the debits, credits, and balance for each child account
-                    $childDebits = $child->transactions()
-                        ->where('transaction_account.debit_credit', 'debit')
-                        ->sum('transaction_account.amount');
-                    $childCredits = $child->transactions()
-                        ->where('transaction_account.debit_credit', 'credit')
-                        ->sum('transaction_account.amount');
-
-                    // Add the child account to the children array
-                    $children[] = [
-                        'account_name' => $child->name,
-                        'debits' => $childDebits,
-                        'credits' => $childCredits,
-                        'balance' => $childCredits - $childDebits,
-                    ];
-
-                    // Add the child's debits and credits to the parent's totals
-                    $debits += $childDebits;
-                    $credits += $childCredits;
-                    $balance += ($childCredits - $childDebits);
-                }
+            // Include only accounts with non-zero debits or credits
+            if ($debits > 0 || $credits > 0) {
+                $trialBalanceData[] = [
+                    'account_code' => $account->code,
+                    'account_name' => $account->name,
+                    'debits' => $debits,
+                    'credits' => $credits,
+                ];
             }
-
-            // Add the main account along with its children (if any)
-            $trialBalance[] = [
-                'account_name' => $account->name,
-                'debits' => $debits,
-                'credits' => $credits,
-                'balance' => $balance,
-                'children' => $children,  // Store children here
-            ];
         }
 
-        // Calculate the total debits and credits
-        $totalDebits = collect($trialBalance)->sum('debits');
-        $totalCredits = collect($trialBalance)->sum('credits');
-        $isBalanced = $totalDebits === $totalCredits;
+        // Calculate total debits and credits for the trial balance
+        $totalDebits = collect($trialBalanceData)->sum('debits');
+        $totalCredits = collect($trialBalanceData)->sum('credits');
 
-        // Pass the trial balance data to the view
-        return view('report.trial_balance', compact('trialBalance', 'totalDebits', 'totalCredits', 'isBalanced'));
+        // Pass data to the view
+        return view('report.trial_balance', compact(
+            'startDate',
+            'endDate',
+            'costCenters',
+            'trialBalanceData',
+            'totalDebits',
+            'totalCredits',
+            'costCenterId',
+            'fromAccount',
+            'toAccount',
+            'accounts', // Include this variable
+        ));
     }
+
 
     /**
      * Generate Cost Center Report.

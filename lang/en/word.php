@@ -2,16 +2,6 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Word Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are used during viewing all pages for various
-    | messages that we need to display to the user. You are free to modify
-    | these language lines according to your application's requirements.
-    |
-     */
     //auth
     'user_create' => 'Created by',
     'user_update' => 'Updated by',
@@ -26,6 +16,80 @@ return [
     'back' => 'Back',
     'Log Out' => 'Log Out',
     'print' => 'Print',
+    'all' => 'Show All',
+    'filter' => 'Filter',
+    'total' => 'Total',
+    'date_from' => 'From',
+    'date_to' => 'To',
+    'name' => 'Name',
+    'links' => 'External Links',
+    'phone' => 'Mobile Number',
+    'email' => 'Email Address',
+    'address' => 'Address',
+    'close' => 'Close',
+    'description' => 'Notes',
+    'budget' => 'Budget',
+    'start_date' => 'Start Date',
+    'end_date' => 'End Date',
+    'status' => 'Status',
+    'date' => 'Date',
+    'amount' => 'Amount',
+    'cost_center_id' => 'Cost Center',
+    'credit_account_id' => 'From Account',
+    'debit_account_id' => 'To Account',
+    'id' => 'ID',
+    'period_id' => 'Accounting Period',
+    'soa' => 'Statement',
+    'filters_applied' => 'Applied Filters',
+    'account_id' => 'Account',
+    'period' => 'Period',
+    'to' => 'To',
+    'description' => 'Description',
+    'debit' => 'Debit',
+    'credit' => 'Credit',
+    // Headers and Labels
+    'as_of_date' => 'As of Date:',
+    'filter' => 'Filter',
+    'balance_sheet' => 'Balance Sheet',
+    'balance_sheet_as_of' => 'Balance Sheet (As of :date)',
+
+    // Table Headers
+    'category' => 'Category',
+    'account_code' => 'Account Code',
+    'account_name' => 'Account Name',
+    'debits' => 'Debits',
+    'credits' => 'Credits',
+    'balance' => 'Balance',
+
+    // Main Categories
+    'assets' => 'Assets',
+    'select_cost_center' => 'Select Cost Center',
+    'cost_center' => 'Cost Center',
+    'current_assets' => 'Current Assets',
+    'non_current_assets' => 'Non-Current Assets',
+    'liabilities' => 'Liabilities',
+    'current_liabilities' => 'Current Liabilities',
+    'non_current_liabilities' => 'Non-Current Liabilities',
+    'equity' => 'Equity',
+    'current_equity' => 'Current Equity',
+    'non_current_equity' => 'Non-Current Equity',
+
+    // Totals Section
+    'totals' => 'Totals',
+    'total_assets' => 'Total Assets',
+    'total_liabilities' => 'Total Liabilities',
+    'total_equity' => 'Total Equity',
+
+    // Accounting Equation
+    'accounting_equation' => 'Accounting Equation',
+    'assets_equation' => 'Assets = Liabilities + Equity',
+    'liabilities_plus_equity' => 'Liabilities + Equity',
+
+    // Balance Status Messages
+    'balance_sheet_balanced' => 'Balance Sheet is balanced!',
+    'balance_sheet_not_balanced' => 'Balance Sheet is not balanced. Difference is :difference.',
+    'adjusting_equity' => 'Adjusting total equity to balance by :amount.',
+    'updated_total_equity' => 'Updated Total Equity',
 
     // general values
     'year' => 'Year',
@@ -34,136 +98,124 @@ return [
 
     //main navigation
     'dashboard' => 'Dashboard',
-    'Map' => 'Map',
-    'contract' => 'Contracts',
-    'accountant' => 'Accounts',
-    'Building' => 'Buildings',
-    'payment' => 'Payments',
-    'expense' => 'Expense Vouchers',
-    'service' => 'Services',
+    'project' => 'Projects',
+    'investor' => 'Investors',
+    'account' => 'Accounts',
+    'financial_management' => 'Financial Management',
+    'finance_operations' => 'Financial Operations',
+    'report' => 'Reports',
+
+    'income' => 'Income',
+    'expense' => 'Expenses',
+
     'Customer' => 'Customers',
     'users' => 'Users',
     'roles' => 'Roles',
 
     // dashboard
-    'dashboard_msg' => 'Welcome to the Yasmin Oasis Residential Complex website in Najaf Province',
+    'dashboard_msg' => 'Welcome to Bawabat Al-Ilm Contracting and Real Estate Investment Company System in Najaf Governorate',
     'dashboard_title' => 'Welcome',
 
     // basic info
-    'basic_msg' => 'Page for basic information',
+    'basic_msg' => 'Basic Information Page',
 
-    //************************************* map        *******************************************
-    'map_contracts' => 'Contract Map',
-    'map_due_installments_0' => 'Due Now',
-    'map_due_installments_30' => 'Due in a Month',
-    'map_due_installments_60' => 'Due in Two Months',
-    'map_buildings' => 'Building Map',
-    'map_empty_buildings' => 'Available Building Map',
+    //************************************* project        *******************************************
+    //nav
+    'project_id' => 'Project Number',
+    'project_date' => 'Project Date',
+    'project_name' => 'Project Name',
+    'project_add' => 'Add Project',
+    'project_search' => 'Search Project',
+
+    'project_archive' => 'Add Image',
+    'project_scan' => 'Add Document',
+    'archiveshow' => 'Attachments',
+
+    //project_info
+    'project_info' => 'Project Information',
 
 
-    //************************************* contract        *******************************************
-    'id' => 'Contract Number',
-    'contract_id' =>  'Contract Number',
-    'contract_date' => 'Contract Date',
-    'contract_amount' => 'Amount',
-    'contract_note' => 'Notes',
+    //************************************* account        *******************************************
+    //nav
+    'code' => 'Account Number',
+    'type' => 'Account Type',
+    'class' => 'Class',
+    'catogery' => 'Category',
+    'account_add' => 'Add Account',
+    'chart_of_account' => 'Chart of Accounts',
 
-    'contract_customer_id' => 'Customer Name',
-    'contract_building_id' => 'Building Number',
-    'contract_payment_method_id' => 'Payment Type',
-    'method_name' => 'Payment Type',
+    'Liability' => 'Liability',
+    'Asset' => 'Asset',
+    'Expense' => 'Expense',
+    'Income' => 'Income',
+    'Equity' => 'Equity',
 
-    'installment_number' => 'Sequence',
-    'installment_name' => 'Installment',
-    'installment_percent' => 'Percentage',
-    'installment_amount' => 'Installment Amount',
-    'installment_date' => 'Installment Due Date',
-    'installment_payment' => 'Payment Status',
+    //account_info
+    'account_info' => 'Account Information',
+    'opening_balance' => 'Opening Balance',
+    'opening_balance_date' => 'Opening Balance Date',
+    'opening_balance_amount' => 'Opening Balance Amount',
+    'opening_balance_type' => 'Opening Balance Type',
+    'opening_balance_note' => 'Opening Balance Notes',
+    'opening_balance_add' => 'Add Opening Balance',
+    'opening_balance_search' => 'Search Opening Balance',
 
+    //************************************* costcenter        *******************************************
+    //nav
+
+    'costcenter_add' => 'Add Cost Center',
+    'costcenter_search' => 'Search Cost Center',
+
+
+    //costcenter_info
+    'costcenter_info' => 'Cost Center Information',
+
+    //************************************* period        *******************************************
+    //nav
+
+    'period_add' => 'Add Accounting Period',
+    'period_search' => 'Search Accounting Period',
+
+
+    //period_info
+    'period_info' => 'Accounting Period Information',
+
+    //************************************* transaction        *******************************************
+    //nav
+
+    'transaction_add' => 'Add Entry',
+    'transaction_search' => 'Search Entry',
+
+
+    //transaction_info
+    'transaction_info' => 'Entry Information',
+
+
+
+    //************************************* income        *******************************************
+
+    'income_id' => 'Income Number',
+    'income_date' => 'Income Date',
+    'income_amount' => 'Received Amount',
+    'income_note' => 'Notes',
+    'income_type_id' => 'Income Type',
+    'add_income' => 'Pay Income',
 
     //nav
-    'contract_add' => 'Add Contract',
-    'contract_search' => 'Search for Contract',
-    'contract_view' => 'View Contract',
-    'contract_edit' => 'Edit Contract',
-    'contract_print' => 'Print Contract',
-    'contract_transfer' => 'Transfer Contract',
-    'contract_due' => 'Due Installments',
-    'statement' => 'Statement',
-
-    //contract_info
-    'contract_info' => 'Contract Information',
-    'installment_info' => 'Installment Information',
-
-
-    //************************************* transfer        *******************************************
-
-    'transfer_id' => 'Transfer Number',
-    'transfer_date' => 'Transfer Date',
-    'transfer_amount' => 'Transfer Fee',
-    'transfer_note' => 'Notes',
-
-    'oldcustomer' => 'Previous Customer',
-    'newcustomer' => 'New Customer',
-    'new_customer_id' => 'New Customer Name',
-
-    //nav
-    'transfer_add' => 'Add Transfer',
-    'transfer_search' => 'Search for Transfer',
-    'transfer_edit' => 'Edit Transfer',
-    'transfer_print' => 'Print Transfer',
-    //transfer_info
-    'transfer_info' => 'Transfer Information',
-    'transfer_contract' => 'View Transfers',
-    'transfer_approve' => 'Approved',
-
-    'old_customer_picture' => 'Previous Customer Picture',
-    'new_customer_picture' => 'New Customer Picture',
-    'capture' => 'Capture',
-
-
-    //************************************* building        *******************************************
-
-    'building_number' => 'Building Number',
-    'block_number' => 'Block Number',
-    'house_number' => 'House Number',
-    'building_area' => 'Area',
-    'building_map_x' => 'Coordinate X',
-    'building_map_y' => 'Coordinate Y',
-
-    'building_category_id' => 'Category',
-    'building_type_id' => 'Type',
-
-    //nav
-    'building_add' => 'Add Building',
-    'building_search' => 'Search for Building',
-
-    //building_info
-    'building_info' => 'Building Information',
-
-
-    //************************************* payment        *******************************************
-
-    'payment_id' => 'Payment Number',
-    'payment_date' => 'Payment Date',
-    'payment_amount' => 'Amount Received',
-    'payment_note' => 'Notes',
-    'add_payment' => 'Make Payment',
-
-    //nav
-    'payment_add' => 'Add Payment',
-    'payment_search' => 'Search for Payment',
-    'payment_approve' => 'Approve Payment',
+    'income_add' => 'Add Income',
+    'income_search' => 'Search Income',
+    'income_approve' => 'Approve Income',
     'approved' => 'Approved',
     'pending' => 'Pending',
 
-    //payment_info
-    'payment_info' => 'Payment Information',
-    'last_payment' => 'Last Payment',
-    'payment_pending' => 'Pending Payments',
-    'payment_status' => 'Payment Status',
-    'approve_status' => 'Approval Status',
-
+    //income_info
+    'income_info' => 'Income Information',
+    'last_income' => 'Last Income',
+    'income_pending' => 'Pending Income',
+    'income_status' => 'Payment Status',
+    'approve_status' => 'Status',
+    'unpaid' => 'Unpaid',
+    'paid' => 'Paid',
 
     //************************************* expense        *******************************************
 
@@ -172,11 +224,11 @@ return [
     'expense_amount' => 'Amount',
     'expense_note' => 'Notes',
     'add_expense' => 'Add Expense Voucher',
-    'expense_type_id' => 'Expense Type',
+    'expense_type_id' => 'Expense Category',
 
     //nav
     'expense_add' => 'Add Expense Voucher',
-    'expense_search' => 'Search for Expense Voucher',
+    'expense_search' => 'Search Expense Voucher',
     'expense_approve' => 'Approve Expense Voucher',
 
     //expense_info
@@ -185,77 +237,39 @@ return [
     'expense_status' => 'Payment Status',
 
 
-    //************************************* cash_account        *******************************************
 
-    'cash_account_id' => 'Cash Account Number',
-    'balance' => 'Balance',
-    'account_name' => 'Account Name',
+    //************************************* investor        *******************************************
 
 
     //nav
-    'cash_account_add' => 'Add Cash Account',
-    'cash_account_search' => 'Search for Cash Account',
+    'investor_add' => 'Add Investor',
+    'investor_search' => 'Search Investor',
+    'investment_amount' => 'Investment Amount',
+    'investment_percentage' => 'Investment Percentage',
+    //investor_info
+    'investor_info' => 'Investor Information',
 
-    //cash_account_info
-    'cash_account_info' => 'Cash Account Information',
 
-    //************************************* cash_transfer        *******************************************
+    //************************************* stage        *******************************************
 
-    'cash_transfer_id' => 'Transfer Number',
-    'amount' => 'Amount',
-
-    'transfer_date' => 'Transfer Date',
-    'from_account_id' => 'From Account',
-    'to_account_id' => 'To Account',
-    'from_account' => 'From Account',
-    'to_account' => 'To Account',
-
-    'transfer_number' => 'Transfer Number',
-    'transfer_note' => 'Notes',
-
+    'stages' => 'Stages',
     //nav
-    'cash_transfer_add' => 'Add Transfer',
-    'cash_transfer_search' => 'Search for Transfer',
+    'stage_add' => 'Add Stage',
+    'stage_search' => 'Search Stage',
 
-    //cash_transfer_info
-    'cash_transfer_info' => 'Transfer Information',
-    'cash_transfer_pending' => 'Pending Transfers',
-    'cash_transfer_approve' => 'Approve Transfer',
+    //stage_info
+    'stage_info' => 'Stage Information',
 
+    //************************************* report        *******************************************
 
-    //************************************* service        *******************************************
-
-    'service_id' => 'Service Number',
-    'service_date' => 'Service Date',
-    'service_amount' => 'Amount',
-    'service_note' => 'Notes',
-    'service_type_id' => 'Service Type',
-
+    'reports' => 'Reports',
     //nav
-    'service_add' => 'Add Service',
-    'service_search' => 'Search for Service',
+    'report_trialBalance' => 'Trial Balance',
+    'report_trialBalanceCostCenter' => 'Trial Balance by Cost Center',
+    'report_balance_sheet' => 'Balance Sheet',
 
-    //service_info
-    'service_info' => 'Service Information',
-
-
-    //************************************* customer        *******************************************
-
-    'customer_full_name' => 'Full Name',
-    'customer_phone' => 'Phone Number',
-    'customer_email' => 'Email Address',
-    'customer_card_number' => 'National Card Number',
-    'customer_card_issud_auth' => 'Issuing Authority',
-    'customer_card_issud_date' => 'Issue Date',
-
-
-    //nav
-    'customer_add' => 'Add Customer',
-    'customer_search' => 'Search for Customer',
-
-    //customer_info
-    'customer_info' => 'Customer Information',
-    'customer_card' => 'National Card Information',
+    //report_info
+    'report_info' => 'Stage Information',
 
     //************************************* users        *******************************************
     'user_name' => 'Username',
@@ -264,7 +278,7 @@ return [
     'email' => 'Email Address',
     'user_status' => 'Status',
     'user_role' => 'Role',
-    'department_id' => 'Department',
+    'department_id' => 'Institution',
 
     //nav
     'user_add' => 'Add User',
@@ -286,13 +300,11 @@ return [
     //user_info
     'role_info' => 'Role Information',
 
-    //************************************* reports        *******************************************
-
-    'total_amount' => 'Total Amount',
-    'received_amount' => 'Amount Received',
-    'remaining_amount' => 'Remaining Amount',
-    'contract_report' => 'Contract Report',
-    'installment_report' => 'Installment Report',
-    'installment_status' => 'Installment Status',
-
+    //************************************* notification *******************************************
+    'notifications' => 'Notifications',
+    'show_all' => 'Show All',
+    'markallasread' => 'Mark All as Read',
+    'unreadnotification' => 'Unread Notifications',
+    'nonotification' => 'No Notifications Added',
+    'readnotification' => 'Read Notifications',
 ];

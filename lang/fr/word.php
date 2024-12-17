@@ -2,16 +2,6 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Lignes de Langue
-    |--------------------------------------------------------------------------
-    |
-    | Les lignes de langue suivantes sont utilisées lors de l'affichage de toutes les pages pour divers
-    | messages que nous devons afficher à l'utilisateur. Vous êtes libre de modifier
-    | ces lignes de langue en fonction des besoins de votre application.
-    |
-     */
     //auth
     'user_create' => 'Créé par',
     'user_update' => 'Mis à jour par',
@@ -22,10 +12,84 @@ return [
     'edit' => 'Modifier',
     'delete' => 'Supprimer',
     'update' => 'Mettre à jour',
-    'save' => 'Sauvegarder',
+    'save' => 'Enregistrer',
     'back' => 'Retour',
     'Log Out' => 'Déconnexion',
     'print' => 'Imprimer',
+    'all' => 'Tout afficher',
+    'filter' => 'Filtrer',
+    'total' => 'Total',
+    'date_from' => 'Du',
+    'date_to' => 'Au',
+    'name' => 'Nom',
+    'links' => 'Liens externes',
+    'phone' => 'Numéro de téléphone',
+    'email' => 'Adresse e-mail',
+    'address' => 'Adresse',
+    'close' => 'Fermer',
+    'description' => 'Notes',
+    'budget' => 'Budget',
+    'start_date' => 'Date de début',
+    'end_date' => 'Date de fin',
+    'status' => 'Statut',
+    'date' => 'Date',
+    'amount' => 'Montant',
+    'cost_center_id' => 'Centre de coûts',
+    'credit_account_id' => 'Compte source',
+    'debit_account_id' => 'Compte destination',
+    'id' => 'ID',
+    'period_id' => 'Période comptable',
+    'soa' => 'Relevé',
+    'filters_applied' => 'Filtres appliqués',
+    'account_id' => 'Compte',
+    'period' => 'Période',
+    'to' => 'To',
+    'description' => 'Description',
+    'debit' => 'Débit',
+    'credit' => 'Crédit',
+    // Headers and Labels
+    'as_of_date' => 'En date du :',
+    'filter' => 'Filtrer',
+    'balance_sheet' => 'Bilan',
+    'balance_sheet_as_of' => 'Bilan (Au :date)',
+
+    // Table Headers
+    'category' => 'Catégorie',
+    'account_code' => 'Code compte',
+    'account_name' => 'Nom du compte',
+    'debits' => 'Débits',
+    'credits' => 'Crédits',
+    'balance' => 'Solde',
+
+    // Main Categories
+    'assets' => 'Actifs',
+    'select_cost_center' => 'Sélectionner le centre de coûts',
+    'cost_center' => 'Centre de coûts',
+    'current_assets' => 'Actifs courants',
+    'non_current_assets' => 'Actifs non courants',
+    'liabilities' => 'Passifs',
+    'current_liabilities' => 'Passifs courants',
+    'non_current_liabilities' => 'Passifs non courants',
+    'equity' => 'Capitaux propres',
+    'current_equity' => 'Capitaux propres courants',
+    'non_current_equity' => 'Capitaux propres non courants',
+
+    // Totals Section
+    'totals' => 'Totaux',
+    'total_assets' => 'Total des actifs',
+    'total_liabilities' => 'Total des passifs',
+    'total_equity' => 'Total des capitaux propres',
+
+    // Accounting Equation
+    'accounting_equation' => 'Équation comptable',
+    'assets_equation' => 'Actifs = Passifs + Capitaux propres',
+    'liabilities_plus_equity' => 'Passifs + Capitaux propres',
+
+    // Balance Status Messages
+    'balance_sheet_balanced' => 'Le bilan est équilibré !',
+    'balance_sheet_not_balanced' => 'Le bilan n\'est pas équilibré. Différence : :difference.',
+    'adjusting_equity' => 'Rééquilibrer le total des capitaux propres de :amount.',
+    'updated_total_equity' => 'Total des capitaux propres mis à jour',
 
     // general values
     'year' => 'Année',
@@ -34,245 +98,213 @@ return [
 
     //main navigation
     'dashboard' => 'Tableau de bord',
-    'Map' => 'Carte',
-    'contract' => 'Contrats',
-    'accountant' => 'Comptabilité',
-    'Building' => 'Bâtiments',
-    'payment' => 'Paiements',
-    'expense' => 'Bons de dépenses',
-    'service' => 'Services',
+    'project' => 'Projets',
+    'investor' => 'Investisseurs',
+    'account' => 'Comptes',
+    'financial_management' => 'Gestion financière',
+    'finance_operations' => 'Opérations financières',
+    'report' => 'Rapports',
+
+    'income' => 'Revenu',
+    'expense' => 'Dépenses',
+
     'Customer' => 'Clients',
     'users' => 'Utilisateurs',
     'roles' => 'Rôles',
 
     // dashboard
-    'dashboard_msg' => 'Bienvenue sur le site du Complexe Résidentiel Yasmin Oasis dans la province de Najaf',
+    'dashboard_msg' => 'Bienvenue dans le système de Bawabat Al-Ilm Contracting et d\'Investissement Immobilier à Najaf',
     'dashboard_title' => 'Bienvenue',
 
     // basic info
-    'basic_msg' => 'Page pour les informations de base',
+    'basic_msg' => 'Page d\'Informations de Base',
 
-    //************************************* map        *******************************************
-    'map_contracts' => 'Carte des Contrats',
-    'map_due_installments_0' => 'Échéance Maintenant',
-    'map_due_installments_30' => 'Échéance dans un Mois',
-    'map_due_installments_60' => 'Échéance dans Deux Mois',
-    'map_buildings' => 'Carte des Bâtiments',
-    'map_empty_buildings' => 'Carte des Bâtiments Disponibles',
+    //************************************* project        *******************************************
+    //nav
+    'project_id' => 'Numéro de projet',
+    'project_date' => 'Date du projet',
+    'project_name' => 'Nom du projet',
+    'project_add' => 'Ajouter un projet',
+    'project_search' => 'Rechercher un projet',
 
-    //************************************* contract        *******************************************
-    'id' => 'Numéro du Contrat',
-    'contract_id' =>  'Numéro du Contrat',
-    'contract_date' => 'Date du Contrat',
-    'contract_amount' => 'Montant',
-    'contract_note' => 'Remarques',
+    'project_archive' => 'Ajouter une image',
+    'project_scan' => 'Ajouter un document',
+    'archiveshow' => 'Pièces jointes',
 
-    'contract_customer_id' => 'Nom du Client',
-    'contract_building_id' => 'Numéro du Bâtiment',
-    'contract_payment_method_id' => 'Type de Paiement',
-    'method_name' => 'Type de Paiement',
+    //project_info
+    'project_info' => 'Informations sur le projet',
 
-    'installment_number' => 'Séquence',
-    'installment_name' => 'Échéance',
-    'installment_percent' => 'Pourcentage',
-    'installment_amount' => 'Montant de l\'Échéance',
-    'installment_date' => 'Date d\'Échéance',
-    'installment_payment' => 'Statut du Paiement',
+
+    //************************************* account        *******************************************
+    //nav
+    'code' => 'Numéro de compte',
+    'type' => 'Type de compte',
+    'class' => 'Classe',
+    'catogery' => 'Catégorie',
+    'account_add' => 'Ajouter un compte',
+    'chart_of_account' => 'Plan des comptes',
+
+    'Liability' => 'Passif',
+    'Asset' => 'Actif',
+    'Expense' => 'Dépense',
+    'Income' => 'Revenu',
+    'Equity' => 'Capitaux propres',
+
+    //account_info
+    'account_info' => 'Informations sur le compte',
+    'opening_balance' => 'Solde d\'ouverture',
+    'opening_balance_date' => 'Date du solde d\'ouverture',
+    'opening_balance_amount' => 'Montant du solde d\'ouverture',
+    'opening_balance_type' => 'Type de solde d\'ouverture',
+    'opening_balance_note' => 'Notes du solde d\'ouverture',
+    'opening_balance_add' => 'Ajouter le solde d\'ouverture',
+    'opening_balance_search' => 'Rechercher le solde d\'ouverture',
+
+    //************************************* costcenter        *******************************************
+    //nav
+
+    'costcenter_add' => 'Ajouter un centre de coûts',
+    'costcenter_search' => 'Rechercher un centre de coûts',
+
+
+    //costcenter_info
+    'costcenter_info' => 'Informations sur le centre de coûts',
+
+    //************************************* period        *******************************************
+    //nav
+
+    'period_add' => 'Ajouter une période comptable',
+    'period_search' => 'Rechercher une période comptable',
+
+
+    //period_info
+    'period_info' => 'Informations sur la période comptable',
+
+    //************************************* transaction        *******************************************
+    //nav
+
+    'transaction_add' => 'Ajouter une entrée',
+    'transaction_search' => 'Rechercher une entrée',
+
+
+    //transaction_info
+    'transaction_info' => 'Informations sur l\'entrée',
+
+
+
+    //************************************* income        *******************************************
+
+    'income_id' => 'Numéro de revenu',
+    'income_date' => 'Date de revenu',
+    'income_amount' => 'Montant reçu',
+    'income_note' => 'Notes',
+    'income_type_id' => 'Type de revenu',
+    'add_income' => 'Payer un revenu',
 
     //nav
-    'contract_add' => 'Ajouter un Contrat',
-    'contract_search' => 'Rechercher un Contrat',
-    'contract_view' => 'Voir le Contrat',
-    'contract_edit' => 'Modifier le Contrat',
-    'contract_print' => 'Imprimer le Contrat',
-    'contract_transfer' => 'Transférer le Contrat',
-    'contract_due' => 'Échéances',
-    'statement' => 'État',
-
-    //contract_info
-    'contract_info' => 'Informations sur le Contrat',
-    'installment_info' => 'Informations sur l\'Échéance',
-
-    //************************************* transfer        *******************************************
-    'transfer_id' => 'Numéro de Transfert',
-    'transfer_date' => 'Date du Transfert',
-    'transfer_amount' => 'Frais de Transfert',
-    'transfer_note' => 'Remarques',
-
-    'oldcustomer' => 'Ancien Client',
-    'newcustomer' => 'Nouveau Client',
-    'new_customer_id' => 'Nom du Nouveau Client',
-
-    //nav
-    'transfer_add' => 'Ajouter un Transfert',
-    'transfer_search' => 'Rechercher un Transfert',
-    'transfer_edit' => 'Modifier un Transfert',
-    'transfer_print' => 'Imprimer le Transfert',
-    //transfer_info
-    'transfer_info' => 'Informations sur le Transfert',
-    'transfer_contract' => 'Voir les Transferts',
-    'transfer_approve' => 'Approuvé',
-
-    'old_customer_picture' => 'Photo de l\'Ancien Client',
-    'new_customer_picture' => 'Photo du Nouveau Client',
-    'capture' => 'Capturer',
-
-    //************************************* building        *******************************************
-    'building_number' => 'Numéro du Bâtiment',
-    'block_number' => 'Numéro du Bloc',
-    'house_number' => 'Numéro de Maison',
-    'building_area' => 'Surface',
-    'building_map_x' => 'Coordonnée X',
-    'building_map_y' => 'Coordonnée Y',
-
-    'building_category_id' => 'Catégorie',
-    'building_type_id' => 'Type',
-
-    //nav
-    'building_add' => 'Ajouter un Bâtiment',
-    'building_search' => 'Rechercher un Bâtiment',
-
-    //building_info
-    'building_info' => 'Informations sur le Bâtiment',
-
-    //************************************* payment        *******************************************
-    'payment_id' => 'Numéro de Paiement',
-    'payment_date' => 'Date de Paiement',
-    'payment_amount' => 'Montant Reçu',
-    'payment_note' => 'Remarques',
-    'add_payment' => 'Effectuer un Paiement',
-
-    //nav
-    'payment_add' => 'Ajouter un Paiement',
-    'payment_search' => 'Rechercher un Paiement',
-    'payment_approve' => 'Approuver le Paiement',
+    'income_add' => 'Ajouter un revenu',
+    'income_search' => 'Rechercher un revenu',
+    'income_approve' => 'Approuver un revenu',
     'approved' => 'Approuvé',
-    'pending' => 'En Attente',
+    'pending' => 'En attente',
 
-    //payment_info
-    'payment_info' => 'Informations sur le Paiement',
-    'last_payment' => 'Dernier Paiement',
-    'payment_pending' => 'Paiements en Attente',
-    'payment_status' => 'Statut du Paiement',
-    'approve_status' => 'Statut d\'Approbation',
+    //income_info
+    'income_info' => 'Informations sur le revenu',
+    'last_income' => 'Dernier revenu',
+    'income_pending' => 'Revenu en attente',
+    'income_status' => 'Statut de paiement',
+    'approve_status' => 'Statut',
+    'unpaid' => 'Non payé',
+    'paid' => 'Payé',
 
     //************************************* expense        *******************************************
-    'expense_id' => 'Numéro du Bon de Dépense',
-    'expense_date' => 'Date du Bon de Dépense',
+
+    'expense_id' => 'Numéro de note de dépense',
+    'expense_date' => 'Date de note de dépense',
     'expense_amount' => 'Montant',
-    'expense_note' => 'Remarques',
-    'add_expense' => 'Ajouter un Bon de Dépense',
-    'expense_type_id' => 'Type de Dépense',
+    'expense_note' => 'Notes',
+    'add_expense' => 'Ajouter une note de dépense',
+    'expense_type_id' => 'Catégorie de dépense',
 
     //nav
-    'expense_add' => 'Ajouter un Bon de Dépense',
-    'expense_search' => 'Rechercher un Bon de Dépense',
-    'expense_approve' => 'Approuver le Bon de Dépense',
+    'expense_add' => 'Ajouter une note de dépense',
+    'expense_search' => 'Rechercher une note de dépense',
+    'expense_approve' => 'Approuver une note de dépense',
 
     //expense_info
-    'expense_info' => 'Informations sur le Bon de Dépense',
-    'expense_pending' => 'Bons de Dépense en Attente',
-    'expense_status' => 'Statut du Paiement',
+    'expense_info' => 'Informations sur la note de dépense',
+    'expense_pending' => 'Notes de dépense en attente',
+    'expense_status' => 'Statut de paiement',
 
-    //************************************* cash_account        *******************************************
-    'cash_account_id' => 'Numéro de Compte de Trésorerie',
-    'balance' => 'Solde',
-    'account_name' => 'Nom du Compte',
 
-    //nav
-    'cash_account_add' => 'Ajouter un Compte de Trésorerie',
-    'cash_account_search' => 'Rechercher un Compte de Trésorerie',
 
-    //cash_account_info
-    'cash_account_info' => 'Informations sur le Compte de Trésorerie',
+    //************************************* investor        *******************************************
 
-    //************************************* cash_transfer        *******************************************
-    'cash_transfer_id' => 'Numéro de Transfert',
-    'amount' => 'Montant',
-
-    'transfer_date' => 'Date du Transfert',
-    'from_account_id' => 'Compte d\'Origine',
-    'to_account_id' => 'Compte de Destination',
-    'from_account' => 'Compte d\'Origine',
-    'to_account' => 'Compte de Destination',
-
-    'transfer_number' => 'Numéro de Transfert',
-    'transfer_note' => 'Remarques',
 
     //nav
-    'cash_transfer_add' => 'Ajouter un Transfert',
-    'cash_transfer_search' => 'Rechercher un Transfert',
+    'investor_add' => 'Ajouter un investisseur',
+    'investor_search' => 'Rechercher un investisseur',
+    'investment_amount' => 'Montant d\'investissement',
+    'investment_percentage' => 'Pourcentage d\'investissement',
+    //investor_info
+    'investor_info' => 'Informations sur l\'investisseur',
 
-    //cash_transfer_info
-    'cash_transfer_info' => 'Informations sur le Transfert',
-    'cash_transfer_pending' => 'Transferts en Attente',
-    'cash_transfer_approve' => 'Approuver le Transfert',
 
-    //************************************* service        *******************************************
-    'service_id' => 'Numéro de Service',
-    'service_date' => 'Date de Service',
-    'service_amount' => 'Montant',
-    'service_note' => 'Remarques',
-    'service_type_id' => 'Type de Service',
+    //************************************* stage        *******************************************
 
+    'stages' => 'Étapes',
     //nav
-    'service_add' => 'Ajouter un Service',
-    'service_search' => 'Rechercher un Service',
+    'stage_add' => 'Ajouter une étape',
+    'stage_search' => 'Rechercher une étape',
 
-    //service_info
-    'service_info' => 'Informations sur le Service',
+    //stage_info
+    'stage_info' => 'Informations sur l\'étape',
 
-    //************************************* customer        *******************************************
-    'customer_full_name' => 'Nom Complet',
-    'customer_phone' => 'Numéro de Téléphone',
-    'customer_email' => 'Adresse Email',
-    'customer_card_number' => 'Numéro de Carte Nationale',
-    'customer_card_issud_auth' => 'Autorité de Délivrance',
-    'customer_card_issud_date' => 'Date de Délivrance',
+    //************************************* report        *******************************************
 
+    'reports' => 'Rapports',
     //nav
-    'customer_add' => 'Ajouter un Client',
-    'customer_search' => 'Rechercher un Client',
+    'report_trialBalance' => 'Balance générale',
+    'report_trialBalanceCostCenter' => 'Balance générale par centre de coûts',
+    'report_balance_sheet' => 'Bilan',
 
-    //customer_info
-    'customer_info' => 'Informations sur le Client',
-    'customer_card' => 'Informations sur la Carte Nationale',
+    //report_info
+    'report_info' => 'Informations sur l\'étape',
 
     //************************************* users        *******************************************
-    'user_name' => 'Nom d\'Utilisateur',
-    'password' => 'Mot de Passe',
-    'confirm_password' => 'Confirmer le Mot de Passe',
-    'email' => 'Adresse Email',
+    'user_name' => 'Nom d\'utilisateur',
+    'password' => 'Mot de passe',
+    'confirm_password' => 'Confirmer le mot de passe',
+    'email' => 'Adresse e-mail',
     'user_status' => 'Statut',
     'user_role' => 'Rôle',
-    'department_id' => 'Département',
+    'department_id' => 'Institution',
 
     //nav
-    'user_add' => 'Ajouter un Utilisateur',
-    'user_search' => 'Voir les Utilisateurs',
+    'user_add' => 'Ajouter un utilisateur',
+    'user_search' => 'Voir les utilisateurs',
 
     //user_info
-    'user_info' => 'Informations sur l\'Utilisateur',
+    'user_info' => 'Informations sur l\'utilisateur',
 
     //************************************* role        *******************************************
     //fields
-    'role_name' => 'Nom du Rôle',
-    'guard' => 'Garde',
+    'role_name' => 'Nom du rôle',
+    'guard' => 'Gardien',
     'permission' => 'Permissions',
 
     //nav
-    'role_add' => 'Ajouter un Rôle',
-    'role_search' => 'Voir les Rôles',
+    'role_add' => 'Ajouter un rôle',
+    'role_search' => 'Voir les rôles',
 
-    //role_info
-    'role_info' => 'Informations sur le Rôle',
+    //user_info
+    'role_info' => 'Informations sur le rôle',
 
-    //************************************* reports        *******************************************
-    'total_amount' => 'Montant Total',
-    'received_amount' => 'Montant Reçu',
-    'remaining_amount' => 'Montant Restant',
-    'contract_report' => 'Rapport sur les Contrats',
-    'installment_report' => 'Rapport sur les Échéances',
-    'installment_status' => 'Statut des Échéances',
-
+    //************************************* notification *******************************************
+    'notifications' => 'Notifications',
+    'show_all' => 'Tout afficher',
+    'markallasread' => 'Marquer tout comme lu',
+    'unreadnotification' => 'Notifications non lues',
+    'nonotification' => 'Aucune notification',
+    'readnotification' => 'Notifications lues',
 ];
