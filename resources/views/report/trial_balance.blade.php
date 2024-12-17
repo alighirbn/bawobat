@@ -10,7 +10,7 @@
                     <div class="a4-width mx-auto">
 
                         <!-- Filter Form -->
-                        <form method="GET" action="{{ route('report.trialBalance') }}" class="mb-6">
+                        <form method="GET" action="{{ route('report.trial_balance') }}" class="mb-6">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div class="flex">
                                     <!-- Start Date -->
@@ -117,11 +117,14 @@
                                             {{ __('word.debits') }}</th>
                                         <th class="px-1 py-1 text-sm text-right border border-gray-300">
                                             {{ __('word.credits') }}</th>
+                                        <th class="px-1 py-1 text-sm text-right border border-gray-300">
+                                            {{ __('word.balance') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($trialBalanceData as $row)
-                                        <tr>
+                                        <!-- Parent Account Row -->
+                                        <tr class="font-semibold">
                                             <td class="px-1 py-1 text-sm border border-gray-300">
                                                 {{ $row['account_code'] }}</td>
                                             <td class="px-1 py-1 text-sm border border-gray-300">
@@ -132,7 +135,31 @@
                                             <td class="px-1 py-1 text-sm text-right border border-gray-300">
                                                 {{ number_format($row['credits'], 0) }}
                                             </td>
+                                            <td
+                                                class="px-1 py-1 text-sm text-right border border-gray-300 {{ $row['balance'] < 0 ? 'text-red-600' : '' }}">
+                                                {{ number_format($row['balance'], 0) }}
+                                            </td>
                                         </tr>
+
+                                        <!-- Child Account Rows -->
+                                        @foreach ($row['children'] as $child)
+                                            <tr class="bg-gray-50">
+                                                <td class="px-1 py-1 text-sm border border-gray-300 pl-8">
+                                                    {{ $child['account_code'] }}</td>
+                                                <td class="px-1 py-1 text-sm border border-gray-300">
+                                                    {{ $child['account_name'] }}</td>
+                                                <td class="px-1 py-1 text-sm text-right border border-gray-300">
+                                                    {{ number_format($child['debits'], 0) }}
+                                                </td>
+                                                <td class="px-1 py-1 text-sm text-right border border-gray-300">
+                                                    {{ number_format($child['credits'], 0) }}
+                                                </td>
+                                                <td
+                                                    class="px-1 py-1 text-sm text-right border border-gray-300 {{ $child['balance'] < 0 ? 'text-red-600' : '' }}">
+                                                    {{ number_format($child['balance'], 0) }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     @endforeach
                                 </tbody>
                                 <tfoot>
@@ -140,6 +167,10 @@
                                         <th class="px-4 py-2 text-left" colspan="2">{{ __('word.totals') }}</th>
                                         <th class="px-4 py-2 text-right">{{ number_format($totalDebits, 0) }}</th>
                                         <th class="px-4 py-2 text-right">{{ number_format($totalCredits, 0) }}</th>
+                                        <th
+                                            class="px-4 py-2 text-right {{ $totalCredits - $totalDebits < 0 ? 'text-red-600' : '' }}">
+                                            {{ number_format($totalCredits - $totalDebits, 0) }}
+                                        </th>
                                     </tr>
                                 </tfoot>
                             </table>

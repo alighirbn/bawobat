@@ -6,7 +6,7 @@
     <div class="bg-gray-100 py-6">
         <div class="a4-width text-gray-700 mx-auto sm:px-6 lg:px-8">
             <!-- Date Filter Form -->
-            <form method="GET" action="{{ route('report.balance-Sheet') }}" class="mb-6">
+            <form method="GET" action="{{ route('report.balance_sheet') }}" class="mb-6">
                 <div class="flex items-center gap-4">
                     <!-- As of Date Filter -->
                     <label for="asOfDate" class="font-semibold text-gray-700">{{ __('word.as_of_date') }}</label>

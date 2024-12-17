@@ -17,36 +17,16 @@
     }
 </style>
 
-{{-- @can('report-soa')
-    <a href="{{ route('report.soa') }}" class="me-3 {{ request()->routeIs('report.soa') ? 'underline-active' : '' }}">
-        {{ __('word.report_soa') }}
-    </a>
-@endcan --}}
-
-@can('report-costCenter')
-    <a href="{{ route('report.costCenter') }}"
-        class="me-3 {{ request()->routeIs('report.costCenter') ? 'underline-active' : '' }}">
-        {{ __('word.report_costCenter') }}
-    </a>
-@endcan
-
 @can('report-trialBalance')
-    <a href="{{ route('report.trialBalance') }}"
-        class="me-3 {{ request()->routeIs('report.trialBalance') ? 'underline-active' : '' }}">
-        {{ __('word.report_trialBalance') }}
+    <a href="{{ route('report.trial_balance') }}"
+        class="me-3 {{ request()->routeIs('report.trial_balance') ? 'underline-active' : '' }}">
+        {{ __('word.trial_balance') }}
     </a>
 @endcan
 
 @can('report-trialBalanceCostCenter')
-    <a href="{{ route('report.trialBalanceCostCenter') }}"
-        class="me-3 {{ request()->routeIs('report.trialBalanceCostCenter') ? 'underline-active' : '' }}">
-        {{ __('word.report_trialBalanceCostCenter') }}
-    </a>
-@endcan
-
-@can('report-trialBalanceCostCenter')
-    <a href="{{ route('report.balance-Sheet') }}"
-        class="me-3 {{ request()->routeIs('report.balance-Sheet') ? 'underline-active' : '' }}">
+    <a href="{{ route('report.balance_sheet') }}"
+        class="me-3 {{ request()->routeIs('report.balance_sheet') ? 'underline-active' : '' }}">
         {{ __('word.report_balance_sheet') }}
     </a>
 @endcan
