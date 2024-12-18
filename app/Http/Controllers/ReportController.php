@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Account\Account;
 use App\Models\Account\CostCenter;
+use App\Models\Account\Period;
+use App\Models\Account\TransactionAccount;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -404,5 +406,73 @@ class ReportController extends Controller
             'netProfitOrLoss',
             'costCenterId'
         ));
+    }
+
+    public function statementOfAccount(Request $request)
+
+    {
+        // Fetch all available accounts for the select dropdown
+        $accounts = Account::whereNotNull('parent_id')
+            ->orderBy('parent_id')
+            ->orderBy('code')
+            ->get();
+
+        // Retrieve the active period (ensure there is one active period)
+        $activePeriod = Period::where('is_active', 1)->first(); // Assuming 'is_active' is used to mark the active period
+
+        if (!$activePeriod) {
+            return back()->with('error', 'No active period found.');
+        }
+
+        // Set the default period dates if the request does not provide them
+        $startDate = $request->input('start_date', $activePeriod->start_date->format('Y-m-d'));
+        $endDate = $request->input('end_date', $activePeriod->end_date->format('Y-m-d'));
+
+        // If the form is submitted, validate the data
+        if ($request->isMethod('get') && $request->has('account_id')) {
+            try {
+                // Validate input on form submission
+                $validated = $request->validate([
+                    'account_id' => 'required|integer|exists:accounts,id',
+                    'start_date' => 'required|date',
+                    'end_date' => 'required|date|after_or_equal:start_date',
+                ]);
+
+                // Get filter values after validation
+                $accountId = $validated['account_id'];
+                $startDate = $validated['start_date'];
+                $endDate = $validated['end_date'];
+
+                // Fetch account details
+                $account = Account::findOrFail($accountId);
+                $accountName = null;
+
+                $accountName = $account ? $account->name : null;
+
+
+                // Fetch SOA with filters
+                $soa = TransactionAccount::getStatementOfAccount($accountId, $startDate, $endDate);
+
+                // Return the view with filtered SOA
+                return view('report.statement_of_account', [
+                    'soa' => $soa,
+                    'account' => $account,
+                    'startDate' => $startDate,
+                    'endDate' => $endDate,
+                    'accounts' => $accounts, // Pass accounts to the view
+                    'accountName' => $accountName,
+                ]);
+            } catch (\Exception $e) {
+                // Catch general errors
+                return back()->with('error', 'Error generating statement of account: ' . $e->getMessage());
+            }
+        }
+
+        // If the form has not been submitted, just return the view with empty filter fields
+        return view('report.statement_of_account', [
+            'accounts' => $accounts, // Pass accounts to the view
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+        ]);
     }
 }

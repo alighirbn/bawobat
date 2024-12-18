@@ -11,7 +11,16 @@
             <div class="overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="a4-width mx-auto">
-
+                        @if ($message = Session::get('success'))
+                            <div class="alert alert-success">
+                                <p>{{ $message }}</p>
+                            </div>
+                        @endif
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
                         <!-- Filter Form -->
                         <form method="GET" action="{{ route('report.trial_balance') }}" class="mb-6">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">

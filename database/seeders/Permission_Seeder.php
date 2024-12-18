@@ -108,10 +108,10 @@ class Permission_Seeder extends Seeder
             //**************************report******************************* */
 
             'report-list',
-            'report-soa',
             'report-trialBalance',
             'report-balanceSheet',
             'report-profitAndLoss',
+            'report-statementOfAccount',
 
 
             //**************************user******************************* */

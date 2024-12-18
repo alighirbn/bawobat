@@ -37,3 +37,10 @@
         {{ __('word.report_profit_and_loss') }}
     </a>
 @endcan
+
+@can('report-statementOfAccount')
+    <a href="{{ route('report.statement_of_account') }}"
+        class="me-3 {{ request()->routeIs('report.statement_of_account') ? 'underline-active' : '' }}">
+        {{ __('word.statement_of_account') }}
+    </a>
+@endcan

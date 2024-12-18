@@ -101,6 +101,23 @@ return [
     'current_equity' => 'حقوق الملكية المتداولة',
     'non_current_equity' => 'حقوق الملكية غير المتداولة',
 
+    'statement_of_account' => 'كشف حساب',
+    'start_date' => 'تاريخ البداية',
+    'end_date' => 'تاريخ النهاية',
+    'account' => 'الحساب',
+    'select_account' => 'اختر الحساب',
+    'cost_center' => 'مركز التكلفة',
+    'all' => 'الكل',
+    'generate' => 'إنشاء',
+    'opening_balance' => 'الرصيد الافتتاحي',
+    'date' => 'التاريخ',
+    'description' => 'الوصف',
+    'debit' => 'مدين',
+    'credit' => 'دائن',
+    'running_balance' => 'الرصيد الجاري',
+    'no_transactions_found' => 'لم يتم العثور على معاملات',
+    'please_select_account' => 'الرجاء تحديد حساب وتطبيق المرشحات لإنشاء الكشف',
+
     // Totals Section
     'totals' => 'المجاميع',
     'total_assets' => 'مجموع الأصول',

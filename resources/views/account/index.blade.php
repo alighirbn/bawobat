@@ -58,7 +58,7 @@
                                                     <li class="list-group-item">
                                                         {{ $child->name . ' ( ' . $child->code . ' )' }}
 
-                                                        <a href="{{ route('account.soa', [
+                                                        <a href="{{ route('report.statement_of_account', [
                                                             'account_id' => $child->id,
                                                             'start_date' => $startDate,
                                                             'end_date' => $endDate,
@@ -109,9 +109,9 @@
                         <input type="hidden" id="parent_id" name="parent_id">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-custom-add"
+                        <button type="button" class="btn btn-custom-show"
                             data-bs-dismiss="modal">{{ __('word.close') }}</button>
-                        <button type="submit" class="btn btn-custom-show">{{ __('word.save') }}</button>
+                        <button type="submit" class="btn btn-custom-add">{{ __('word.save') }}</button>
                     </div>
                 </form>
             </div>
