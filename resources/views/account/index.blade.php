@@ -14,22 +14,13 @@
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="container">
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success">
-                            <p>{{ $message }}</p>
-                        </div>
-                    @endif
-                    @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
+
                     <!-- Loop through all accounts -->
                     <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>{{ __('word.add') }}</th>
-                                <th>{{ __('word.soa') }}</th>
+
                                 <th>{{ __('word.code') }}</th>
                                 <th>{{ __('word.catogery') }}</th>
                                 <th>{{ __('word.name') }}</th>
@@ -42,8 +33,10 @@
                                 <tr>
                                     <!-- Action Button -->
                                     <td>
-                                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#addAccountModal" data-parent-id="{{ $account->id }}">
+                                        <button type="button" class="my-1 mx-1 btn btn-custom-show"
+                                            data-bs-toggle="modal" data-bs-target="#addAccountModal"
+                                            data-parent-id="{{ $account->id }}"
+                                            data-parent-code="{{ $account->code }}">
                                             +
                                         </button>
                                     </td>
@@ -76,8 +69,6 @@
                                     <td>{{ __('word.' . $account->type) }}</td>
                                     <td>{{ $account->class }}</td>
 
-                                    <!-- Child Accounts -->
-
                                 </tr>
                             @endforeach
                         </tbody>
@@ -89,7 +80,7 @@
         </div>
     </div>
     <!-- Modal for adding a new account -->
-    <div class="modal fade  text-gray-900" id="addAccountModal" tabindex="-1" aria-labelledby="addAccountModalLabel"
+    <div class="modal fade text-gray-900" id="addAccountModal" tabindex="-1" aria-labelledby="addAccountModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -100,12 +91,31 @@
                 <form action="{{ route('account.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
+                        <!-- Account Name -->
                         <div class="mb-3">
                             <label for="name" class="form-label">{{ __('word.name') }}</label>
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
 
-                        <!-- Hidden field to pass the parent account ID -->
+                        <!-- Parent Code -->
+                        <div class="mb-3">
+                            <label for="parent_code" class="form-label">{{ __('word.parent_code') }}</label>
+                            <input type="text" class="form-control" id="parent_code" readonly>
+                        </div>
+
+                        <!-- Last Digits -->
+                        <div class="mb-3">
+                            <label for="last_digits" class="form-label">{{ __('word.last_digits') }}</label>
+                            <input type="number" class="form-control" id="last_digits" name="last_digits" required>
+                        </div>
+
+                        <!-- Full Account Code -->
+                        <div class="mb-3">
+                            <label for="code" class="form-label">{{ __('word.full_code') }}</label>
+                            <input type="text" class="form-control" id="code" name="code" readonly>
+                        </div>
+
+                        <!-- Hidden Parent ID -->
                         <input type="hidden" id="parent_id" name="parent_id">
                     </div>
                     <div class="modal-footer">
@@ -121,15 +131,32 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Set the parent_id in the modal when the "Add Child Account" button is clicked
-        var addAccountModal = document.getElementById('addAccountModal');
-        addAccountModal.addEventListener('show.bs.modal', function(event) {
-            var button = event.relatedTarget; // Button that triggered the modal
-            var parentId = button.getAttribute('data-parent-id'); // Get parent_id from button
-
-            // Set the parent_id field in the modal form
+        document.addEventListener('DOMContentLoaded', function() {
+            var addAccountModal = document.getElementById('addAccountModal');
             var parentIdInput = addAccountModal.querySelector('#parent_id');
-            parentIdInput.value = parentId;
+            var parentCodeInput = addAccountModal.querySelector('#parent_code');
+            var lastDigitsInput = addAccountModal.querySelector('#last_digits');
+            var fullCodeInput = addAccountModal.querySelector('#code');
+
+            // Handle showing the modal and setting initial data
+            addAccountModal.addEventListener('show.bs.modal', function(event) {
+                var button = event.relatedTarget; // Button that triggered the modal
+                var parentId = button.getAttribute('data-parent-id'); // Parent ID
+                var parentCode = button.getAttribute('data-parent-code'); // Parent Code
+
+                // Set parent_id and parent_code in the modal
+                parentIdInput.value = parentId;
+                parentCodeInput.value = parentCode;
+                fullCodeInput.value = ''; // Reset the full code field
+                lastDigitsInput.value = ''; // Reset the last digits field
+            });
+
+            // Update the full account code dynamically
+            lastDigitsInput.addEventListener('input', function() {
+                var parentCode = parentCodeInput.value;
+                var lastDigits = lastDigitsInput.value;
+                fullCodeInput.value = parentCode + lastDigits;
+            });
         });
     </script>
 </x-app-layout>

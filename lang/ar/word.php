@@ -100,7 +100,10 @@ return [
     'equity' => 'حقوق الملكية',
     'current_equity' => 'حقوق الملكية المتداولة',
     'non_current_equity' => 'حقوق الملكية غير المتداولة',
+    'parent_code' => 'رمز الحساب الأب',
+    'last_digits' => 'آخر أرقام',
 
+    'full_code' => 'رمز الحساب الكامل',
     'statement_of_account' => 'كشف حساب',
     'start_date' => 'تاريخ البداية',
     'end_date' => 'تاريخ النهاية',

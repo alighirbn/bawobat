@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id_create')->nullable()->constrained('users')->nullOnDelete(); // Creator user
             $table->foreignId('user_id_update')->nullable()->constrained('users')->nullOnDelete(); // Updater user
 
-            $table->string('code')->unique(); // Account code (e.g., '101' for "Capital")
+            $table->integer('code')->unique(); // Account code (e.g., 101 for "Capital")
             $table->string('name');           // Account name (e.g., 'Capital')
             $table->enum('type', [
                 'Asset',
