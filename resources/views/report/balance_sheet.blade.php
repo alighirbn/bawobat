@@ -1,5 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
+        <!-- app css-->
+        <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
+
         @include('report.nav.navigation')
     </x-slot>
 
@@ -10,7 +13,8 @@
                 <div class="flex items-center gap-4">
                     <!-- As of Date Filter -->
                     <label for="asOfDate" class="font-semibold text-gray-700">{{ __('word.as_of_date') }}</label>
-                    <input type="date" id="asOfDate" name="as_of_date" value="{{ request('as_of_date', $asOfDate) }}"
+                    <input type="date" id="asOfDate" name="as_of_date"
+                        value="{{ request('as_of_date', $asOfDate) }}"
                         class="border border-gray-300 rounded px-2 py-1" />
 
                     <!-- Cost Center Filter -->

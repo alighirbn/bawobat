@@ -1,5 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
+        <!-- app css-->
+        <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
+
         @include('report.nav.navigation')
     </x-slot>
 

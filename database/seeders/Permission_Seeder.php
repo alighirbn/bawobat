@@ -110,8 +110,8 @@ class Permission_Seeder extends Seeder
             'report-list',
             'report-soa',
             'report-trialBalance',
-            'report-costCenter',
-            'report-trialBalanceCostCenter',
+            'report-balanceSheet',
+            'report-profitAndLoss',
 
 
             //**************************user******************************* */

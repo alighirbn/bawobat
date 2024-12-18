@@ -283,4 +283,126 @@ class ReportController extends Controller
             'costCenterId' // Pass the cost center filter to the view
         ));
     }
+
+
+
+    public function profitAndLoss(Request $request)
+    {
+        // Fetch input filters from the request
+        $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
+        $endDate = $request->input('end_date', now()->toDateString());
+        $costCenterId = $request->input('cost_center_id', null);
+
+        // Fetch the available cost centers
+        $costCenters = CostCenter::all();
+
+        // Retrieve only the accounts that are of type 'Income' or 'Expense'
+        $accounts = Account::with(['transactions', 'children'])
+            ->whereIn('type', ['Income', 'Expense'])
+            ->get();
+
+        // Initialize arrays for income and expense data
+        $incomeAccounts = [];
+        $expenseAccounts = [];
+
+        // Iterate through each account to prepare the profit and loss data
+        foreach ($accounts as $account) {
+            // Skip child accounts (handled with their parent)
+            if ($account->parent_id) {
+                continue;
+            }
+
+            // Get total debits and credits for the account within the specified date range
+            $debits = $account->transactions()
+                ->when($costCenterId, function ($query) use ($costCenterId) {
+                    return $query->where('transaction_account.cost_center_id', $costCenterId);
+                })
+                ->where('transaction_account.debit_credit', 'debit')
+                ->whereBetween('transactions.date', [$startDate, $endDate])
+                ->sum('transaction_account.amount');
+
+            $credits = $account->transactions()
+                ->when($costCenterId, function ($query) use ($costCenterId) {
+                    return $query->where('transaction_account.cost_center_id', $costCenterId);
+                })
+                ->where('transaction_account.debit_credit', 'credit')
+                ->whereBetween('transactions.date', [$startDate, $endDate])
+                ->sum('transaction_account.amount');
+
+            // Calculate the balance based on the account type
+            $balance = match ($account->type) {
+                'Income' => $credits - $debits, // Income: Credit - Debit
+                'Expense' => $debits - $credits, // Expense: Debit - Credit
+            };
+
+            // Initialize an array to store children of the account
+            $children = [];
+
+            // If the account has children, include them
+            if ($account->children->isNotEmpty()) {
+                foreach ($account->children as $child) {
+                    $childDebits = $child->transactions()
+                        ->when($costCenterId, function ($query) use ($costCenterId) {
+                            return $query->where('transaction_account.cost_center_id', $costCenterId);
+                        })
+                        ->where('transaction_account.debit_credit', 'debit')
+                        ->whereBetween('transactions.date', [$startDate, $endDate])
+                        ->sum('transaction_account.amount');
+
+                    $childCredits = $child->transactions()
+                        ->when($costCenterId, function ($query) use ($costCenterId) {
+                            return $query->where('transaction_account.cost_center_id', $costCenterId);
+                        })
+                        ->where('transaction_account.debit_credit', 'credit')
+                        ->whereBetween('transactions.date', [$startDate, $endDate])
+                        ->sum('transaction_account.amount');
+
+                    $childBalance = match ($account->type) {
+                        'Income' => $childCredits - $childDebits,
+                        'Expense' => $childDebits - $childCredits,
+                    };
+
+                    $children[] = [
+                        'account_code' => $child->code,
+                        'account_name' => $child->name,
+                        'balance' => $childBalance,
+                    ];
+
+                    $balance += $childBalance;
+                }
+            }
+
+            // Add the account to the appropriate section
+            $accountData = [
+                'account_code' => $account->code,
+                'account_name' => $account->name,
+                'balance' => $balance,
+                'children' => $children,
+            ];
+
+            if ($account->type === 'Income') {
+                $incomeAccounts[] = $accountData;
+            } elseif ($account->type === 'Expense') {
+                $expenseAccounts[] = $accountData;
+            }
+        }
+
+        // Calculate totals
+        $totalIncome = collect($incomeAccounts)->sum('balance');
+        $totalExpenses = collect($expenseAccounts)->sum('balance');
+        $netProfitOrLoss = $totalIncome - $totalExpenses;
+
+        // Pass the data to the view
+        return view('report.profit_and_loss', compact(
+            'startDate',
+            'endDate',
+            'costCenters',
+            'incomeAccounts',
+            'expenseAccounts',
+            'totalIncome',
+            'totalExpenses',
+            'netProfitOrLoss',
+            'costCenterId'
+        ));
+    }
 }

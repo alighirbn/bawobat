@@ -24,9 +24,16 @@
     </a>
 @endcan
 
-@can('report-trialBalanceCostCenter')
+@can('report-balanceSheet')
     <a href="{{ route('report.balance_sheet') }}"
         class="me-3 {{ request()->routeIs('report.balance_sheet') ? 'underline-active' : '' }}">
         {{ __('word.report_balance_sheet') }}
+    </a>
+@endcan
+
+@can('report-profitAndLoss')
+    <a href="{{ route('report.profit_and_loss') }}"
+        class="me-3 {{ request()->routeIs('report.profit_and_loss') ? 'underline-active' : '' }}">
+        {{ __('word.report_profit_and_loss') }}
     </a>
 @endcan
