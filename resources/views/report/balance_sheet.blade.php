@@ -44,7 +44,7 @@
                 <!-- Single Table for Assets, Liabilities, and Equity -->
                 <table class="w-full border border-gray-300 border-collapse">
                     <thead>
-                        <tr class="bg-gray-200">
+                        <tr class="bg-gray-50">
                             <th class="px-1 py-1 text-sm  text-left border border-gray-300">
                                 {{ __('word.category') }}</th>
                             <th class="px-1 py-1 text-sm  text-left border border-gray-300">
@@ -74,9 +74,9 @@
                             <!-- Adjusted colspan -->
                         </tr>
                         @foreach ($assetsCurrent as $asset)
-                            <tr>
-                                <td class="px-1 py-1 text-sm  border border-gray-300">{{ $asset['account_code'] }}</td>
+                            <tr class="font-semibold">
                                 <td class="px-1 py-1 text-sm  border border-gray-300"></td>
+                                <td class="px-1 py-1 text-sm  border border-gray-300">{{ $asset['account_code'] }}</td>
                                 <!-- Account Code -->
                                 <td class="px-1 py-1 text-sm  border border-gray-300">{{ $asset['account_name'] }}</td>
                                 <td class="px-1 py-1 text-sm  text-right border border-gray-300">
@@ -87,7 +87,7 @@
                                     {{ number_format($asset['balance'], 0) }}</td>
                             </tr>
                             @foreach ($asset['children'] as $child)
-                                <tr class="bg-gray-200">
+                                <tr class="bg-gray-50">
                                     <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                     <td class="px-1 py-1 text-sm  border border-gray-300">{{ $child['account_code'] }}
                                     </td>
@@ -111,9 +111,9 @@
                             <!-- Adjusted colspan -->
                         </tr>
                         @foreach ($assetsNonCurrent as $asset)
-                            <tr>
-                                <td class="px-1 py-1 text-sm  border border-gray-300">{{ $asset['account_code'] }}</td>
+                            <tr class="font-semibold">
                                 <td class="px-1 py-1 text-sm  border border-gray-300"></td>
+                                <td class="px-1 py-1 text-sm  border border-gray-300">{{ $asset['account_code'] }}</td>
                                 <!-- Account Code -->
                                 <td class="px-1 py-1 text-sm  border border-gray-300">{{ $asset['account_name'] }}</td>
                                 <td class="px-1 py-1 text-sm  text-right border border-gray-300">
@@ -124,7 +124,7 @@
                                     {{ number_format($asset['balance'], 0) }}</td>
                             </tr>
                             @foreach ($asset['children'] as $child)
-                                <tr class="bg-gray-200">
+                                <tr class="bg-gray-50">
                                     <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                     <td class="px-1 py-1 text-sm  border border-gray-300">{{ $child['account_code'] }}
                                     </td>
@@ -154,10 +154,10 @@
                             <!-- Adjusted colspan -->
                         </tr>
                         @foreach ($liabilitiesCurrent as $liability)
-                            <tr>
+                            <tr class="font-semibold">
+                                <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                 <td class="px-1 py-1 text-sm  border border-gray-300">{{ $liability['account_code'] }}
                                 </td>
-                                <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                 <!-- Account Code -->
                                 <td class="px-1 py-1 text-sm  border border-gray-300">{{ $liability['account_name'] }}
                                 </td>
@@ -169,7 +169,7 @@
                                     {{ number_format($liability['balance'], 0) }}</td>
                             </tr>
                             @foreach ($liability['children'] as $child)
-                                <tr class="bg-gray-200">
+                                <tr class="bg-gray-50">
                                     <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                     <td class="px-1 py-1 text-sm  border border-gray-300">{{ $child['account_code'] }}
                                     </td>
@@ -193,10 +193,10 @@
                             <!-- Adjusted colspan -->
                         </tr>
                         @foreach ($liabilitiesNonCurrent as $liability)
-                            <tr>
+                            <tr class="font-semibold">
+                                <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                 <td class="px-1 py-1 text-sm  border border-gray-300">{{ $liability['account_code'] }}
                                 </td>
-                                <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                 <!-- Account Code -->
                                 <td class="px-1 py-1 text-sm  border border-gray-300">{{ $liability['account_name'] }}
                                 </td>
@@ -208,7 +208,7 @@
                                     {{ number_format($liability['balance'], 0) }}</td>
                             </tr>
                             @foreach ($liability['children'] as $child)
-                                <tr class="bg-gray-200">
+                                <tr class="bg-gray-50">
                                     <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                     <td class="px-1 py-1 text-sm  border border-gray-300">{{ $child['account_code'] }}
                                     </td>
@@ -239,10 +239,10 @@
                             <!-- Adjusted colspan -->
                         </tr>
                         @foreach ($equityCurrent as $equity)
-                            <tr>
+                            <tr class="font-semibold">
+                                <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                 <td class="px-1 py-1 text-sm  border border-gray-300">{{ $equity['account_code'] }}
                                 </td>
-                                <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                 <!-- Account Code -->
                                 <td class="px-1 py-1 text-sm  border border-gray-300">{{ $equity['account_name'] }}
                                 </td>
@@ -254,7 +254,7 @@
                                     {{ number_format($equity['balance'], 0) }}</td>
                             </tr>
                             @foreach ($equity['children'] as $child)
-                                <tr class="bg-gray-200">
+                                <tr class="bg-gray-50">
                                     <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                     <td class="px-1 py-1 text-sm  border border-gray-300">{{ $child['account_code'] }}
                                     </td>
@@ -278,10 +278,10 @@
                             <!-- Adjusted colspan -->
                         </tr>
                         @foreach ($equityNonCurrent as $equity)
-                            <tr>
+                            <tr class="font-semibold">
+                                <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                 <td class="px-1 py-1 text-sm  border border-gray-300">{{ $equity['account_code'] }}
                                 </td>
-                                <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                 <!-- Account Code -->
                                 <td class="px-1 py-1 text-sm  border border-gray-300">{{ $equity['account_name'] }}
                                 </td>
@@ -293,7 +293,7 @@
                                     {{ number_format($equity['balance'], 0) }}</td>
                             </tr>
                             @foreach ($equity['children'] as $child)
-                                <tr class="bg-gray-200">
+                                <tr class="bg-gray-50">
                                     <td class="px-1 py-1 text-sm  border border-gray-300"></td>
                                     <td class="px-1 py-1 text-sm  border border-gray-300">{{ $child['account_code'] }}
                                     </td>
