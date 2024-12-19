@@ -249,9 +249,9 @@ return [
     'add_income' => 'تسديد الايراد',
 
     //nav
-    'income_add' => 'اضافة ايراد',
-    'income_search' => 'بحث عن ايراد',
-    'income_approve' => 'قبول الايراد',
+    'income_add' => 'اضافة سند ايراد',
+    'income_search' => 'بحث عن سند ايراد',
+    'income_approve' => 'قبول سند الايراد',
     'approved' => 'مقبولة',
     'pending' => 'في الانتظار',
 

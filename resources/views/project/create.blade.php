@@ -57,11 +57,36 @@
 
                                 <div class=" mx-4 my-4 w-full">
                                     <x-input-label for="status" class="w-full mb-1" :value="__('word.status')" />
-                                    <x-text-input id="status" class="w-full block mt-1" type="text" name="status"
-                                        value="{{ old('status') }}" />
+                                    <select id="status"
+                                        class="w-full block mt-1 border-gray-300 rounded-md shadow-sm" name="status">
+                                        <option value="">{{ __('word.select_status') }}</option>
+                                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active
+                                        </option>
+                                        <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>
+                                            Pending</option>
+                                        <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>
+                                            Completed</option>
+                                        <option value="cancelled" {{ old('status') == 'cancelled' ? 'selected' : '' }}>
+                                            Cancelled</option>
+                                    </select>
                                     <x-input-error :messages="$errors->get('status')" class="w-full mt-2" />
                                 </div>
 
+                                <div class=" mx-4 my-4 w-full">
+                                    <x-input-label for="cost_center_id" class="w-full mb-1" :value="__('word.cost_center')" />
+                                    <select id="cost_center_id"
+                                        class="w-full block mt-1 border-gray-300 rounded-md shadow-sm"
+                                        name="cost_center_id">
+                                        <option value="">{{ __('word.select_cost_center') }}</option>
+                                        @foreach ($cost_centers as $cost_center)
+                                            <option value="{{ $cost_center->id }}"
+                                                {{ old('cost_center_id') == $cost_center->id ? 'selected' : '' }}>
+                                                {{ $cost_center->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <x-input-error :messages="$errors->get('cost_center_id')" class="w-full mt-2" />
+                                </div>
                             </div>
 
                             <div class=" mx-4 my-4 w-full">

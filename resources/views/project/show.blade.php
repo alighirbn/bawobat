@@ -42,6 +42,18 @@
                                 {{ __('word.archiveshow') }}
                             </a>
                         @endcan
+                        @can('income-create')
+                            <a href="{{ route('income.create', ['cost_center_id' => $project->cost_center_id]) }}"
+                                class="btn btn-custom-archive">
+                                {{ __('word.income_add') }}
+                            </a>
+                        @endcan
+                        @can('expense-create')
+                            <a href="{{ route('expense.create', ['cost_center_id' => $project->cost_center_id]) }}"
+                                class="btn btn-custom-archive">
+                                {{ __('word.expense_add') }}
+                            </a>
+                        @endcan
 
                     </div>
                     @if ($message = Session::get('success'))

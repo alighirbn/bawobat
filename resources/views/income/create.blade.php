@@ -33,7 +33,7 @@
                                         </option>
                                         @foreach ($cost_centers as $cost_center)
                                             <option value="{{ $cost_center->id }}"
-                                                {{ old('cost_center_id') == $cost_center->id ? 'selected' : '' }}>
+                                                {{ (old('cost_center_id') ?? $cost_center_id) == $cost_center->id ? 'selected' : '' }}>
                                                 {{ $cost_center->name }}
                                             </option>
                                         @endforeach

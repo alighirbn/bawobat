@@ -28,9 +28,9 @@ class IncomeController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-
+        $cost_center_id = $request->cost_center_id;
         $cost_centers = CostCenter::all();
 
         $revenueAccounts = Account::whereNotNull('parent_id')
@@ -45,7 +45,7 @@ class IncomeController extends Controller
             ->orderBy('code') // Additional sorting by 'code'
             ->get();
 
-        return view('income.create', compact(['cost_centers', 'revenueAccounts', 'cashAccounts']));
+        return view('income.create', compact(['cost_centers', 'revenueAccounts', 'cashAccounts', 'cost_center_id']));
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\ProjectDataTable;
 use App\Http\Requests\ProjectRequest;
+use App\Models\Account\CostCenter;
 use App\Models\Project\Project;
 use App\Models\Project\ProjectStage;
 use App\Models\Cash\Transaction;
@@ -38,7 +39,8 @@ class ProjectController extends Controller
     // Show the form for creating a new project
     public function create()
     {
-        return view('project.create'); // Assuming you have a 'create' view for the project
+        $cost_centers = CostCenter::all();
+        return view('project.create', compact(['cost_centers'])); // Assuming you have a 'create' view for the project
     }
 
     public function store(ProjectRequest $request)
@@ -59,6 +61,7 @@ class ProjectController extends Controller
             'url_address' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'cost_center_id' => 'required|exists:costcenters,id',
             'budget' => 'required|numeric',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',

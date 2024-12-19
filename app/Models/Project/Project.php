@@ -59,6 +59,11 @@ class Project extends Model
         return $this->hasMany(ProjectStage::class);
     }
 
+    public function cost_center()
+    {
+        return $this->belongsTo(CostCenter::class);
+    }
+
     // Relationship with Investor (many-to-many)
     public function investors()
     {

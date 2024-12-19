@@ -22,8 +22,9 @@ class ExpenseController extends Controller
         return $dataTable->onlyPending($onlyPending)->render('expense.index');
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        $cost_center_id = $request->cost_center_id;
         $cost_centers = CostCenter::all();
         $expenseAccounts = Account::whereNotNull('parent_id')
             ->where('type', 'Expense')
@@ -37,7 +38,7 @@ class ExpenseController extends Controller
             ->orderBy('code') // Additional sorting by 'code'
             ->get();
 
-        return view('expense.create', compact(['cost_centers', 'expenseAccounts', 'cashAccounts']));
+        return view('expense.create', compact(['cost_centers', 'expenseAccounts', 'cashAccounts', 'cost_center_id']));
     }
 
 
