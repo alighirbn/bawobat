@@ -25,7 +25,7 @@
                         </div>
                     @endif
 
-                    <div class="container a4-width p-4 bg-white mx-auto">
+                    <div class="container p-4 bg-white mx-auto">
                         <div style="text-align: center; margin: 0.8rem auto; font-size: 1.2rem; font-weight: bold;">
                             <p>تعديل القيد المحاسبي</p>
                         </div>
@@ -76,59 +76,6 @@
                             </div>
 
                             <div class="flex space-x-3">
-
-                                <!-- Credit Entries -->
-                                <div class="card mx-1 w-full shadow-sm">
-                                    <div class="card-header">
-                                        <h5>قيود الدائن</h5>
-                                    </div>
-                                    <div class="card-body" id="credit_entries">
-                                        @foreach ($transaction->credits as $index => $credit)
-                                            <div class="credit-entry p-3 border rounded mb-3 bg-white text-gray-900">
-                                                <div class="mx-2 my-2 w-full">
-                                                    <label for="credit_account_id[]">الحساب</label>
-                                                    <select name="credit[{{ $index }}][account_id]"
-                                                        class="w-full block mt-1" required>
-                                                        <option value="" disabled selected>اختر الحساب</option>
-                                                        @foreach ($accounts as $account)
-                                                            <option value="{{ $account->id }}"
-                                                                {{ old("credit.$index.account_id", $credit->account_id) == $account->id ? 'selected' : '' }}>
-                                                                {{ $account->name }} ({{ $account->code }})
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <div class="mx-2 my-2 w-full">
-                                                    <label for="credit_amount[]">المبلغ</label>
-                                                    <input type="text" name="credit[{{ $index }}][amount]"
-                                                        class="w-full block mt-1 credit-amount"
-                                                        value="{{ old("credit.$index.amount", $credit->amount) }}"
-                                                        required>
-                                                </div>
-
-                                                <div class="mx-2 my-2 w-full">
-                                                    <label for="credit_cost_center_id[]">مركز التكلفة </label>
-                                                    <select name="credit[{{ $index }}][cost_center_id]" required
-                                                        class="w-full block mt-1">
-                                                        <option value="" disabled selected>اختر مركز التكلفة
-                                                        </option>
-                                                        @foreach ($costCenters as $costCenter)
-                                                            <option value="{{ $costCenter->id }}"
-                                                                {{ old("credit.$index.cost_center_id", $credit->cost_center_id) == $costCenter->id ? 'selected' : '' }}>
-                                                                {{ $costCenter->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <button type="button"
-                                                    class="btn btn-custom-delete remove-entry mt-3">حذف</button>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                    <button type="button" class="btn btn-custom-show" id="add-credit-entry">إضافة قيد
-                                        دائن</button>
-                                </div>
                                 <!-- Debit Entries -->
                                 <div class="card mx-1 w-full shadow-sm">
                                     <div class="card-header">
@@ -150,37 +97,100 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
+                                                <div class="flex">
 
-                                                <div class="mx-2 my-2 w-full">
-                                                    <label for="debit_amount[]">المبلغ</label>
-                                                    <input type="text" name="debit[{{ $index }}][amount]"
-                                                        class="w-full block mt-1 debit-amount"
-                                                        value="{{ old("debit.$index.amount", $debit->amount) }}"
-                                                        required>
-                                                </div>
+                                                    <div class="mx-2 my-2 w-full">
+                                                        <label for="debit_amount[]">المبلغ</label>
+                                                        <input type="text" name="debit[{{ $index }}][amount]"
+                                                            class="w-full block mt-1 debit-amount"
+                                                            value="{{ old("debit.$index.amount", $debit->amount) }}"
+                                                            required>
+                                                    </div>
 
-                                                <div class="mx-2 my-2 w-full">
-                                                    <label for="debit_cost_center_id[]">مركز التكلفة </label>
-                                                    <select name="debit[{{ $index }}][cost_center_id]" required
-                                                        class="w-full block mt-1">
-                                                        <option value="" disabled selected>اختر مركز التكلفة
-                                                        </option>
-                                                        @foreach ($costCenters as $costCenter)
-                                                            <option value="{{ $costCenter->id }}"
-                                                                {{ old("debit.$index.cost_center_id", $debit->cost_center_id) == $costCenter->id ? 'selected' : '' }}>
-                                                                {{ $costCenter->name }}
+                                                    <div class="mx-2 my-2 w-full">
+                                                        <label for="debit_cost_center_id[]">مركز التكلفة </label>
+                                                        <select name="debit[{{ $index }}][cost_center_id]"
+                                                            required class="w-full block mt-1">
+                                                            <option value="" disabled selected>اختر مركز التكلفة
                                                             </option>
-                                                        @endforeach
-                                                    </select>
+                                                            @foreach ($costCenters as $costCenter)
+                                                                <option value="{{ $costCenter->id }}"
+                                                                    {{ old("debit.$index.cost_center_id", $debit->cost_center_id) == $costCenter->id ? 'selected' : '' }}>
+                                                                    {{ $costCenter->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <button type="button"
+                                                        class="btn btn-custom-delete remove-entry ">حذف</button>
+
                                                 </div>
-                                                <button type="button"
-                                                    class="btn btn-custom-delete remove-entry mt-3">حذف</button>
+
                                             </div>
                                         @endforeach
                                     </div>
                                     <button type="button" class="btn btn-custom-show" id="add-debit-entry">إضافة قيد
                                         مدين</button>
                                 </div>
+                                <!-- Credit Entries -->
+                                <div class="card mx-1 w-full shadow-sm">
+                                    <div class="card-header">
+                                        <h5>قيود الدائن</h5>
+                                    </div>
+                                    <div class="card-body" id="credit_entries">
+                                        @foreach ($transaction->credits as $index => $credit)
+                                            <div class="credit-entry p-3 border rounded mb-3 bg-white text-gray-900">
+                                                <div class="mx-2 my-2 w-full">
+                                                    <label for="credit_account_id[]">الحساب</label>
+                                                    <select name="credit[{{ $index }}][account_id]"
+                                                        class="w-full block mt-1" required>
+                                                        <option value="" disabled selected>اختر الحساب</option>
+                                                        @foreach ($accounts as $account)
+                                                            <option value="{{ $account->id }}"
+                                                                {{ old("credit.$index.account_id", $credit->account_id) == $account->id ? 'selected' : '' }}>
+                                                                {{ $account->name }} ({{ $account->code }})
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="flex">
+
+                                                    <div class="mx-2 my-2 w-full">
+                                                        <label for="credit_amount[]">المبلغ</label>
+                                                        <input type="text"
+                                                            name="credit[{{ $index }}][amount]"
+                                                            class="w-full block mt-1 credit-amount"
+                                                            value="{{ old("credit.$index.amount", $credit->amount) }}"
+                                                            required>
+                                                    </div>
+
+                                                    <div class="mx-2 my-2 w-full">
+                                                        <label for="credit_cost_center_id[]">مركز التكلفة </label>
+                                                        <select name="credit[{{ $index }}][cost_center_id]"
+                                                            required class="w-full block mt-1">
+                                                            <option value="" disabled selected>اختر مركز التكلفة
+                                                            </option>
+                                                            @foreach ($costCenters as $costCenter)
+                                                                <option value="{{ $costCenter->id }}"
+                                                                    {{ old("credit.$index.cost_center_id", $credit->cost_center_id) == $costCenter->id ? 'selected' : '' }}>
+                                                                    {{ $costCenter->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+
+                                                    <button type="button"
+                                                        class="btn btn-custom-delete remove-entry mt-3">حذف</button>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <button type="button" class="btn btn-custom-show" id="add-credit-entry">إضافة
+                                        قيد
+                                        دائن</button>
+                                </div>
+
                             </div>
                             <div class="mt-4">
                                 <button type="submit" class="btn btn-custom-add">تحديث القيد</button>
