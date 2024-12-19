@@ -10,8 +10,6 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-
-
     public function trialBalance(Request $request)
     {
         // Fetch input filters from the request
@@ -129,8 +127,6 @@ class ReportController extends Controller
             'accounts', // Include this variable
         ));
     }
-
-
 
     public function balanceSheet(Request $request)
     {
@@ -286,8 +282,6 @@ class ReportController extends Controller
         ));
     }
 
-
-
     public function profitAndLoss(Request $request)
     {
         // Fetch input filters from the request
@@ -409,7 +403,6 @@ class ReportController extends Controller
     }
 
     public function statementOfAccount(Request $request)
-
     {
         // Fetch all available accounts for the select dropdown
         $accounts = Account::whereNotNull('parent_id')

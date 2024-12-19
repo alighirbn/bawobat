@@ -18,6 +18,7 @@ class Period extends Model
         'start_date',
         'end_date',
         'is_active',
+        'is_closed',
         'user_id_create',
         'user_id_update',
     ];

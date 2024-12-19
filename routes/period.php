@@ -21,6 +21,12 @@ Route::group(['prefix' => 'period'], function () {
     Route::get('/edit/{url_address}', [PeriodController::class, 'edit'])->middleware(['auth', 'verified', 'permission:period-update'])->name('period.edit');
     Route::patch('/update/{url_address}', [PeriodController::class, 'update'])->middleware(['auth', 'verified', 'permission:period-update'])->name('period.update');
 
+    //close
+    Route::get('/close/{url_address}', [PeriodController::class, 'closePeriod'])->middleware(['auth', 'verified', 'permission:period-close'])->name('period.close');
+
+    //open
+    Route::get('/open/{url_address}', [PeriodController::class, 'openPeriod'])->middleware(['auth', 'verified', 'permission:period-open'])->name('period.open');
+
     //delete
     Route::delete('/delete/{url_address}', [PeriodController::class, 'destroy'])->middleware(['auth', 'verified', 'permission:period-delete'])->name('period.destroy');
 });

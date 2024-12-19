@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('start_date'); // Start date of the period
             $table->date('end_date'); // End date of the period
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_closed')->default(false); // Open/Closed status
             $table->timestamps();
             $table->foreignId('user_id_create')->nullable()->constrained('users')->nullOnDelete(); // Creator user
             $table->foreignId('user_id_update')->nullable()->constrained('users')->nullOnDelete(); // Updater user

@@ -40,6 +40,8 @@ class Permission_Seeder extends Seeder
             'period-create',
             'period-update',
             'period-delete',
+            'period-close',
+            'period-open',
 
             //**************************opening_balance******************************* */
 

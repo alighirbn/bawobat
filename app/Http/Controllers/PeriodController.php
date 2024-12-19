@@ -88,6 +88,23 @@ class PeriodController extends Controller
         }
     }
 
+    public function closePeriod(string $url_address)
+    {
+        $period = Period::where('url_address', $url_address)->firstOrFail();
+        $period->is_closed = true;
+        $period->save();
+        return redirect()->back()->with('success', 'تم إغلاق الفترة بنجاح!');
+    }
+
+    public function openPeriod(string $url_address)
+    {
+        $period = Period::where('url_address', $url_address)->firstOrFail();
+        $period->is_closed = false;
+        $period->save();
+        return redirect()->back()->with('success', 'تم فتح الفترة بنجاح!');
+    }
+
+
     /**
      * Remove the specified resource from storage.
      */
