@@ -25,7 +25,7 @@
                         </div>
                     @endif
 
-                    <div class="container p-4 bg-white mx-auto">
+                    <div class="container p-4 bg-white mx-auto font-semibold text-sm ">
                         <div style="text-align: center; margin: 0.8rem auto; font-size: 1.2rem; font-weight: bold;">
                             <p>تعديل القيد المحاسبي</p>
                         </div>
@@ -40,7 +40,7 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="flex">
-                                        <div class=" mx-2 my-2 w-full">
+                                        <div class=" mx-1 my-1 w-full">
                                             <x-input-label for="description" class=" mb-1" :value="__('word.description')" />
                                             <x-text-input id="description" class="w-full block mt-1" type="text"
                                                 value="{{ old('description', $transaction->description) }}"
@@ -49,7 +49,7 @@
                                         </div>
                                     </div>
                                     <div class="flex">
-                                        <div class=" mx-2 my-2 w-full">
+                                        <div class=" mx-1 my-1 w-full">
                                             <x-input-label for="date" class=" mb-1" :value="__('word.date')" />
                                             <x-text-input id="date" class="w-full block mt-1" type="date"
                                                 value="{{ old('date', isset($transaction->date) ? $transaction->date->format('Y-m-d') : '') }}"
@@ -57,7 +57,7 @@
                                             <x-input-error :messages="$errors->get('date')" class="w-full mt-2" />
                                         </div>
 
-                                        <div class=" mx-2 my-2 w-full">
+                                        <div class=" mx-1 my-1 w-full">
                                             <x-input-label for="period_id" class="w-full mb-1" :value="__('word.period_id')" />
                                             <select id="period_id" class="w-full block mt-1 " name="period_id">
                                                 @foreach ($activePeriods as $activePeriod)
@@ -69,9 +69,7 @@
                                             </select>
                                             <x-input-error :messages="$errors->get('period_id')" class="w-full mt-2" />
                                         </div>
-
                                     </div>
-
                                 </div>
                             </div>
 
@@ -84,7 +82,7 @@
                                     <div class="card-body" id="debit_entries">
                                         @foreach ($transaction->debits as $index => $debit)
                                             <div class="debit-entry p-3 border rounded mb-3 bg-white text-gray-900">
-                                                <div class="mx-2 my-2 w-full">
+                                                <div class="mx-1 my-1 w-full">
                                                     <label for="debit_account_id[]">الحساب</label>
                                                     <select name="debit[{{ $index }}][account_id]"
                                                         class="w-full block mt-1" required>
@@ -99,7 +97,7 @@
                                                 </div>
                                                 <div class="flex">
 
-                                                    <div class="mx-2 my-2 w-full">
+                                                    <div class="mx-1 my-1 w-full">
                                                         <label for="debit_amount[]">المبلغ</label>
                                                         <input type="text" name="debit[{{ $index }}][amount]"
                                                             class="w-full block mt-1 debit-amount"
@@ -107,7 +105,7 @@
                                                             required>
                                                     </div>
 
-                                                    <div class="mx-2 my-2 w-full">
+                                                    <div class="mx-1 my-1 w-full">
                                                         <label for="debit_cost_center_id[]">مركز التكلفة </label>
                                                         <select name="debit[{{ $index }}][cost_center_id]"
                                                             required class="w-full block mt-1">
@@ -123,14 +121,13 @@
                                                     </div>
 
                                                     <button type="button"
-                                                        class="btn btn-custom-delete remove-entry ">حذف</button>
-
+                                                        class="btn btn-custom-delete remove-entry  mt-3">حذف</button>
                                                 </div>
-
                                             </div>
                                         @endforeach
                                     </div>
-                                    <button type="button" class="btn btn-custom-show" id="add-debit-entry">إضافة قيد
+                                    <button type="button" class="btn btn-custom-show " id="add-debit-entry">إضافة
+                                        قيد
                                         مدين</button>
                                 </div>
                                 <!-- Credit Entries -->
@@ -141,7 +138,7 @@
                                     <div class="card-body" id="credit_entries">
                                         @foreach ($transaction->credits as $index => $credit)
                                             <div class="credit-entry p-3 border rounded mb-3 bg-white text-gray-900">
-                                                <div class="mx-2 my-2 w-full">
+                                                <div class="mx-1 my-1 w-full">
                                                     <label for="credit_account_id[]">الحساب</label>
                                                     <select name="credit[{{ $index }}][account_id]"
                                                         class="w-full block mt-1" required>
@@ -156,7 +153,7 @@
                                                 </div>
                                                 <div class="flex">
 
-                                                    <div class="mx-2 my-2 w-full">
+                                                    <div class="mx-1 my-1 w-full">
                                                         <label for="credit_amount[]">المبلغ</label>
                                                         <input type="text"
                                                             name="credit[{{ $index }}][amount]"
@@ -165,7 +162,7 @@
                                                             required>
                                                     </div>
 
-                                                    <div class="mx-2 my-2 w-full">
+                                                    <div class="mx-1 my-1 w-full">
                                                         <label for="credit_cost_center_id[]">مركز التكلفة </label>
                                                         <select name="credit[{{ $index }}][cost_center_id]"
                                                             required class="w-full block mt-1">
@@ -299,7 +296,7 @@
         function addEntry(type) {
             let entryHtml = `
                 <div class="${type}-entry p-3 border rounded mb-3 bg-white text-gray-900">
-                    <div class="mx-2 my-2 w-full">
+                    <div class="mx-1 my-1 w-full">
                         <label for="${type}_account_id[]">الحساب</label>
                         <select name="${type}[new][account_id]" class="w-full block mt-1" required>
                             <option value="" disabled selected>اختر الحساب</option>
@@ -308,13 +305,13 @@
                             @endforeach
                         </select>
                     </div>
-    
-                    <div class="mx-2 my-2 w-full">
+                    <div class="flex">
+                    <div class="mx-1 my-1 w-full">
                         <label for="${type}_amount[]">المبلغ</label>
                         <input type="text" name="${type}[new][amount]" class="w-full block mt-1 ${type}-amount" required>
                     </div>
     
-                    <div class="mx-2 my-2 w-full">
+                    <div class="mx-1 my-1 w-full">
                         <label for="${type}_cost_center_id[]">مركز التكلفة</label>
                         <select name="${type}[new][cost_center_id]" class="w-full block mt-1" required>
                             <option value="" disabled selected>اختر مركز التكلفة</option>
@@ -324,6 +321,7 @@
                         </select>
                     </div>
                     <button type="button" class="btn btn-custom-delete remove-entry mt-3">حذف</button>
+                 </div>
                 </div>
             `;
 
