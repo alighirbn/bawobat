@@ -39,55 +39,45 @@ class TransactionAccount extends Model
         return $this->belongsTo(CostCenter::class);
     }
 
-    // Query Scopes
-    public function scopeDebits($query)
-    {
-        return $query->where('debit_credit', self::DEBIT);
-    }
-
-    public function scopeCredits($query)
-    {
-        return $query->where('debit_credit', self::CREDIT);
-    }
-
-    // Calculate Opening Balance
-    public static function getOpeningBalance($accountId, $startDate)
-    {
-        return DB::table('transaction_account')
-            ->join('transactions', 'transaction_account.transaction_id', '=', 'transactions.id')  // Join with transactions table
-            ->where('transaction_account.account_id', $accountId)
-            ->where('transactions.date', '<', $startDate)  // Ensure it's before the start date
-            ->selectRaw('SUM(CASE WHEN transaction_account.debit_credit = "debit" THEN transaction_account.amount ELSE -transaction_account.amount END) as balance')
-            ->value('balance') ?? 0;  // Return balance or 0 if no value
-    }
-
-    // Fetch SOA (Statement of Account)
-    public static function getStatementOfAccount($accountId, $startDate, $endDate)
+    // Fetch Statement of Account
+    public static function getStatementOfAccount($accountId, $startDate, $endDate, $costCenterId = null)
     {
         // Step 1: Calculate the opening balance
-        $openingBalance = self::getOpeningBalance($accountId, $startDate);
-
-        // Step 2: Fetch transactions within the specified range
-        $transactions = self::join('transactions', 'transactions.id', '=', 'transaction_account.transaction_id')
+        $openingBalanceQuery = DB::table('transaction_account')
+            ->join('transactions', 'transaction_account.transaction_id', '=', 'transactions.id')
             ->where('transaction_account.account_id', $accountId)
-            ->whereBetween('transactions.date', [$startDate, $endDate])  // Filter by date range
+            ->where('transactions.date', '<', $startDate);
+
+        if ($costCenterId) {
+            $openingBalanceQuery->where('transaction_account.cost_center_id', $costCenterId);
+        }
+
+        $openingBalance = $openingBalanceQuery
+            ->selectRaw('SUM(CASE WHEN transaction_account.debit_credit = "debit" THEN transaction_account.amount ELSE -transaction_account.amount END) as balance')
+            ->value('balance') ?? 0;
+
+        // Step 2: Fetch transactions within the date range
+        $transactionsQuery = self::join('transactions', 'transactions.id', '=', 'transaction_account.transaction_id')
+            ->where('transaction_account.account_id', $accountId)
+            ->whereBetween('transactions.date', [$startDate, $endDate]);
+
+        if ($costCenterId) {
+            $transactionsQuery->where('transaction_account.cost_center_id', $costCenterId);
+        }
+
+        $transactions = $transactionsQuery
             ->select('transaction_account.amount', 'transaction_account.debit_credit', 'transactions.date', 'transactions.description')
-            ->orderBy('transactions.date')  // Order by transaction date
+            ->orderBy('transactions.date')
             ->get();
 
-        // Step 3: Calculate running balance
+        // Step 3: Calculate running balance and format SOA
         $runningBalance = $openingBalance;
         $soa = $transactions->map(function ($entry) use (&$runningBalance) {
-            // Calculate amount, applying debit or credit logic
-            $amount = $entry->amount ?? 0;
-            $amount = $entry->debit_credit === self::DEBIT ? $amount : -$amount;
-
-            // Update running balance
+            $amount = $entry->debit_credit === self::DEBIT ? $entry->amount : -$entry->amount;
             $runningBalance += $amount;
 
-            // Return the formatted data for the SOA
             return [
-                'date' => $entry->date,  // Transaction date
+                'date' => $entry->date,
                 'description' => $entry->description,
                 'debit' => $entry->debit_credit === self::DEBIT ? $entry->amount : null,
                 'credit' => $entry->debit_credit === self::CREDIT ? $entry->amount : null,
@@ -95,7 +85,7 @@ class TransactionAccount extends Model
             ];
         });
 
-        // Step 4: Prepend the opening balance to the SOA
+        // Step 4: Prepend opening balance
         $soa->prepend([
             'date' => $startDate,
             'description' => 'Opening Balance',

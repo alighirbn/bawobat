@@ -29,6 +29,18 @@
                                     </select>
                                 </div>
                                 <div class="mx-2 my-2 w-full">
+                                    <label for="cost_center_id" class="form-label">{{ __('word.cost_center') }}</label>
+                                    <select class="w-full block mt-1 " id="cost_center_id" name="cost_center_id">
+                                        <option value="">{{ __('word.select_cost_center') }}</option>
+                                        @foreach ($costCenters as $costCenter)
+                                            <option value="{{ $costCenter->id }}"
+                                                {{ old('cost_center_id', request('cost_center_id')) == $costCenter->id ? 'selected' : '' }}>
+                                                {{ $costCenter->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mx-2 my-2 w-full">
                                     <label for="start_date" class="form-label">{{ __('word.start_date') }}</label>
                                     <input type="date" class="w-full block mt-1 " id="start_date" name="start_date"
                                         value="{{ old('start_date', request('start_date', $startDate ?? '')) }}"
@@ -48,7 +60,8 @@
                             @if (request('account_id') && request('start_date') && request('end_date'))
                                 <div class="mt-4">
                                     <p><strong>{{ __('word.filters_applied') }}:</strong> {{ __('word.account') }}:
-                                        {{ $accountName }} | {{ __('word.period') }}:
+                                        {{ $accountName }} | {{ __('word.cost_center') }}:
+                                        {{ $costCenterName }} | {{ __('word.period') }}:
                                         {{ request('start_date') }} {{ __('word.to') }} {{ request('end_date') }}</p>
                                 </div>
                             @endif

@@ -7,9 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\IncomeRequest;
 use App\Models\Account\Account;
 use App\Models\Account\CostCenter;
+use App\Models\Account\Period;
 use App\Models\Account\Transaction;
 use App\Models\Income\Income;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class IncomeController extends Controller
 {
@@ -32,12 +34,12 @@ class IncomeController extends Controller
         $cost_centers = CostCenter::all();
 
         $revenueAccounts = Account::whereNotNull('parent_id')
-            ->where('type', 'income')
+            ->where('type', 'Income')
             ->orderBy('parent_id')
             ->orderBy('code') // Additional sorting by 'code'
             ->get();
         $cashAccounts = Account::whereNotNull('parent_id')
-            ->where('type', 'asset')
+            ->where('type', 'Asset')
             ->where('class', 5)
             ->orderBy('parent_id')
             ->orderBy('code') // Additional sorting by 'code'
@@ -51,10 +53,18 @@ class IncomeController extends Controller
      */
     public function store(IncomeRequest $request)
     {
-        $income = Income::create($request->validated());
+        DB::beginTransaction();
+        try {
+            $income = Income::create($request->validated());
+            DB::commit();
 
-        return redirect()->route('income.show', $income->url_address)
-            ->with('success', 'تمت أضافة الايراد بنجاح في انتظار الموافقة عليها ');
+            return redirect()->route('income.show', $income->url_address)
+                ->with('success', 'تمت أضافة الايراد بنجاح في انتظار الموافقة عليها ');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->with('error', 'حدث خطأ أثناء إضافة الايراد. يرجى المحاولة مرة أخرى.');
+        }
     }
 
     /**
@@ -74,16 +84,22 @@ class IncomeController extends Controller
     }
     public function approve(Request $request, string $url_address)
     {
-        $income = Income::where('url_address', '=', $url_address)->first();
-
-        if (isset($income)) {
-
+        DB::beginTransaction();
+        try {
+            $income = Income::where('url_address', '=', $url_address)->first();
+            $periodId = $request->period_id ?? $this->getActivePeriodId();
+            if (!isset($income)) {
+                DB::rollBack();
+                $ip = $this->getIPAddress();
+                return view('Income.accessdenied', ['ip' => $ip]);
+            }
 
             // Create a transaction for the approved income
             $transaction = Transaction::create([
                 'url_address' => $this->get_random_string(60),
                 'user_id_create' => auth()->user()->id,
                 'date' => now(),
+                'period_id' => $periodId,
                 'description' => $income->description,
                 'transactionable_id' => $income->id,
                 'transactionable_type' => income::class,
@@ -93,6 +109,7 @@ class IncomeController extends Controller
             $creditAccount = Account::find($income->credit_account_id);
 
             if (!$debitAccount || !$creditAccount) {
+                DB::rollBack();
                 return redirect()->route('income.show', $income->url_address)
                     ->with('error', 'Invalid debit or credit account specified.');
             }
@@ -114,12 +131,13 @@ class IncomeController extends Controller
             // Approve the income
             $income->approve();
 
-
+            DB::commit();
             return redirect()->route('income.show', $income->url_address)
                 ->with('success', 'تم قبول الايراد بنجاح وتم تسجيل المعاملة في الحساب النقدي.');
-        } else {
-            $ip = $this->getIPAddress();
-            return view('Income.accessdenied', ['ip' => $ip]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('income.show', $income->url_address)
+                ->with('error', 'حدث خطأ أثناء معالجة الايراد. يرجى المحاولة مرة أخرى.');
         }
     }
 
@@ -141,12 +159,12 @@ class IncomeController extends Controller
 
             $cost_centers = CostCenter::all();
             $revenueAccounts = Account::whereNotNull('parent_id')
-                ->where('type', 'income')
+                ->where('type', 'Income')
                 ->orderBy('parent_id')
                 ->orderBy('code') // Additional sorting by 'code'
                 ->get();
             $cashAccounts = Account::whereNotNull('parent_id')
-                ->where('type', 'asset')
+                ->where('type', 'Asset')
                 ->where('class', 5)
                 ->orderBy('parent_id')
                 ->orderBy('code') // Additional sorting by 'code'
@@ -165,12 +183,18 @@ class IncomeController extends Controller
      */
     public function update(IncomeRequest $request, string $url_address)
     {
-        // insert the user input into model and lareval insert it into the database.
-        Income::where('url_address', $url_address)->update($request->validated());
+        DB::beginTransaction();
+        try {
+            Income::where('url_address', $url_address)->update($request->validated());
+            DB::commit();
 
-        //inform the user
-        return redirect()->route('income.index')
-            ->with('success', 'تمت تعديل الايراد  بنجاح ');
+            return redirect()->route('income.index')
+                ->with('success', 'تمت تعديل الايراد  بنجاح ');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->with('error', 'حدث خطأ أثناء تعديل الايراد. يرجى المحاولة مرة أخرى.');
+        }
     }
 
 
@@ -179,27 +203,39 @@ class IncomeController extends Controller
      */
     public function destroy(string $url_address)
     {
-        $income = Income::where('url_address', $url_address)->first();
+        DB::beginTransaction();
+        try {
+            $income = Income::where('url_address', $url_address)->first();
 
-        if (isset($income)) {
+            if (!isset($income)) {
+                DB::rollBack();
+                $ip = $this->getIPAddress();
+                return view('income.accessdenied', ['ip' => $ip]);
+            }
+
             if ($income->approved) {
-
                 // Delete related transactions
                 $income->transactions()->delete();
             }
 
             // Delete the income
             $income->delete();
+            DB::commit();
 
             return redirect()->route('income.index')
                 ->with('success', 'تمت حذف الايراد بنجاح ');
-        } else {
-            $ip = $this->getIPAddress();
-            return view('income.accessdenied', ['ip' => $ip]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('income.index')
+                ->with('error', 'حدث خطأ أثناء حذف الايراد. يرجى المحاولة مرة أخرى.');
         }
     }
 
-
+    protected function getActivePeriodId()
+    {
+        $activePeriod = Period::where('is_active', true)->first();
+        return $activePeriod ? $activePeriod->id : null;
+    }
     public function getIPAddress()
     {
         //whether ip is from the share internet

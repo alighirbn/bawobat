@@ -38,7 +38,11 @@
 
             <!-- Balance Sheet -->
             <div class="overflow-hidden shadow sm:rounded-lg bg-white p-6">
-                <h2 class="text-xl font-bold mb-4">{{ __('word.balance_sheet_as_of', ['date' => $asOfDate]) }}
+                <h2 class="text-xl font-bold mb-4">
+                    {{ __('word.balance_sheet_as_of', ['date' => $asOfDate]) }}
+                    @if ($costCenterId)
+                        - {{ $costCenters->where('id', $costCenterId)->first()->name }}
+                    @endif
                 </h2>
 
                 <!-- Single Table for Assets, Liabilities, and Equity -->

@@ -404,68 +404,76 @@ class ReportController extends Controller
 
     public function statementOfAccount(Request $request)
     {
-        // Fetch all available accounts for the select dropdown
+        // Fetch necessary data for dropdowns
         $accounts = Account::whereNotNull('parent_id')
             ->orderBy('parent_id')
             ->orderBy('code')
             ->get();
 
-        // Retrieve the active period (ensure there is one active period)
-        $activePeriod = Period::where('is_active', 1)->first(); // Assuming 'is_active' is used to mark the active period
+        $costCenters = CostCenter::orderBy('name')->get();
+
+        // Retrieve the active period
+        $activePeriod = Period::where('is_active', 1)->first();
 
         if (!$activePeriod) {
             return back()->with('error', 'No active period found.');
         }
 
-        // Set the default period dates if the request does not provide them
+        // Default period dates
         $startDate = $request->input('start_date', $activePeriod->start_date->format('Y-m-d'));
         $endDate = $request->input('end_date', $activePeriod->end_date->format('Y-m-d'));
+        $costCenterId = $request->input('cost_center_id');
+        $costCenterName = null;
 
-        // If the form is submitted, validate the data
-        if ($request->isMethod('get') && $request->has('account_id')) {
+        if ($request->has('account_id')) {
+            $validated = $request->validate([
+                'account_id' => 'required|integer|exists:accounts,id',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after_or_equal:start_date',
+                'cost_center_id' => 'nullable|integer|exists:costcenters,id',
+            ]);
+
+            $accountId = $validated['account_id'];
+            $account = Account::findOrFail($accountId);
+            $accountName = null;
+            $accountName = $account ? $account->name : null;
+
+            if ($costCenterId) {
+                $costCenter = CostCenter::findOrFail($costCenterId);
+                $costCenterName = $costCenter ? $costCenter->name : null;
+            }
+
             try {
-                // Validate input on form submission
-                $validated = $request->validate([
-                    'account_id' => 'required|integer|exists:accounts,id',
-                    'start_date' => 'required|date',
-                    'end_date' => 'required|date|after_or_equal:start_date',
-                ]);
+                $soa = TransactionAccount::getStatementOfAccount(
+                    $accountId,
+                    $startDate,
+                    $endDate,
+                    $costCenterId
+                );
 
-                // Get filter values after validation
-                $accountId = $validated['account_id'];
-                $startDate = $validated['start_date'];
-                $endDate = $validated['end_date'];
-
-                // Fetch account details
-                $account = Account::findOrFail($accountId);
-                $accountName = null;
-
-                $accountName = $account ? $account->name : null;
-
-
-                // Fetch SOA with filters
-                $soa = TransactionAccount::getStatementOfAccount($accountId, $startDate, $endDate);
-
-                // Return the view with filtered SOA
-                return view('report.statement_of_account', [
-                    'soa' => $soa,
-                    'account' => $account,
-                    'startDate' => $startDate,
-                    'endDate' => $endDate,
-                    'accounts' => $accounts, // Pass accounts to the view
-                    'accountName' => $accountName,
-                ]);
+                return view('report.statement_of_account', compact(
+                    'soa',
+                    'account',
+                    'startDate',
+                    'endDate',
+                    'accounts',
+                    'costCenters',
+                    'accountName',
+                    'costCenterId',
+                    'costCenterName'
+                ));
             } catch (\Exception $e) {
-                // Catch general errors
                 return back()->with('error', 'Error generating statement of account: ' . $e->getMessage());
             }
         }
 
-        // If the form has not been submitted, just return the view with empty filter fields
-        return view('report.statement_of_account', [
-            'accounts' => $accounts, // Pass accounts to the view
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-        ]);
+        // Default view when no account is selected
+        return view('report.statement_of_account', compact(
+            'accounts',
+            'costCenters',
+            'startDate',
+            'endDate',
+            'costCenterId'
+        ));
     }
 }

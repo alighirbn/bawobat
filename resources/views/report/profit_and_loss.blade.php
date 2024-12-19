@@ -42,7 +42,21 @@
                             </div>
                         </form>
                         <div class="overflow-hidden shadow sm:rounded-lg bg-white p-6">
-
+                            <!-- Display the Filters Applied -->
+                            @if (request('start_date', $startDate) && request('end_date', $endDate))
+                                <div class="mt-4">
+                                    <p><strong>{{ __('word.filters_applied') }}:</strong>
+                                        @if (request('cost_center_id', $costCenterId))
+                                            {{ __('word.cost_center') }}:
+                                            {{ $costCenters->where('id', request('cost_center_id', $costCenterId))->first()->name }}
+                                            |
+                                        @endif
+                                        {{ __('word.period') }}: {{ request('start_date', $startDate) }}
+                                        {{ __('word.to') }}
+                                        {{ request('end_date', $endDate) }}
+                                    </p>
+                                </div>
+                            @endif
                             <!-- Income Section -->
                             <div class="row">
                                 <div class="col-md-12">
