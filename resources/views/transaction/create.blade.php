@@ -37,14 +37,14 @@
 
                     <div class="container  p-4 bg-white mx-auto font-semibold text-sm">
                         <div style="text-align: center; margin: 0.8rem auto; font-size: 1.2rem; font-weight: bold;">
-                            <p>إنشاء قيد محاسبي</p>
+                            <p>إنشاء قسيمة يومية </p>
                         </div>
 
                         <form id="form" class="form" action="{{ route('transaction.store') }}" method="POST">
                             @csrf
                             <div class="card shadow-sm mb-3">
                                 <div class="card-header">
-                                    <h5>تفاصيل القيد</h5>
+                                    <h5>تفاصيل القسيمة يومية</h5>
                                 </div>
                                 <div class="card-body">
                                     <div class="flex">
@@ -115,8 +115,7 @@
                                                         <label for="debit_cost_center_id[]">مركز التكلفة </label>
                                                         <select name="debit[{{ $index }}][cost_center_id]"
                                                             required class="w-full block mt-1">
-                                                            <option value="" disabled selected>اختر مركز التكلفة
-                                                            </option>
+
                                                             @foreach ($costCenters as $costCenter)
                                                                 <option value="{{ $costCenter->id }}"
                                                                     {{ old("debit.$index.cost_center_id") == $costCenter->id ? 'selected' : '' }}>
@@ -131,7 +130,8 @@
                                             </div>
                                         @endforeach
                                     </div>
-                                    <button type="button" class="btn btn-custom-show" id="add-debit-entry">إضافة قيد
+                                    <button type="button" class="btn btn-custom-show" id="add-debit-entry">إضافة قسيمة
+                                        يومية
                                         مدين</button>
                                 </div>
                                 <!-- Credit Entries -->
@@ -169,8 +169,7 @@
                                                         <label for="credit_cost_center_id[]">مركز التكلفة </label>
                                                         <select name="credit[{{ $index }}][cost_center_id]"
                                                             required class="w-full block mt-1">
-                                                            <option value="" disabled selected>اختر مركز التكلفة
-                                                            </option>
+
                                                             @foreach ($costCenters as $costCenter)
                                                                 <option value="{{ $costCenter->id }}"
                                                                     {{ old("credit.$index.cost_center_id") == $costCenter->id ? 'selected' : '' }}>
@@ -186,13 +185,13 @@
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-custom-show" id="add-credit-entry">إضافة
-                                    قيد
+                                    قسيمة يومية
                                     دائن</button>
                             </div>
 
                     </div>
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-custom-add">إنشاء القيد</button>
+                        <button type="submit" class="btn btn-custom-add">إنشاء القسيمة يومية</button>
                     </div>
                     <!-- Debit, Credit, and Balance -->
                     <div class="mt-4">
@@ -264,7 +263,7 @@
                 let description = '';
                 if (creditAccounts.length > 0 && debitAccounts.length > 0) {
                     description =
-                        `المبلغ: ${totalAmount.toLocaleString('en-US')} -- من ${creditAccounts.join(', ')} إلى ${debitAccounts.join(', ')}`;
+                        ` من حـ / ${creditAccounts.join('و حـ / ')} إلى حـ / ${debitAccounts.join('و حـ / ')}`;
                 }
 
                 // Update the description field
@@ -353,7 +352,7 @@
             <div class="mx-1 my-1 w-full">
                 <label>مركز التكلفة</label>
                 <select name="debit[${debitCounter}][cost_center_id]" class="w-full block mt-1" required>
-                    <option value="" disabled selected>اختر مركز التكلفة</option>
+                   
                     @foreach ($costCenters as $costCenter)
                         <option value="{{ $costCenter->id }}">{{ $costCenter->name }}</option>
                     @endforeach
@@ -392,7 +391,7 @@
             <div class="mx-1 my-1 w-full">
                 <label>مركز التكلفة</label>
                 <select name="credit[${creditCounter}][cost_center_id]" class="w-full block mt-1" required>
-                    <option value="" disabled selected>اختر مركز التكلفة</option>
+                   
                     @foreach ($costCenters as $costCenter)
                         <option value="{{ $costCenter->id }}">{{ $costCenter->name }}</option>
                     @endforeach
@@ -438,7 +437,9 @@
                 // Check if the totals balance
                 if (totalDebit !== totalCredit) {
                     event.preventDefault();
-                    alert('القيد المحاسبي غير متوازن. تأكد من أن إجمالي المدين يساوي إجمالي الدائن.');
+                    alert(
+                        'القسيمة يومية المحاسبي غير متوازن. تأكد من أن إجمالي المدين يساوي إجمالي الدائن.'
+                    );
                 }
             });
 

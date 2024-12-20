@@ -34,21 +34,6 @@ class Project extends Model
         'user_id_update',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::created(function ($project) {
-            $costcenter = CostCenter::create([
-                'url_address' => $project->get_random_string(60),
-                'code' => $project->id + 1,
-                'name' =>  $project->name,
-                'description' =>  'مركز الكلفة لمشروع ' . $project->name,
-                'user_id_create' => auth()->id(),
-            ]);
-            $project->update(['cost_center_id' => $costcenter->id]);
-        });
-    }
     /**
      * Relationships
      */
@@ -70,11 +55,6 @@ class Project extends Model
         return $this->belongsToMany(Investor::class, 'project_investors')->withPivot('investment_amount');
     }
 
-    // Relationship with Transactions
-    public function transactions()
-    {
-        return $this->hasMany(Transaction::class);
-    }
 
     public function archives()
     {

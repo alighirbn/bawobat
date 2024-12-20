@@ -11,52 +11,55 @@
 
     <div class="py-2">
         <div class="max-w-full mx-auto sm:px-4 lg:px-6">
-            <div class=" overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-3 text-gray-900 m-4">
                     @if ($message = Session::get('success'))
                         <div class="alert alert-success mb-2">
                             <p>{{ $message }}</p>
                         </div>
                     @endif
-                    <div class="print-container a4-width p-4 bg-white mx-auto " dir="rtl">
+                    <div class="print-container a4-width p-4 bg-white mx-auto" dir="rtl">
                         <div class="flex">
-                            <div class=" mx-2 my-2 w-full ">
+                            <div class="mx-2 my-2 w-full">
                                 {!! QrCode::size(90)->generate($transaction->id) !!}
                             </div>
-                            <div class=" mx-2 my-2 w-full ">
-                                <img src="{{ asset('images/yasmine.png') }}" alt="الشعار"
+                            <div class="mx-2 my-2 w-full">
+                                <img src="{{ asset('images/yasmine.png') }}" alt="{{ __('word.logo') }}"
                                     style="h-6;max-width: 70%; height: auto;">
                             </div>
-                            <div class=" mx-2 my-2 w-full ">
+                            <div class="mx-2 my-2 w-full">
                                 <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($transaction->id, 'C39') }}"
-                                    alt="باركود" />
+                                    alt="{{ __('word.barcode') }}" />
 
-                                <p><strong>{{ __('عدد القيد:') }}</strong>
+                                <p><strong>{{ __('word.journal_voucher_id') }}</strong>
                                     {{ $transaction->id }}
                                 </p>
-                                <p><strong>{{ __('تاريخ القيد:') }}</strong> {{ $transaction->date->format('Y-m-d') }}
+                                <p><strong>{{ __('word.journal_voucher_date') }}</strong>
+                                    {{ $transaction->date->format('Y-m-d') }}
                                 </p>
-                                <p><strong>{{ __('الفترة المحاسبية :') }}</strong> {{ $transaction->period->name }}
+                                <p><strong>{{ __('word.accounting_period') }}</strong>
+                                    {{ $transaction->period->name }}
                                 </p>
-
                             </div>
                         </div>
                         <div style="text-align: center; margin: 0.8rem auto; font-size: 1.2rem; font-weight: bold;">
-                            <p>قيد محاسبي</p>
+                            <p>{{ __('word.daily_voucher') }}</p>
                         </div>
 
                         <div class="card shadow-sm mb-3">
                             <div class="card-header bg-gray-100 p-2 rounded-t-md">
-                                <h5 class="text-md font-semibold text-gray-800">{{ __('معلومات القيد') }}</h5>
+                                <h5 class="text-md font-semibold text-gray-800">{{ __('word.entry_info') }}</h5>
                             </div>
                             <div class="card-body p-3 bg-gray-50">
                                 <div class="flex">
                                     <div class="mb-1 mx-1 w-full">
-                                        <strong class="text-sm font-medium text-gray-700">{{ __('الوصف:') }}</strong>
+                                        <strong
+                                            class="text-sm font-medium text-gray-700">{{ __('word.description') }}</strong>
                                         <p class="text-sm">{{ $transaction->description }}</p>
                                     </div>
                                     <div class="mb-1 mx-1 w-full">
-                                        <strong class="text-sm font-medium text-gray-700">{{ __('التاريخ:') }}</strong>
+                                        <strong
+                                            class="text-sm font-medium text-gray-700">{{ __('word.date') }}</strong>
                                         <p class="text-sm">{{ $transaction->date->format('Y-m-d') }}</p>
                                     </div>
                                 </div>
@@ -66,7 +69,7 @@
                         <div class="flex space-x-3">
                             <div class="card mx-1 w-full shadow-sm">
                                 <div class="card-header bg-gray-100 p-2 rounded-t-md">
-                                    <h5 class="text-md font-semibold text-gray-800">{{ __('الإدخالات المدينة') }}</h5>
+                                    <h5 class="text-md font-semibold text-gray-800">{{ __('word.debit_entries') }}</h5>
                                 </div>
                                 <div class="card-body bg-gray-50 p-2">
                                     <div id="debit_entries">
@@ -78,19 +81,19 @@
                                                 <div class="flex">
                                                     <div class="mb-1 mx-1 w-full">
                                                         <strong
-                                                            class="text-xs font-medium text-gray-700">{{ __('الحساب:') }}</strong>
+                                                            class="text-xs font-medium text-gray-700">{{ __('word.account') }}</strong>
                                                         <p class="text-sm">{{ $debit->account->name }}
                                                             ({{ $debit->account->code }})
                                                         </p>
                                                     </div>
                                                     <div class="mb-1 mx-1 w-full">
                                                         <strong
-                                                            class="text-xs font-medium text-gray-700">{{ __('المبلغ:') }}</strong>
+                                                            class="text-xs font-medium text-gray-700">{{ __('word.amount') }}</strong>
                                                         <p class="text-sm">{{ number_format($debit->amount, 0) }}</p>
                                                     </div>
                                                     <div class="mb-1 mx-1 w-full">
                                                         <strong
-                                                            class="text-xs font-medium text-gray-700">{{ __('مركز التكلفة:') }}</strong>
+                                                            class="text-xs font-medium text-gray-700">{{ __('word.cost_center') }}</strong>
                                                         <p class="text-sm">{{ $debit->costCenter->name }}</p>
                                                     </div>
                                                 </div>
@@ -101,14 +104,15 @@
                                         @endforeach
                                     </div>
                                     <div class="mt-2 font-semibold text-sm text-gray-700">
-                                        <strong>{{ __('إجمالي المدين:') }}</strong>
+                                        <strong>{{ __('word.total_debit') }}</strong>
                                         {{ number_format($totalDebit, 0) }}
                                     </div>
                                 </div>
                             </div>
                             <div class="card mx-1 w-full shadow-sm">
                                 <div class="card-header bg-gray-100 p-2 rounded-t-md">
-                                    <h5 class="text-md font-semibold text-gray-800">{{ __('الإدخالات الدائنة') }}</h5>
+                                    <h5 class="text-md font-semibold text-gray-800">{{ __('word.credit_entries') }}
+                                    </h5>
                                 </div>
                                 <div class="card-body bg-gray-50 p-2">
                                     <div id="credit_entries">
@@ -120,19 +124,19 @@
                                                 <div class="flex">
                                                     <div class="mb-1 mx-1 w-full">
                                                         <strong
-                                                            class="text-xs font-medium text-gray-700">{{ __('الحساب:') }}</strong>
+                                                            class="text-xs font-medium text-gray-700">{{ __('word.account') }}</strong>
                                                         <p class="text-sm">{{ $credit->account->name }}
                                                             ({{ $credit->account->code }})
                                                         </p>
                                                     </div>
                                                     <div class="mb-1 mx-1 w-full">
                                                         <strong
-                                                            class="text-xs font-medium text-gray-700">{{ __('المبلغ:') }}</strong>
+                                                            class="text-xs font-medium text-gray-700">{{ __('word.amount') }}</strong>
                                                         <p class="text-sm">{{ number_format($credit->amount, 0) }}</p>
                                                     </div>
                                                     <div class="mb-1 mx-1 w-full">
                                                         <strong
-                                                            class="text-xs font-medium text-gray-700">{{ __('مركز التكلفة:') }}</strong>
+                                                            class="text-xs font-medium text-gray-700">{{ __('word.cost_center') }}</strong>
                                                         <p class="text-sm">{{ $credit->costCenter->name }}</p>
                                                     </div>
                                                 </div>
@@ -143,7 +147,7 @@
                                         @endforeach
                                     </div>
                                     <div class="mt-2 font-semibold text-sm text-gray-700">
-                                        <strong>{{ __('إجمالي الدائن:') }}</strong>
+                                        <strong>{{ __('word.total_credit') }}</strong>
                                         {{ number_format($totalCredit, 0) }}
                                     </div>
                                 </div>

@@ -230,13 +230,28 @@ return [
     //************************************* transaction        *******************************************
     //nav
 
-    'transaction_add' => 'اضافة قيد',
-    'transaction_search' => 'بحث عن قيد',
+    'transaction_add' => 'اضافة قسيمة اليومية',
+    'transaction_search' => 'بحث في سجل اليومية',
 
 
     //transaction_info
-    'transaction_info' => 'بيانات القيد',
-
+    'transaction_info' => 'بيانات القسيمة اليومية',
+    'journal_voucher_id' => 'عدد القسيمة اليومية:',
+    'journal_voucher_date' => 'تاريخ القسيمة اليومية:',
+    'accounting_period' => 'الفترة المحاسبية :',
+    'daily_voucher' => 'قسيمة يومية',
+    'entry_info' => 'معلومات القيد',
+    'description' => 'الوصف:',
+    'date' => 'التاريخ:',
+    'debit_entries' => 'الإدخالات المدينة',
+    'credit_entries' => 'الإدخالات الدائنة',
+    'account' => 'الحساب:',
+    'amount' => 'المبلغ:',
+    'cost_center' => 'مركز التكلفة:',
+    'total_debit' => 'إجمالي المدين:',
+    'total_credit' => 'إجمالي الدائن:',
+    'logo' => 'الشعار',
+    'barcode' => 'باركود',
 
 
     //************************************* income        *******************************************

@@ -28,6 +28,12 @@ class TransactionDataTable extends DataTable
             ->editColumn('id', function ($row) {
                 return $row->period->name . '-' . $row->id; // Assuming 'period' is a relationship
             })
+            ->addColumn('debit', function ($row) {
+                return number_format($row->entries->where('debit_credit', 'debit')->sum('amount'), 0);
+            })
+            ->addColumn('credit', function ($row) {
+                return number_format($row->entries->where('debit_credit', 'credit')->sum('amount'), 0);
+            })
             ->rawColumns(['action'])
             ->setRowId('id');
     }
@@ -113,6 +119,8 @@ class TransactionDataTable extends DataTable
             Column::make('date')->title(__('word.date'))->class('text-center'),
 
             Column::make('description')->title(__('word.description'))->class('text-center'),
+            Column::make('debit')->title(__('word.debit'))->class('text-center'), // Debit column
+            Column::make('credit')->title(__('word.credit'))->class('text-center'), // Credit column
 
         ];
     }
