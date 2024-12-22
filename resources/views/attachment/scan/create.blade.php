@@ -56,6 +56,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const devices = @json($devices); // Pass devices from your backend
             const scanButton = document.getElementById('scan-button');
             const deviceSelect = document.getElementById('device');
             const loading = document.getElementById('loading');
@@ -64,7 +65,13 @@
 
             const model = @json($model); // The model passed from the controller
             const recordId = @json($record->id); // The record ID passed from the controller
-
+            // Populate the device select options
+            devices.forEach(device => {
+                const option = document.createElement('option');
+                option.value = device.id;
+                option.textContent = device.name;
+                deviceSelect.appendChild(option);
+            });
             scanButton.addEventListener('click', function() {
                 const deviceId = deviceSelect.value;
 
