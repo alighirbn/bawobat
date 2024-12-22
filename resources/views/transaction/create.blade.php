@@ -84,7 +84,7 @@
                                 <!-- Debit Entries -->
                                 <div class="card mx-1 w-full shadow-sm">
                                     <div class="card-header">
-                                        <h5>قيود المدين</h5>
+                                        <h5>قيود المدين - {{ __('word.to_account') }}</h5>
                                     </div>
                                     <div class="card-body" id="debit_entries">
                                         @foreach (old('debit', [0 => []]) as $index => $debit)
@@ -137,7 +137,7 @@
                                 <!-- Credit Entries -->
                                 <div class="card mx-1 w-full shadow-sm">
                                     <div class="card-header">
-                                        <h5>قيود الدائن</h5>
+                                        <h5>قيود الدائن - {{ __('word.from_account') }}</h5>
                                     </div>
                                     <div class="card-body" id="credit_entries">
                                         @foreach (old('credit', [0 => []]) as $index => $credit)

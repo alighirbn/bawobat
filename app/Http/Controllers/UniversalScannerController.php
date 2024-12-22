@@ -49,7 +49,7 @@ class UniversalScannerController extends Controller
     /**
      * Display the list of available scanner devices for a model and ID.
      */
-    public function scanCreate(string $model, int $id)
+    public function scanCreate(string $model, int $id, string $url_address)
     {
         try {
             $modelClass = $this->resolveModelClass($model);
@@ -57,7 +57,7 @@ class UniversalScannerController extends Controller
 
             $devices = $this->scanner->listDevices();
 
-            return view('attachment.scan.create', compact('devices', 'record', 'model'));
+            return view('attachment.scan.create', compact('devices', 'record', 'model', 'url_address'));
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
@@ -106,13 +106,13 @@ class UniversalScannerController extends Controller
     /**
      * Display the form to upload archives for a model and ID.
      */
-    public function archiveCreate(string $model, int $id)
+    public function archiveCreate(string $model, int $id, string $url_address)
     {
         try {
             $modelClass = $this->resolveModelClass($model);
             $record = resolve($modelClass)->findOrFail($id);
 
-            return view('attachment.archive.create', compact('record', 'model'));
+            return view('attachment.archive.create', compact('record', 'model', 'url_address'));
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }
@@ -156,7 +156,7 @@ class UniversalScannerController extends Controller
     /**
      * Show archives for a model and ID.
      */
-    public function archiveShow(string $model, int $id)
+    public function archiveShow(string $model, int $id, string $url_address)
     {
         try {
             $modelClass = $this->resolveModelClass($model);
@@ -166,7 +166,7 @@ class UniversalScannerController extends Controller
                 return $archive->image_path;
             });
 
-            return view('attachment.archive.show', compact('record', 'model', 'archives'));
+            return view('attachment.archive.show', compact('record', 'model', 'archives', 'url_address'));
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
         }

@@ -13,6 +13,10 @@
                         <a href="{{ url()->previous() }}" class="btn btn-custom-back">
                             {{ __('word.back') }}
                         </a>
+                        <a href="{{ route(strtolower(class_basename($model)) . '.show', $url_address) }}"
+                            class="btn btn-custom-show">
+                            {{ __('word.view') }}
+                        </a>
                     </div>
 
                     <div class="row">

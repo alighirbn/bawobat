@@ -26,18 +26,18 @@
                         </button>
 
                         @can('project-archive')
-                            <a href="{{ route('archive.create', ['model' => 'Project', 'id' => $project->id]) }}"
+                            <a href="{{ route('archive.create', ['model' => 'Project', 'id' => $project->id, 'url_address' => $project->url_address]) }}"
                                 class="btn btn-custom-archive">
                                 {{ __('word.project_archive') }}
                             </a>
 
-                            <a href="{{ route('scan.create', ['model' => 'Project', 'id' => $project->id]) }}"
+                            <a href="{{ route('scan.create', ['model' => 'Project', 'id' => $project->id, 'url_address' => $project->url_address]) }}"
                                 class="btn btn-custom-archive">
                                 {{ __('word.project_scan') }}
                             </a>
                         @endcan
                         @can('project-archiveshow')
-                            <a href="{{ route('archive.show', ['model' => 'Project', 'id' => $project->id]) }}"
+                            <a href="{{ route('archive.show', ['model' => 'Project', 'id' => $project->id, 'url_address' => $project->url_address]) }}"
                                 class="btn btn-custom-archive">
                                 {{ __('word.archiveshow') }}
                             </a>

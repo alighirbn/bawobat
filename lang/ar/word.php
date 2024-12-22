@@ -103,6 +103,13 @@ return [
     'parent_code' => 'رمز الحساب الأب',
     'last_digits' => 'آخر أرقام',
 
+    'income_archive' => 'اضافة صورة',
+    'income_scan' => 'اضافة مستند',
+    'expense_archive' => 'اضافة صورة',
+    'expense_scan' => 'اضافة مستند',
+    'transaction_archive' => 'اضافة صورة',
+    'transaction_scan' => 'اضافة مستند',
+
     'full_code' => 'رمز الحساب الكامل',
     'statement_of_account' => 'كشف حساب',
     'start_date' => 'تاريخ البداية',

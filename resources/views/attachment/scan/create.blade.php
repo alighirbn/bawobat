@@ -14,6 +14,10 @@
                         <a href="{{ url()->previous() }}" class="btn btn-custom-back">
                             {{ __('word.back') }}
                         </a>
+                        <a href="{{ route(strtolower(class_basename($model)) . '.show', $url_address) }}"
+                            class="btn btn-custom-show">
+                            {{ __('word.view') }}
+                        </a>
                     </div>
 
                     <div class="container mx-auto p-4">
@@ -63,6 +67,8 @@
             const scanResult = document.getElementById('scan-result');
             const errorMessage = document.getElementById('error-message');
 
+            const scanStoreUrl = @json(route('scan.store', ['model' => $model, 'id' => $record->id]));
+
             const model = @json($model); // The model passed from the controller
             const recordId = @json($record->id); // The record ID passed from the controller
             // Populate the device select options
@@ -85,7 +91,7 @@
                 scanResult.innerHTML = ''; // Clear previous results
                 errorMessage.classList.add('hidden'); // Hide previous error messages
 
-                fetch(`/scan/${model}/${recordId}`, {
+                fetch(scanStoreUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

@@ -21,6 +21,24 @@
                             {{ __('word.back') }}
                         </a>
 
+                        @can('expense-archive')
+                            <a href="{{ route('archive.create', ['model' => 'Expense', 'id' => $expense->id, 'url_address' => $expense->url_address]) }}"
+                                class="btn btn-custom-archive">
+                                {{ __('word.expense_archive') }}
+                            </a>
+
+                            <a href="{{ route('scan.create', ['model' => 'Expense', 'id' => $expense->id, 'url_address' => $expense->url_address]) }}"
+                                class="btn btn-custom-archive">
+                                {{ __('word.expense_scan') }}
+                            </a>
+                        @endcan
+                        @can('expense-archiveshow')
+                            <a href="{{ route('archive.show', ['model' => 'Expense', 'id' => $expense->id, 'url_address' => $expense->url_address]) }}"
+                                class="btn btn-custom-archive">
+                                {{ __('word.archiveshow') }}
+                            </a>
+                        @endcan
+
                         <button id="print" class="btn btn-custom-print" onclick="window.print();">
                             {{ __('word.print') }}
                         </button>

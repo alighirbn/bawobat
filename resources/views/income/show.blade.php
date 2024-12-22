@@ -19,6 +19,23 @@
                             {{ __('word.back') }}
                         </a>
 
+                        @can('income-archive')
+                            <a href="{{ route('archive.create', ['model' => 'Income', 'id' => $income->id, 'url_address' => $income->url_address]) }}"
+                                class="btn btn-custom-archive">
+                                {{ __('word.income_archive') }}
+                            </a>
+
+                            <a href="{{ route('scan.create', ['model' => 'Income', 'id' => $income->id, 'url_address' => $income->url_address]) }}"
+                                class="btn btn-custom-archive">
+                                {{ __('word.income_scan') }}
+                            </a>
+                        @endcan
+                        @can('income-archiveshow')
+                            <a href="{{ route('archive.show', ['model' => 'Income', 'id' => $income->id, 'url_address' => $income->url_address]) }}"
+                                class="btn btn-custom-archive">
+                                {{ __('word.archiveshow') }}
+                            </a>
+                        @endcan
                         <button id="print" class="btn btn-custom-print" onclick="window.print();">
                             {{ __('word.print') }}
                         </button>

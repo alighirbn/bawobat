@@ -58,6 +58,8 @@ class Permission_Seeder extends Seeder
             'transaction-create',
             'transaction-update',
             'transaction-delete',
+            'transaction-archive',
+            'transaction-archiveshow',
 
             //**************************project******************************* */
 
@@ -97,6 +99,8 @@ class Permission_Seeder extends Seeder
             'income-update',
             'income-delete',
             'income-approve',
+            'income-archive',
+            'income-archiveshow',
 
             //**************************expense******************************* */
 
@@ -106,6 +110,8 @@ class Permission_Seeder extends Seeder
             'expense-update',
             'expense-delete',
             'expense-approve',
+            'expense-archive',
+            'expense-archiveshow',
 
             //**************************report******************************* */
 

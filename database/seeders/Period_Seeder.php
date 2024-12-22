@@ -13,9 +13,9 @@ class Period_Seeder extends Seeder
         $periods = [
             [
                 'url_address' => $this->get_random_string(60),
-                'name' => '2015',
-                'start_date' => Carbon::create(2015, 1, 1), // Start of 2015
-                'end_date' => Carbon::create(2015, 12, 31), // End of 2015
+                'name' => '2024',
+                'start_date' => Carbon::create(2024, 1, 1), // Start of 2015
+                'end_date' => Carbon::create(2024, 12, 31), // End of 2015
                 'is_active' => true,
             ],
         ];

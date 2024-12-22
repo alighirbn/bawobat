@@ -18,6 +18,31 @@
                             <p>{{ $message }}</p>
                         </div>
                     @endif
+                    <div class="header-buttons">
+                        <a href="{{ url()->previous() }}" class="btn btn-custom-back">
+                            {{ __('word.back') }}
+                        </a>
+                        @can('transaction-archive')
+                            <a href="{{ route('archive.create', ['model' => 'Transaction', 'id' => $transaction->id, 'url_address' => $transaction->url_address]) }}"
+                                class="btn btn-custom-archive">
+                                {{ __('word.transaction_archive') }}
+                            </a>
+
+                            <a href="{{ route('scan.create', ['model' => 'Transaction', 'id' => $transaction->id, 'url_address' => $transaction->url_address]) }}"
+                                class="btn btn-custom-archive">
+                                {{ __('word.transaction_scan') }}
+                            </a>
+                        @endcan
+                        @can('transaction-archiveshow')
+                            <a href="{{ route('archive.show', ['model' => 'Transaction', 'id' => $transaction->id, 'url_address' => $transaction->url_address]) }}"
+                                class="btn btn-custom-archive">
+                                {{ __('word.archiveshow') }}
+                            </a>
+                        @endcan
+                        <button id="print" class="btn btn-custom-print" onclick="window.print();">
+                            {{ __('word.print') }}
+                        </button>
+                    </div>
                     <div class="print-container a4-width p-4 bg-white mx-auto" dir="rtl">
                         <div class="flex">
                             <div class="mx-2 my-2 w-full">
@@ -69,7 +94,8 @@
                         <div class="flex space-x-3">
                             <div class="card mx-1 w-full shadow-sm">
                                 <div class="card-header bg-gray-100 p-2 rounded-t-md">
-                                    <h5 class="text-md font-semibold text-gray-800">{{ __('word.debit_entries') }}</h5>
+                                    <h5 class="text-md font-semibold text-gray-800">{{ __('word.debit_entries') }} -
+                                        {{ __('word.to_account') }}</h5>
                                 </div>
                                 <div class="card-body bg-gray-50 p-2">
                                     <div id="debit_entries">
@@ -111,7 +137,8 @@
                             </div>
                             <div class="card mx-1 w-full shadow-sm">
                                 <div class="card-header bg-gray-100 p-2 rounded-t-md">
-                                    <h5 class="text-md font-semibold text-gray-800">{{ __('word.credit_entries') }}
+                                    <h5 class="text-md font-semibold text-gray-800">{{ __('word.credit_entries') }} -
+                                        {{ __('word.from_account') }}
                                     </h5>
                                 </div>
                                 <div class="card-body bg-gray-50 p-2">
