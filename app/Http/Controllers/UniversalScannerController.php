@@ -2,11 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\WiaScanner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class UniversalScannerController extends Controller
 {
+    private $scanner;
+
+    public function __construct(WiaScanner $scanner)
+    {
+        $this->scanner = $scanner;
+    }
+
     /**
      * Map of model names to their fully qualified namespaces.
      */
@@ -47,7 +55,7 @@ class UniversalScannerController extends Controller
             $modelClass = $this->resolveModelClass($model);
             $record = resolve($modelClass)->findOrFail($id);
 
-            $devices = app('App\Services\WiaScanner')->listDevices();
+            $devices = $this->scanner->listDevices();
 
             return view('attachment.scan.create', compact('devices', 'record', 'model'));
         } catch (\Exception $e) {
