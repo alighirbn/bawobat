@@ -3,7 +3,6 @@
     <x-slot name="header">
         <!-- App CSS -->
         <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
-        @include('project.nav.navigation')
 
     </x-slot>
 
@@ -37,8 +36,9 @@
                         </div>
                     </div>
 
-                    <form id="uploadForm" action="{{ route('project.archivestore', $project->url_address) }}"
-                        method="POST" enctype="multipart/form-data" style="display: none;">
+                    <form id="uploadForm"
+                        action="{{ route('archive.store', ['model' => $model, 'id' => $record->id]) }}" method="POST"
+                        enctype="multipart/form-data" style="display: none;">
                         @csrf
                         <div id="imageInputsContainer"></div>
                         <button type="submit" class="btn btn-success" style="display: none;">Upload</button>

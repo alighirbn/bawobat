@@ -64,8 +64,9 @@
                                     <select id="status"
                                         class="w-full block mt-1 border-gray-300 rounded-md shadow-sm" name="status">
                                         <option value="">{{ __('word.select_status') }}</option>
-                                        <option value="active"
-                                            {{ old('status', $project->status) == 'active' ? 'selected' : '' }}>Active
+                                        <option value="ongoing"
+                                            {{ old('status', $project->status) == 'ongoing' ? 'selected' : '' }}>
+                                            Ongoing
                                         </option>
                                         <option value="pending"
                                             {{ old('status', $project->status) == 'pending' ? 'selected' : '' }}>
@@ -73,8 +74,8 @@
                                         <option value="completed"
                                             {{ old('status', $project->status) == 'completed' ? 'selected' : '' }}>
                                             Completed</option>
-                                        <option value="cancelled"
-                                            {{ old('status', $project->status) == 'cancelled' ? 'selected' : '' }}>
+                                        <option value="canceled"
+                                            {{ old('status', $project->status) == 'canceled' ? 'selected' : '' }}>
                                             Cancelled</option>
                                     </select>
                                     <x-input-error :messages="$errors->get('status')" class="w-full mt-2" />

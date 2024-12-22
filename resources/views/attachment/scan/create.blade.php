@@ -3,7 +3,6 @@
     <x-slot name="header">
         <!-- App CSS -->
         <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
-        @include('project.nav.navigation')
 
     </x-slot>
 
@@ -57,51 +56,38 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const devices = @json($devices); // Pass devices from your backend
-            const deviceSelect = document.getElementById('device');
             const scanButton = document.getElementById('scan-button');
-            const scanResult = document.getElementById('scan-result');
+            const deviceSelect = document.getElementById('device');
             const loading = document.getElementById('loading');
+            const scanResult = document.getElementById('scan-result');
             const errorMessage = document.getElementById('error-message');
 
-            // Pass the project URL address from the backend
-            const projectUrlAddress = @json($project->url_address); // Assuming $project is passed from the backend
+            const model = @json($model); // The model passed from the controller
+            const recordId = @json($record->id); // The record ID passed from the controller
 
-            // Populate the device select options
-            devices.forEach(device => {
-                const option = document.createElement('option');
-                option.value = device.id;
-                option.textContent = device.name;
-                deviceSelect.appendChild(option);
-            });
-
-            // Handle scan button click
             scanButton.addEventListener('click', function() {
                 const deviceId = deviceSelect.value;
 
-                // Check if device is selected
                 if (!deviceId) {
-                    alert('Please select a scanner device.');
+                    alert('يرجى اختيار الجهاز.');
                     return;
                 }
 
                 // Show loading spinner
                 loading.classList.remove('hidden');
                 scanResult.innerHTML = ''; // Clear previous results
-                errorMessage.classList.add('hidden'); // Hide any previous error messages
+                errorMessage.classList.add('hidden'); // Hide previous error messages
 
-                // Make the scan request, including the project url_address
-                fetch('/project/scan', {
+                fetch(`/scan/${model}/${recordId}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                .getAttribute('content'),
+                                .getAttribute('content')
                         },
                         body: JSON.stringify({
-                            device_id: deviceId,
-                            url_address: projectUrlAddress // Include the project's url_address in the request
-                        }),
+                            device_id: deviceId
+                        })
                     })
                     .then(response => response.json())
                     .then(data => {
@@ -109,23 +95,21 @@
                         loading.classList.add('hidden');
 
                         if (data.image_path) {
-                            scanResult.innerHTML =
-                                `<img src="${data.image_path}" alt="Scanned Image" class="max-w-full h-auto rounded-md" />`;
+                            scanResult.innerHTML = `
+                            <img src="${data.image_path}" alt="Scanned Image" class="img-fluid rounded" />
+                        `;
                         } else if (data.error) {
-                            // If an error message is returned from the server
                             errorMessage.classList.remove('hidden');
-                            errorMessage.textContent = 'Error: ' + data.error;
+                            errorMessage.textContent = `Error: ${data.error}`;
                         }
                     })
                     .catch(error => {
                         // Hide loading spinner
                         loading.classList.add('hidden');
-                        // Display generic error message if something goes wrong with the request
                         errorMessage.classList.remove('hidden');
-                        errorMessage.textContent = 'Error: ' + error.message;
+                        errorMessage.textContent = `Error: ${error.message}`;
                     });
             });
-
         });
     </script>
 

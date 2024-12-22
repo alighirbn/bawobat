@@ -73,6 +73,9 @@ Route::group(['middleware' => 'checkStatus'], function () {
         //notification routes
         require __DIR__ . '/notification.php';
 
+        //scanner routes
+        require __DIR__ . '/scanner.php';
+
         //profile routes
         require __DIR__ . '/profile.php';
     });

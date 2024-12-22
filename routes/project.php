@@ -25,15 +25,6 @@ Route::group(['prefix' => 'project'], function () {
 
     Route::delete('/delete/{url_address}', [ProjectController::class, 'destroy'])->middleware(['auth', 'verified', 'permission:project-delete'])->name('project.destroy');
 
-    //archive
-    Route::get('/archiveshow/{url_address}', [ProjectController::class, 'archiveshow'])->middleware(['auth', 'verified', 'permission:project-archiveshow'])->name('project.archiveshow');
-    Route::get('/archive/{url_address}', [ProjectController::class, 'archivecreate'])->middleware(['auth', 'verified', 'permission:project-archive'])->name('project.archivecreate');
-    Route::post('/archive/{url_address}', [ProjectController::class, 'archivestore'])->middleware(['auth', 'verified', 'permission:project-archive'])->name('project.archivestore');
-
-    //scan
-    Route::get('/scan/{url_address}', [ProjectController::class, 'scancreate'])->middleware(['auth', 'verified', 'permission:project-archive'])->name('project.scancreate');
-    Route::post('/scan', [ProjectController::class, 'scanstore'])->middleware(['auth', 'verified', 'permission:project-archive'])->name('project.scanstore');
-
     // add
     Route::post('/{projectId}/add-investor', [ProjectController::class, 'addInvestor'])->middleware(['auth', 'verified', 'permission:project-addInvestor'])->name('project.addInvestor');
     Route::post('/{projectId}/add-stage', [ProjectController::class, 'addStage'])->middleware(['auth', 'verified', 'permission:project-addStage'])->name('project.addStage');

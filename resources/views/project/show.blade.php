@@ -26,31 +26,31 @@
                         </button>
 
                         @can('project-archive')
-                            <a href="{{ route('project.archivecreate', $project->url_address) }}"
+                            <a href="{{ route('archive.create', ['model' => 'Project', 'id' => $project->id]) }}"
                                 class="btn btn-custom-archive">
                                 {{ __('word.project_archive') }}
                             </a>
 
-                            <a href="{{ route('project.scancreate', $project->url_address) }}"
+                            <a href="{{ route('scan.create', ['model' => 'Project', 'id' => $project->id]) }}"
                                 class="btn btn-custom-archive">
                                 {{ __('word.project_scan') }}
                             </a>
                         @endcan
                         @can('project-archiveshow')
-                            <a href="{{ route('project.archiveshow', $project->url_address) }}"
+                            <a href="{{ route('archive.show', ['model' => 'Project', 'id' => $project->id]) }}"
                                 class="btn btn-custom-archive">
                                 {{ __('word.archiveshow') }}
                             </a>
                         @endcan
                         @can('income-create')
                             <a href="{{ route('income.create', ['cost_center_id' => $project->cost_center_id]) }}"
-                                class="btn btn-custom-archive">
+                                class="btn btn-custom-add">
                                 {{ __('word.income_add') }}
                             </a>
                         @endcan
                         @can('expense-create')
                             <a href="{{ route('expense.create', ['cost_center_id' => $project->cost_center_id]) }}"
-                                class="btn btn-custom-archive">
+                                class="btn btn-custom-add">
                                 {{ __('word.expense_add') }}
                             </a>
                         @endcan

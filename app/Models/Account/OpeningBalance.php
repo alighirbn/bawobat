@@ -2,6 +2,7 @@
 
 namespace App\Models\Account;
 
+use App\Models\Archive;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,5 +46,9 @@ class OpeningBalance extends Model
     public function transaction()
     {
         return $this->morphMany(Transaction::class, 'transactionable');
+    }
+    public function archives()
+    {
+        return $this->morphMany(Archive::class, 'archivable');
     }
 }

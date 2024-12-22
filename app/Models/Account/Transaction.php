@@ -2,6 +2,7 @@
 
 namespace App\Models\Account;
 
+use App\Models\Archive;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -73,5 +74,9 @@ class Transaction extends Model
     public function period()
     {
         return $this->belongsTo(Period::class);
+    }
+    public function archives()
+    {
+        return $this->morphMany(Archive::class, 'archivable');
     }
 }

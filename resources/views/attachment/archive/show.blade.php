@@ -2,7 +2,6 @@
 
     <x-slot name="header">
         <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
-        @include('project.nav.navigation')
 
     </x-slot>
 
