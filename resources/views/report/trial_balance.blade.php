@@ -23,7 +23,7 @@
                         @endif
                         <!-- Filter Form -->
                         <form method="GET" action="{{ route('report.trial_balance') }}" class="mb-6">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
                                 <div class="flex">
                                     <!-- Start Date -->
                                     <div class="mx-4 my-4 w-full">

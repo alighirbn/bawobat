@@ -6,7 +6,7 @@
         @include('report.nav.navigation')
     </x-slot>
 
-    <div class="bg-gray-100 py-6">
+    <div class="bg-custom py-6">
         <div class="a4-width text-gray-700 mx-auto sm:px-6 lg:px-8">
             <!-- Date Filter Form -->
             <form method="GET" action="{{ route('report.balance_sheet') }}" class="mb-6">

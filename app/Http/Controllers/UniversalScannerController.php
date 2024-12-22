@@ -146,7 +146,7 @@ class UniversalScannerController extends Controller
                 ]);
             }
 
-            return redirect()->route('archive.show', ['model' => $model, 'id' => $id])
+            return redirect()->route('archive.show', ['model' => $model, 'id' => $id, 'url_address' => $record->url_address])
                 ->with('success', 'Archives saved successfully.');
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
