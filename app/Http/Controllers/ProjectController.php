@@ -52,6 +52,14 @@ class ProjectController extends Controller
             ->with('success', 'تمت أضافة البيانات بنجاح ');
     }
 
+    // Show the form for editing an existing project
+    public function edit($url_address)
+    {
+        $project = Project::where('url_address', $url_address)->firstOrFail();
+        $cost_centers = CostCenter::all();
+
+        return view('project.edit', compact(['project', 'cost_centers']));
+    }
     // Update an existing project
     public function update(Request $request, $id)
     {
@@ -71,7 +79,8 @@ class ProjectController extends Controller
         $project->user_id_update = Auth::id(); // Store the updater's user ID
         $project->save();
 
-        return response()->json($project);
+        return redirect()->route('project.index')
+            ->with('success', 'تم تعديل البيانات بنجاح ');
     }
 
     // Delete a project
