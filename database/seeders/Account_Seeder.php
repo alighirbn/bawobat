@@ -45,9 +45,9 @@ class Account_Seeder extends Seeder
             // الفصل 6 - المصاريف (Expenses)
             ['url_address' => $this->get_random_string(60), 'code' => '601', 'name' => 'المشتريات', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating'],
             ['url_address' => $this->get_random_string(60), 'code' => '618', 'name' => 'مصاريف الشركة المستثمرة', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating'],
+            ['url_address' => $this->get_random_string(60), 'code' => '626', 'name' => 'مصاريف تشغيلية', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating'], // Other Expenses
             ['url_address' => $this->get_random_string(60), 'code' => '631', 'name' => 'الرواتب', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating'],
             ['url_address' => $this->get_random_string(60), 'code' => '651', 'name' => 'مصاريف اندثار اصل', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating'], // Other Expenses
-            ['url_address' => $this->get_random_string(60), 'code' => '626', 'name' => 'مصاريف تشغيلية', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating'], // Other Expenses
             ['url_address' => $this->get_random_string(60), 'code' => '665', 'name' => 'مصاريف خسائر استثمار', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating'], // Other Expenses
             ['url_address' => $this->get_random_string(60), 'code' => '673', 'name' => ' فوائد على القروض', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating'], // Other Expenses
             ['url_address' => $this->get_random_string(60), 'code' => '675', 'name' => 'فروقات تحويل عملة', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating'], // Other Expenses
