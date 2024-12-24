@@ -16,8 +16,9 @@ class PaymentImportController extends Controller
     // Show the list of payments available for import
     public function showPaymentsForImport()
     {
-        // Fetch payments from the 'yasmin' database
-        $payments = YasminPayment::all();
+
+        // Fetch only approved payments from the 'yasmin' database
+        $payments = YasminPayment::where('approved', true)->get();
 
         // Get the list of already imported payments (from 'bawobat' database)
         $importedPayments = PaymentImport::pluck('payment_id')->toArray();
