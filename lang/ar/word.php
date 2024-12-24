@@ -102,7 +102,25 @@ return [
     'non_current_equity' => 'حقوق الملكية غير المتداولة',
     'parent_code' => 'رمز الحساب الأب',
     'last_digits' => 'آخر أرقام',
-
+    'imported_payments' => 'المدفوعات المستوردة',
+    'payment_id' => 'معرف الدفع',
+    'payment_date' => 'تاريخ الدفع',
+    'amount' => 'المبلغ',
+    'note' => 'ملاحظة',
+    'imported_at' => 'تم الاستيراد في',
+    'transaction_id' => 'معرف المعاملة',
+    'import_payments' => 'استيراد المدفوعات',
+    'select' => 'اختر',
+    'payment_date' => 'تاريخ الدفع',
+    'amount' => 'المبلغ',
+    'note' => 'ملاحظة',
+    'imported' => 'تم الاستيراد',
+    'yes' => 'نعم',
+    'no' => 'لا',
+    'payment_import' => 'استيراد المدفوعات',
+    'payment_import_selected' => 'استيراد المدفوعات المحددة',
+    'payment_imported' => 'المدفوعات المستوردة',
+    'import_selected_payments' => 'استيراد المدفوعات المحددة',
     'income_archive' => 'اضافة صورة',
     'income_scan' => 'اضافة مستند',
     'expense_archive' => 'اضافة صورة',
@@ -237,8 +255,8 @@ return [
     //************************************* transaction        *******************************************
     //nav
 
-    'transaction_add' => 'اضافة قسيمة اليومية',
-    'transaction_search' => 'بحث في سجل اليومية',
+    'transaction_add' => 'اضافة قسيمة يومية',
+    'transaction_search' => 'بحث عن قسيمة يومية',
 
 
     //transaction_info

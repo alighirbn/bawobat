@@ -21,7 +21,7 @@
                             <input type="hidden" id="url_address" name="url_address"
                                 value="{{ $period->url_address }}">
                             <h1 class="font-semibold underline text-l text-gray-900 leading-tight mx-4 w-full">
-                                {{ __('word.edit_period_info') }}
+                                {{ __('word.period_info') }}
                             </h1>
 
                             <div class="flex">
@@ -31,9 +31,7 @@
                                         value="{{ old('name', $period->name) }}" />
                                     <x-input-error :messages="$errors->get('name')" class="w-full mt-2" />
                                 </div>
-                            </div>
 
-                            <div class="flex">
                                 <div class="mx-4 my-4 w-full">
                                     <x-input-label for="start_date" class="w-full mb-1" :value="__('word.start_date')" />
                                     <x-text-input id="start_date" class="w-full block mt-1" type="date"
@@ -41,9 +39,7 @@
                                         value="{{ old('start_date', $period->start_date->format('Y-m-d')) }}" />
                                     <x-input-error :messages="$errors->get('start_date')" class="w-full mt-2" />
                                 </div>
-                            </div>
 
-                            <div class="flex">
                                 <div class="mx-4 my-4 w-full">
                                     <x-input-label for="end_date" class="w-full mb-1" :value="__('word.end_date')" />
                                     <x-text-input id="end_date" class="w-full block mt-1" type="date"

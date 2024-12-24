@@ -10,7 +10,7 @@ class Cost_Center_Seeder extends Seeder
     public function run()
     {
         $cost_centers = [
-            ['url_address' => $this->get_random_string(60), 'code' => 'MA', 'name' => 'الافتراضي', 'description' => 'مركز الكلفة الافتراضي'],
+            ['url_address' => $this->get_random_string(60), 'code' => '01', 'name' => 'الافتراضي', 'description' => 'مركز الكلفة الافتراضي'],
         ];
 
         DB::table('costcenters')->insert($cost_centers);

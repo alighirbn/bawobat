@@ -19,6 +19,7 @@ class Account_Seeder extends Seeder
             ['url_address' => $this->get_random_string(60), 'code' => '161', 'name' => 'قروض طويلة الأجل', 'type' => 'Liability', 'class' => 1, 'category' => 'Non-Current'],
 
             // الفصل 2 - الأصول الثابتة (Fixed Assets)
+            ['url_address' => $this->get_random_string(60), 'code' => '215', 'name' => 'اصول الطرف الثالث', 'type' => 'Asset', 'class' => 2, 'category' => 'Non-Current'],
             ['url_address' => $this->get_random_string(60), 'code' => '224', 'name' => 'اصول عامة', 'type' => 'Asset', 'class' => 2, 'category' => 'Non-Current'],
             ['url_address' => $this->get_random_string(60), 'code' => '225', 'name' => 'مركبات', 'type' => 'Asset', 'class' => 2, 'category' => 'Non-Current'],
             ['url_address' => $this->get_random_string(60), 'code' => '226', 'name' => 'معدات مكتبية', 'type' => 'Asset', 'class' => 2, 'category' => 'Non-Current'],
