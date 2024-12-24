@@ -1,6 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-start">
+            <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
             @include('payments.nav.navigation')
         </div>
     </x-slot>
@@ -14,14 +15,23 @@
                             <p>{{ __($message) }}</p>
                         </div>
                     @endif
-                    <h1>{{ __('word.import_payments') }}</h1>
-
-                    <!-- Success message if any -->
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ __(session('success')) }}
+                    @if ($message = Session::get('error'))
+                        <div class="alert alert-danger">
+                            <p>{{ __($message) }}</p>
                         </div>
                     @endif
+                    <div class="header-buttons">
+                        <a href="{{ url()->previous() }}" class="btn btn-custom-back">
+                            {{ __('word.back') }}
+                        </a>
+                    </div>
+                    <h1>{{ __('word.import_payments') }}</h1>
+
+                    <!-- Live Count and Sum Display -->
+                    <div class="mb-4">
+                        <p><strong>{{ __('word.selected_count') }}:</strong> <span id="selected-count">0</span></p>
+                        <p><strong>{{ __('word.total_amount') }}:</strong> <span id="total-amount">0</span></p>
+                    </div>
 
                     <form method="POST" action="{{ route('payments.import.post') }}">
                         @csrf
@@ -42,12 +52,14 @@
                                         <td>
                                             @if (!in_array($payment->id, $importedPayments))
                                                 <input type="checkbox" name="selected_payments[]"
-                                                    value="{{ $payment->id }}">
+                                                    value="{{ $payment->id }}" class="payment-checkbox"
+                                                    data-amount="{{ $payment->payment_amount }}">
                                             @endif
                                         </td>
                                         <td>{{ $payment->payment_date }}</td>
-                                        <td>{{ $payment->payment_amount }}</td>
-                                        <td>{{ $payment->payment_note }}</td>
+                                        <td>{{ number_format($payment->payment_amount, 0) }}</td>
+                                        <td>{{ $payment->payment_note . ' - ' . $payment->contract->customer->customer_full_name . ' - ' . $payment->contract->building->building_number }}
+                                        </td>
                                         <td>
                                             {{ in_array($payment->id, $importedPayments) ? __('word.yes') : __('word.no') }}
                                         </td>
@@ -57,11 +69,37 @@
                         </table>
 
                         <button type="submit"
-                            class="btn btn-primary">{{ __('word.import_selected_payments') }}</button>
+                            class="btn btn-custom-archive">{{ __('word.import_selected_payments') }}</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('.payment-checkbox');
+            const selectedCount = document.getElementById('selected-count');
+            const totalAmount = document.getElementById('total-amount');
+
+            const updateSummary = () => {
+                let count = 0;
+                let sum = 0;
+
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        count++;
+                        sum += parseFloat(checkbox.getAttribute('data-amount'));
+                    }
+                });
+
+                selectedCount.textContent = count;
+                totalAmount.textContent = new Intl.NumberFormat().format(sum);
+            };
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateSummary);
+            });
+        });
+    </script>
 </x-app-layout>

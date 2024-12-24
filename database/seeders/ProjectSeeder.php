@@ -5,16 +5,26 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class Cost_Center_Seeder extends Seeder
+class ProjectSeeder extends Seeder
 {
     public function run()
     {
-        $cost_centers = [
-            ['url_address' => $this->get_random_string(60), 'code' => '01', 'name' => 'بوابة العلم', 'description' => 'مركز الكلفة بوابة العلم'],
-            ['url_address' => $this->get_random_string(60), 'code' => '02', 'name' => 'واحة الياسمين', 'description' => 'مركز الكلفة مجمع الياسمين السكني'],
+        $projects = [
+            [
+                'url_address' => $this->get_random_string(60),
+                'cost_center_id' => 2,
+                'name' => 'بوابة العلم',
+                'description' => 'مركز الكلفة بوابة العلم',
+                'budget' => 150000000000,
+                'start_date' => '2024-06-01',
+                'end_date' => '2027-06-1',
+                'status' => 'ongoing',
+                'user_id_create' => 1,
+                'user_id_update' => 1,
+            ],
         ];
 
-        DB::table('costcenters')->insert($cost_centers);
+        DB::table('projects')->insert($projects);
     }
     public function get_random_string($length)
     {

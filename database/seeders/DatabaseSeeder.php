@@ -22,8 +22,10 @@ class DatabaseSeeder extends Seeder
       Permission_Seeder::class,
       Department_Seeder::class,
       Account_Seeder::class,
+      Sub_Account_Seeder::class,
       Cost_Center_Seeder::class,
       Period_Seeder::class,
+      ProjectSeeder::class,
     ]);
   }
 }

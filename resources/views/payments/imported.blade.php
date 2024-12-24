@@ -1,6 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-start">
+            <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
             @include('payments.nav.navigation')
         </div>
     </x-slot>
@@ -14,6 +15,11 @@
                             <p>{{ $message }}</p>
                         </div>
                     @endif
+                    <div class="header-buttons">
+                        <a href="{{ url()->previous() }}" class="btn btn-custom-back">
+                            {{ __('word.back') }}
+                        </a>
+                    </div>
                     <div class="container">
                         <h1>{{ __('word.imported_payments') }}</h1>
 
@@ -33,8 +39,9 @@
                                     <tr>
                                         <td>{{ $import->payment->id }}</td>
                                         <td>{{ $import->payment->payment_date }}</td>
-                                        <td>{{ $import->payment->payment_amount }}</td>
-                                        <td>{{ $import->payment->payment_note }}</td>
+                                        <td>{{ number_format($import->payment->payment_amount, 0) }}</td>
+                                        <td>{{ $import->payment->payment_note . ' - ' . $import->payment->contract->customer->customer_full_name . ' - ' . $import->payment->contract->building->building_number }}
+                                        </td>
                                         <td>{{ $import->imported_at }}</td>
                                         <td>{{ $import->transaction_id }}</td>
                                     </tr>

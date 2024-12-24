@@ -54,6 +54,15 @@
                                 {{ __('word.expense_add') }}
                             </a>
                         @endcan
+                        @if ($project->id == 1)
+                            <a href="{{ route('payments.import') }}" class="btn btn-custom-add ">
+                                {{ __('word.payment_import') }}
+                            </a>
+
+                            <a href="{{ route('payments.imported') }}" class="btn btn-custom-add ">
+                                {{ __('word.payment_imported') }}
+                            </a>
+                        @endif
 
                     </div>
                     @if ($message = Session::get('success'))

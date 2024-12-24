@@ -44,19 +44,17 @@ return [
     'account_id' => 'الحساب',
     'period' => 'الفترة',
     'to' => 'الى',
-    'date' => 'التاريخ',
-    'description' => 'الوصف',
+    'selected_count' => 'العدد',
+    'total_amount' => 'المبلغ',
     'debit' => 'المدين',
     'credit' => 'الدائن',
     // Headers and Labels
     'as_of_date' => 'كما في تاريخ:',
-    'filter' => 'تصفية',
+
     'balance_sheet' => 'الميزانية العمومية',
     'balance_sheet_as_of' => 'الميزانية العمومية (كما في :date)',
-    'start_date' => 'تاريخ البداية',
-    'end_date' => 'تاريخ النهاية',
+
     'cost_center' => 'مركز التكلفة',
-    'all' => 'الكل',
     'from_account' => 'من حساب',
     'to_account' => 'إلى حساب',
     'select_account' => 'اختر الحساب',
@@ -72,14 +70,8 @@ return [
     'income' => 'الدخل',
     'report_profit_and_loss' => 'بيان الأرباح والخسائر',
     'profit_and_loss_statement' => 'بيان الأرباح والخسائر',
-    'start_date' => 'تاريخ البداية',
-    'end_date' => 'تاريخ النهاية',
-    'cost_center' => 'مركز التكلفة',
-    'all' => 'الكل',
-    'filter' => 'تصفية',
-    'account_code' => 'رمز الحساب',
-    'account_name' => 'اسم الحساب',
-    'balance' => 'الرصيد',
+
+
     'no_income_data' => 'لا توجد بيانات دخل متاحة',
     'total_income' => 'إجمالي الدخل',
     'expenses' => 'المصروفات',
@@ -91,7 +83,7 @@ return [
     // Main Categories
     'assets' => 'الأصول',
     'select_cost_center' => 'اختر مركز التكلفة',
-    'cost_center' => 'مركز التكلفة',
+
     'current_assets' => 'الأصول المتداولة',
     'non_current_assets' => 'الأصول غير المتداولة',
     'liabilities' => 'الخصوم',
@@ -105,15 +97,13 @@ return [
     'imported_payments' => 'المدفوعات المستوردة',
     'payment_id' => 'معرف الدفع',
     'payment_date' => 'تاريخ الدفع',
-    'amount' => 'المبلغ',
+
     'note' => 'ملاحظة',
     'imported_at' => 'تم الاستيراد في',
     'transaction_id' => 'معرف المعاملة',
     'import_payments' => 'استيراد المدفوعات',
     'select' => 'اختر',
-    'payment_date' => 'تاريخ الدفع',
-    'amount' => 'المبلغ',
-    'note' => 'ملاحظة',
+
     'imported' => 'تم الاستيراد',
     'yes' => 'نعم',
     'no' => 'لا',
@@ -130,18 +120,12 @@ return [
 
     'full_code' => 'رمز الحساب الكامل',
     'statement_of_account' => 'كشف حساب',
-    'start_date' => 'تاريخ البداية',
-    'end_date' => 'تاريخ النهاية',
+
     'account' => 'الحساب',
-    'select_account' => 'اختر الحساب',
-    'cost_center' => 'مركز التكلفة',
-    'all' => 'الكل',
+
     'generate' => 'إنشاء',
     'opening_balance' => 'الرصيد الافتتاحي',
-    'date' => 'التاريخ',
-    'description' => 'الوصف',
-    'debit' => 'مدين',
-    'credit' => 'دائن',
+
     'running_balance' => 'الرصيد الجاري',
     'no_transactions_found' => 'لم يتم العثور على معاملات',
     'please_select_account' => 'الرجاء تحديد حساب وتطبيق المرشحات لإنشاء الكشف',
@@ -172,12 +156,12 @@ return [
     'dashboard' => 'الرئيسية',
     'project' => 'المشاريع',
     'investor' => 'المساهمين',
-    'account' => 'الحسابات',
+
     'financial_management' => 'الادارة المالية',
     'finance_operations' => 'العمليات المالية',
     'report' => 'التقارير',
 
-    'income' => 'الايرادات',
+
     'expense' => 'المصروفات',
 
     'Customer' => 'الزبائن',
@@ -224,7 +208,7 @@ return [
 
     //account_info
     'account_info' => 'بيانات الحساب',
-    'opening_balance' => 'الرصيد الافتتاحي',
+
     'opening_balance_date' => 'تاريخ الرصيد الافتتاحي',
     'opening_balance_amount' => 'مبلغ الرصيد الافتتاحي',
     'opening_balance_type' => 'نوع الرصيد الافتتاحي',
@@ -266,13 +250,10 @@ return [
     'accounting_period' => 'الفترة المحاسبية :',
     'daily_voucher' => 'قسيمة يومية',
     'entry_info' => 'معلومات القيد',
-    'description' => 'الوصف:',
-    'date' => 'التاريخ:',
+
     'debit_entries' => 'الإدخالات المدينة',
     'credit_entries' => 'الإدخالات الدائنة',
-    'account' => 'الحساب:',
-    'amount' => 'المبلغ:',
-    'cost_center' => 'مركز التكلفة:',
+
     'total_debit' => 'إجمالي المدين:',
     'total_credit' => 'إجمالي الدائن:',
     'logo' => 'الشعار',
@@ -362,7 +343,7 @@ return [
     'user_name' => 'اسم المستخدم',
     'password' => 'كلمة السر',
     'confirm_password' => 'تأكيد كلمة السر',
-    'email' => 'عنوان البريد الألكتروني',
+
     'user_status' => 'الحالة',
     'user_role' => 'الدور',
     'department_id' => 'المؤسسة',

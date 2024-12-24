@@ -23,4 +23,9 @@ class YasminPayment extends Model
         'user_id_create',
         'user_id_update',
     ];
+
+    public function contract()
+    {
+        return $this->belongsTo(YasminContract::class, 'payment_contract_id', 'id');
+    }
 }

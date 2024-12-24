@@ -9,7 +9,7 @@ use App\Models\Account\Account;
 use App\Models\Account\CostCenter;
 use App\Models\Account\Period;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
