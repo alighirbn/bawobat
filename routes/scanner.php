@@ -10,4 +10,7 @@ Route::group(['prefix' => 'attachment'], function () {
     Route::post('{model}/{id}/archive/store', [UniversalScannerController::class, 'archiveStore'])->name('archive.store');
 
     Route::get('{model}/{id}/{url_address}/archive/show', [UniversalScannerController::class, 'archiveShow'])->name('archive.show');
+
+    // Add this route for deleting an archive
+    Route::delete('archive/{archive}/delete', [UniversalScannerController::class, 'archiveDelete'])->name('archive.delete');
 });

@@ -162,13 +162,45 @@ class UniversalScannerController extends Controller
             $modelClass = $this->resolveModelClass($model);
             $record = resolve($modelClass)->with('archives')->findOrFail($id);
 
-            $archives = $record->archives->map(function ($archive) {
-                return $archive->image_path;
-            });
+            // Pass the full archives collection instead of just the image paths
+            $archives = $record->archives;
 
             return view('attachment.archive.show', compact('record', 'model', 'archives', 'url_address'));
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);
+        }
+    }
+
+
+    /**
+     * Delete an archive for a model and ID.
+     */
+    public function archiveDelete(int $archiveId)
+    {
+        try {
+            // Find the archive record
+            $archive = \App\Models\Archive::findOrFail($archiveId);
+
+            // Get necessary information for redirecting back to the archiveShow view
+            $model = $archive->model_type; // Assuming you have a polymorphic model or column to identify the model
+            $id = $archive->model_id;      // ID of the related model
+            $urlAddress = $archive->url_address; // Assuming this is stored in your archive
+
+            // Delete the image file from storage
+            $imagePath = str_replace('storage/', 'public/', $archive->image_path);
+            Storage::delete($imagePath);
+
+            // Delete the archive record from the database
+            $archive->delete();
+
+            // Redirect back to the archiveShow view with a success message
+            return redirect()
+                ->route('archive.show', ['model' => $model, 'id' => $id, 'url_address' => $urlAddress])
+                ->with('success', 'تم الحذف بنجاح');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'حدث خطأ أثناء الحذف: ' . $e->getMessage());
         }
     }
 }

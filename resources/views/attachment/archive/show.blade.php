@@ -1,5 +1,4 @@
 <x-app-layout>
-
     <x-slot name="header">
         <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
         <div class="flex justify-start">
@@ -28,17 +27,31 @@
                             <p>No archived images available.</p>
                         @else
                             <div class="row">
-                                @foreach ($archives as $image)
+                                @foreach ($archives as $archive)
                                     <div class="col-md-3">
-                                        <img src="{{ asset($image) }}" class="card-img-top" alt="Contract Image">
+                                        <div class="card mb-3">
+                                            <img src="{{ asset($archive->image_path) }}" class="card-img-top"
+                                                alt="Contract Image">
+                                            <div class="card-body text-center">
+                                                <form action="{{ route('archive.delete', $archive->id) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('هل انت متأكد من حذف الصورة ؟?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-custom-delete">
+                                                        {{ __('word.delete') }}
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>
                         @endif
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
-
 </x-app-layout>
