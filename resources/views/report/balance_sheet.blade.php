@@ -8,6 +8,9 @@
 
     <div class="bg-custom py-6">
         <div class="a4-width text-gray-700 mx-auto sm:px-6 lg:px-8">
+            <button id="print" class="btn btn-custom-print" onclick="window.print();">
+                {{ __('word.print') }}
+            </button>
             <!-- Date Filter Form -->
             <form method="GET" action="{{ route('report.balance_sheet') }}" class="mb-6">
                 <div class="flex items-center gap-4">
@@ -37,7 +40,7 @@
             </form>
 
             <!-- Balance Sheet -->
-            <div class="overflow-hidden shadow sm:rounded-lg bg-white p-6">
+            <div class="overflow-hidden shadow sm:rounded-lg bg-white p-6 print-container">
                 <h2 class="text-xl font-bold mb-4">
                     {{ __('word.balance_sheet_as_of', ['date' => $asOfDate]) }}
                     @if ($costCenterId)

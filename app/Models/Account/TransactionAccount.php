@@ -66,7 +66,14 @@ class TransactionAccount extends Model
         }
 
         $transactions = $transactionsQuery
-            ->select('transaction_account.amount', 'transaction_account.debit_credit', 'transactions.date', 'transactions.description')
+            ->select(
+                'transaction_account.transaction_id',
+                'transactions.url_address', // Include url_address
+                'transaction_account.amount',
+                'transaction_account.debit_credit',
+                'transactions.date',
+                'transactions.description'
+            )
             ->orderBy('transactions.date')
             ->get();
 
@@ -77,6 +84,8 @@ class TransactionAccount extends Model
             $runningBalance += $amount;
 
             return [
+                'transaction_id' => $entry->transaction_id,
+                'url_address' => $entry->url_address, // Add url_address to the result
                 'date' => $entry->date,
                 'description' => $entry->description,
                 'debit' => $entry->debit_credit === self::DEBIT ? $entry->amount : null,
@@ -87,6 +96,8 @@ class TransactionAccount extends Model
 
         // Step 4: Prepend opening balance
         $soa->prepend([
+            'transaction_id' => null,
+            'url_address' => null, // No url_address for opening balance
             'date' => $startDate,
             'description' => 'Opening Balance',
             'debit' => null,

@@ -18,7 +18,7 @@ class Sub_Account_Seeder extends Seeder
             ['url_address' => $this->get_random_string(60), 'code' => '6260002', 'name' => 'اجور فواتير الماء', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating', 'parent_id' => 25],
             ['url_address' => $this->get_random_string(60), 'code' => '6260003', 'name' => 'اجور فواتير الكهرباء', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating', 'parent_id' => 25],
             ['url_address' => $this->get_random_string(60), 'code' => '6260004', 'name' => 'اجور فواتير الانترنيت', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating', 'parent_id' => 25],
-            ['url_address' => $this->get_random_string(60), 'code' => '6260006', 'name' => 'لوازم قرطاسية', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating', 'parent_id' => 25],
+            ['url_address' => $this->get_random_string(60), 'code' => '6260005', 'name' => 'لوازم قرطاسية', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating', 'parent_id' => 25],
             ['url_address' => $this->get_random_string(60), 'code' => '6260006', 'name' => 'اجور احبار الطابعات', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating', 'parent_id' => 25],
             ['url_address' => $this->get_random_string(60), 'code' => '6260007', 'name' => 'اجور اساسية ( ماء - شاي - قهوه - سكر - سفريات)', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating', 'parent_id' => 25],
             ['url_address' => $this->get_random_string(60), 'code' => '6260008', 'name' => 'اجور مستحضرات تنظيف (زاهي - صابون - كلينكس)', 'type' => 'Expense', 'class' => 6, 'category' => 'Operating', 'parent_id' => 25],

@@ -2,7 +2,11 @@
 
     <x-slot name="header">
         <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
-
+        <div class="flex justify-start">
+            @include('income.nav.navigation')
+            @include('expense.nav.navigation')
+            @include('transaction.nav.navigation')
+        </div>
     </x-slot>
 
     <div class="bg-custom py-6">

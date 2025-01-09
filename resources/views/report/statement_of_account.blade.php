@@ -11,8 +11,10 @@
             <div class="overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="a4-width mx-auto">
-                        <h2 class="text-center">{{ __('word.statement_of_account') }}</h2>
 
+                        <button id="print" class="btn btn-custom-print" onclick="window.print();">
+                            {{ __('word.print') }}
+                        </button>
                         <!-- Filter Form -->
                         <form method="GET" action="{{ route('report.statement_of_account') }}">
                             <div class="flex">
@@ -54,8 +56,9 @@
                             </div>
                             <button type="submit" class="btn btn-custom-add">{{ __('word.filter') }}</button>
                         </form>
-                        <div class="overflow-hidden shadow sm:rounded-lg bg-white p-6">
+                        <div class="overflow-hidden shadow sm:rounded-lg bg-white p-6 print-container">
 
+                            <h2 class="text-center">{{ __('word.statement_of_account') }}</h2>
                             <!-- Display the Filters Applied -->
                             @if (request('account_id') && request('start_date') && request('end_date'))
                                 <div class="mt-4">
@@ -70,6 +73,7 @@
                                 <table class="table table-bordered mt-4">
                                     <thead>
                                         <tr>
+                                            <th class="no-print" style="width: 12%;">{{ __('word.action') }}</th>
                                             <th style="width: 12%;">{{ __('word.date') }}</th>
                                             <th style="width: 43%;">{{ __('word.description') }}</th>
                                             <th style="width: 15%;">{{ __('word.debit') }}</th>
@@ -80,6 +84,16 @@
                                     <tbody>
                                         @forelse ($soa as $entry)
                                             <tr class="font-semibold">
+                                                <td class="px-1 py-1 text-sm border border-gray-300 no-print">
+                                                    @if ($entry['url_address'])
+                                                        <a href="{{ route('transaction.show', $entry['url_address']) }}"
+                                                            class="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                                            {{ __('word.view') }}
+                                                        </a>
+                                                    @else
+                                                        <!-- No button for opening balance -->
+                                                    @endif
+                                                </td>
                                                 <td class="px-1 py-1 text-sm border border-gray-300">
                                                     {{ $entry['date'] }}</td>
                                                 <td class="px-1 py-1 text-sm border border-gray-300">
@@ -108,4 +122,12 @@
             </div>
         </div>
     </div>
+
+    <style>
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
 </x-app-layout>

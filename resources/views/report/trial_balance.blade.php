@@ -22,6 +22,9 @@
                             </div>
                         @endif
                         <!-- Filter Form -->
+                        <button id="print" class="btn btn-custom-print" onclick="window.print();">
+                            {{ __('word.print') }}
+                        </button>
                         <form method="GET" action="{{ route('report.trial_balance') }}" class="mb-6">
                             <div>
                                 <div class="flex">
@@ -104,7 +107,7 @@
                             </div>
                         </form>
 
-                        <div class="overflow-hidden shadow sm:rounded-lg bg-white p-6">
+                        <div class="overflow-hidden shadow sm:rounded-lg bg-white p-6 print-container">
                             <h1 class="text-xl font-bold mb-2">{{ __('word.trial_balance') }}</h1>
 
                             <!-- Applied Filters -->

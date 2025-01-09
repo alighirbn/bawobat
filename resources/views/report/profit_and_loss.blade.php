@@ -10,6 +10,9 @@
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                    <button id="print" class="btn btn-custom-print" onclick="window.print();">
+                        {{ __('word.print') }}
+                    </button>
                     <div class="a4-width mx-auto">
                         <form method="GET" action="{{ route('report.profit_and_loss') }}">
                             <div class="row">
@@ -41,7 +44,7 @@
                                 </div>
                             </div>
                         </form>
-                        <div class="overflow-hidden shadow sm:rounded-lg bg-white p-6">
+                        <div class="overflow-hidden shadow sm:rounded-lg bg-white p-6 print-container">
                             <!-- Display the Filters Applied -->
                             @if (request('start_date', $startDate) && request('end_date', $endDate))
                                 <div class="mt-4">
@@ -165,16 +168,6 @@
                                 </div>
                             </div>
 
-                            <!-- Net Profit/Loss -->
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h2 class="text-center">{{ __('word.net') }}
-                                        {{ $netProfitOrLoss >= 0 ? __('word.profit') : __('word.loss') }}</h2>
-                                    <h3 class="text-center text-{{ $netProfitOrLoss >= 0 ? 'success' : 'danger' }}">
-                                        {{ number_format(abs($netProfitOrLoss), 0) }}
-                                    </h3>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
