@@ -45,6 +45,24 @@
                             </div>
                         </form>
                         <div class="overflow-hidden shadow sm:rounded-lg bg-white p-6 print-container">
+
+                            <!-- Logo and Title Section -->
+
+                            <div class="flex items-center justify-between p-4 bg-gray-100 rounded-lg shadow-sm">
+                                <!-- Title Section -->
+                                <div class="text-2xl font-bold text-gray-800">
+                                    بيان الإيرادات والمصروفات
+                                </div>
+
+                                <!-- Spacer (Optional, can be removed if not needed) -->
+                                <div class="flex-grow"></div>
+
+                                <!-- Logo Section -->
+                                <div class="flex justify-end">
+                                    <img src="{{ asset('images/yasmine.png') }}" alt="Logo" class="h-16 w-auto">
+                                </div>
+                            </div>
+
                             <!-- Display the Filters Applied -->
                             @if (request('start_date', $startDate) && request('end_date', $endDate))
                                 <div class="mt-4">

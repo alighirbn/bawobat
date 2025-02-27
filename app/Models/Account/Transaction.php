@@ -3,6 +3,7 @@
 namespace App\Models\Account;
 
 use App\Models\Archive;
+use App\Models\PaymentImport;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -78,5 +79,11 @@ class Transaction extends Model
     public function archives()
     {
         return $this->morphMany(Archive::class, 'archivable');
+    }
+
+    // Relationship to PaymentImport
+    public function paymentImports()
+    {
+        return $this->hasMany(PaymentImport::class, 'transaction_id', 'id');
     }
 }

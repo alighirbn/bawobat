@@ -165,10 +165,23 @@ class TransactionController extends Controller
      */
     public function destroy(string $url_address)
     {
-        $affected = Transaction::where('url_address', $url_address)->delete();
+        $transaction = Transaction::where('url_address', $url_address)->first();
+
+        if (!$transaction) {
+            return redirect()->route('transaction.index')->with('error', 'القيد غير موجود.');
+        }
+
+        // Check if the transaction has related PaymentImport records before deleting
+        if ($transaction->paymentImports()->exists()) {
+            $transaction->paymentImports()->delete();
+        }
+
+        // Now delete the transaction itself
+        $transaction->delete();
 
         return redirect()->route('transaction.index')->with('success', 'تم حذف القيد الحسابي بنجاح.');
     }
+
 
     private function addEntries($entries, $transaction, $debitCredit)
     {
