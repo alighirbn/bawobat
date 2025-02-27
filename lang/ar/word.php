@@ -50,6 +50,8 @@ return [
     'credit' => 'الدائن',
     // Headers and Labels
     'as_of_date' => 'كما في تاريخ:',
+    'delete_confirm' => 'هل انت متأكد من حذف هذا الحساب؟',
+    'delete_confirm_title' => 'تأكيد الحذف',
 
     'balance_sheet' => 'الميزانية العمومية',
     'balance_sheet_as_of' => 'الميزانية العمومية (كما في :date)',

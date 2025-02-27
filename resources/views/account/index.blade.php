@@ -1,6 +1,5 @@
 <x-app-layout>
     <x-slot name="header">
-        <!-- app css-->
         <link rel="stylesheet" type="text/css" href="{{ url('/css/app.css') }}" />
         <div class="flex justify-start">
             @include('account.nav.navigation')
@@ -13,6 +12,16 @@
     <div class="py-4">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                @if ($message = Session::get('success'))
+                    <div class="alert alert-success">
+                        <p>{{ $message }}</p>
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <div class="container">
 
                     <!-- Loop through all accounts -->
@@ -33,12 +42,20 @@
                                 <tr>
                                     <!-- Action Button -->
                                     <td>
-                                        <button type="button" class="my-1 mx-1 btn btn-custom-show"
-                                            data-bs-toggle="modal" data-bs-target="#addAccountModal"
-                                            data-parent-id="{{ $account->id }}"
-                                            data-parent-code="{{ $account->code }}">
-                                            +
-                                        </button>
+                                        <div class="flex">
+
+                                            <button type="button" class="my-1 mx-1 btn btn-custom-show"
+                                                data-bs-toggle="modal" data-bs-target="#addAccountModal"
+                                                data-parent-id="{{ $account->id }}"
+                                                data-parent-code="{{ $account->code }}">
+                                                +
+                                            </button>
+                                            <button type="button" class="btn btn-custom-edit" data-bs-toggle="modal"
+                                                data-bs-target="#editAccountModal" data-id="{{ $account->id }}"
+                                                data-name="{{ $account->name }}" data-code="{{ $account->code }}">
+                                                {{ __('word.edit') }}
+                                            </button>
+                                        </div>
                                     </td>
 
                                     <!-- Account Details -->
@@ -59,6 +76,22 @@
                                                             class="btn btn-info btn-sm">
                                                             {{ __('word.soa') }}
                                                         </a>
+                                                        <button type="button" class="btn btn-custom-edit"
+                                                            data-bs-toggle="modal" data-bs-target="#editAccountModal"
+                                                            data-id="{{ $child->id }}"
+                                                            data-name="{{ $child->name }}"
+                                                            data-code="{{ $child->code }}">
+                                                            {{ __('word.edit') }}
+                                                        </button>
+                                                        <form action="{{ route('account.destroy', $child->id) }}"
+                                                            method="POST" style="display:inline;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-custom-delete"
+                                                                onclick="return confirm('{{ __('word.delete_confirm') }}')">
+                                                                {{ __('word.delete') }}
+                                                            </button>
+                                                        </form>
 
                                                     </li>
                                                 @endforeach
@@ -75,59 +108,76 @@
                     </table>
 
                 </div>
-
             </div>
         </div>
     </div>
-    <!-- Modal for adding a new account -->
+
+    <!-- Add Account Modal -->
     <div class="modal fade text-gray-900" id="addAccountModal" tabindex="-1" aria-labelledby="addAccountModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addAccountModalLabel">{{ __('word.account_add') }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title">{{ __('word.account_add') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form action="{{ route('account.store') }}" method="POST">
                     @csrf
                     <div class="modal-body">
-                        <!-- Account Name -->
-                        <div class="mb-3">
-                            <label for="name" class="form-label">{{ __('word.name') }}</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
+                        <label class="form-label">{{ __('word.name') }}</label>
+                        <input type="text" class="form-control" name="name" required>
 
-                        <!-- Parent Code -->
-                        <div class="mb-3">
-                            <label for="parent_code" class="form-label">{{ __('word.parent_code') }}</label>
-                            <input type="text" class="form-control" id="parent_code" readonly>
-                        </div>
+                        <label class="form-label">{{ __('word.parent_code') }}</label>
+                        <input type="text" class="form-control" id="parent_code" readonly>
 
-                        <!-- Last Digits -->
-                        <div class="mb-3">
-                            <label for="last_digits" class="form-label">{{ __('word.last_digits') }}</label>
-                            <input type="number" class="form-control" id="last_digits" name="last_digits" required>
-                        </div>
+                        <label class="form-label">{{ __('word.last_digits') }}</label>
+                        <input type="number" class="form-control" id="last_digits" name="last_digits" required>
 
-                        <!-- Full Account Code -->
-                        <div class="mb-3">
-                            <label for="code" class="form-label">{{ __('word.full_code') }}</label>
-                            <input type="text" class="form-control" id="code" name="code" readonly>
-                        </div>
+                        <label class="form-label">{{ __('word.full_code') }}</label>
+                        <input type="text" class="form-control" id="code" name="code" readonly>
 
-                        <!-- Hidden Parent ID -->
                         <input type="hidden" id="parent_id" name="parent_id">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-custom-show"
+                        <button type="button" class="btn btn-secondary"
                             data-bs-dismiss="modal">{{ __('word.close') }}</button>
-                        <button type="submit" class="btn btn-custom-add">{{ __('word.save') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __('word.save') }}</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <!-- Include Bootstrap JS and dependencies -->
+
+    <!-- Edit Account Modal -->
+    <div class="modal fade text-gray-900" id="editAccountModal" tabindex="-1" aria-labelledby="editAccountModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ __('word.account_edit') }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="editAccountForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body">
+                        <label class="form-label">{{ __('word.name') }}</label>
+                        <input type="text" class="form-control" id="edit_name" name="name" required>
+
+                        <label class="form-label">{{ __('word.full_code') }}</label>
+                        <input type="text" class="form-control" id="edit_code" name="code" readonly>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">{{ __('word.close') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __('word.save') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
@@ -138,24 +188,36 @@
             var lastDigitsInput = addAccountModal.querySelector('#last_digits');
             var fullCodeInput = addAccountModal.querySelector('#code');
 
-            // Handle showing the modal and setting initial data
             addAccountModal.addEventListener('show.bs.modal', function(event) {
-                var button = event.relatedTarget; // Button that triggered the modal
-                var parentId = button.getAttribute('data-parent-id'); // Parent ID
-                var parentCode = button.getAttribute('data-parent-code'); // Parent Code
+                var button = event.relatedTarget;
+                var parentId = button.getAttribute('data-parent-id');
+                var parentCode = button.getAttribute('data-parent-code');
 
-                // Set parent_id and parent_code in the modal
                 parentIdInput.value = parentId;
                 parentCodeInput.value = parentCode;
-                fullCodeInput.value = ''; // Reset the full code field
-                lastDigitsInput.value = ''; // Reset the last digits field
+                fullCodeInput.value = '';
+                lastDigitsInput.value = '';
             });
 
-            // Update the full account code dynamically
             lastDigitsInput.addEventListener('input', function() {
-                var parentCode = parentCodeInput.value;
-                var lastDigits = lastDigitsInput.value;
-                fullCodeInput.value = parentCode + lastDigits;
+                fullCodeInput.value = parentCodeInput.value + lastDigitsInput.value;
+            });
+
+            // Edit Modal
+            var editAccountModal = document.getElementById('editAccountModal');
+            var editNameInput = editAccountModal.querySelector('#edit_name');
+            var editCodeInput = editAccountModal.querySelector('#edit_code');
+            var editForm = document.getElementById('editAccountForm');
+
+            editAccountModal.addEventListener('show.bs.modal', function(event) {
+                var button = event.relatedTarget;
+                var id = button.getAttribute('data-id');
+                var name = button.getAttribute('data-name');
+                var code = button.getAttribute('data-code');
+
+                editNameInput.value = name;
+                editCodeInput.value = code;
+                editForm.action = "/account/" + id;
             });
         });
     </script>
