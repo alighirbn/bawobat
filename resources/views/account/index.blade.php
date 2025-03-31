@@ -43,13 +43,15 @@
                                     <!-- Action Button -->
                                     <td>
                                         <div class="flex">
+                                            @can('account-create')
+                                                <button type="button" class="my-1 mx-1 btn btn-custom-show"
+                                                    data-bs-toggle="modal" data-bs-target="#addAccountModal"
+                                                    data-parent-id="{{ $account->id }}"
+                                                    data-parent-code="{{ $account->code }}">
+                                                    +
+                                                </button>
+                                            @endcan
 
-                                            <button type="button" class="my-1 mx-1 btn btn-custom-show"
-                                                data-bs-toggle="modal" data-bs-target="#addAccountModal"
-                                                data-parent-id="{{ $account->id }}"
-                                                data-parent-code="{{ $account->code }}">
-                                                +
-                                            </button>
                                             <button type="button" class="btn btn-custom-edit" data-bs-toggle="modal"
                                                 data-bs-target="#editAccountModal" data-id="{{ $account->id }}"
                                                 data-name="{{ $account->name }}" data-code="{{ $account->code }}">

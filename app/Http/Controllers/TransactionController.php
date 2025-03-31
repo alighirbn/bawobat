@@ -150,7 +150,7 @@ class TransactionController extends Controller
 
             DB::commit();
 
-            return redirect()->route('transaction.index')->with('success', 'تم إنشاء القيد الحسابي بنجاح!');
+            return redirect()->route('transaction.show', $transaction->url_address)->with('success', 'تم إنشاء القيد الحسابي بنجاح!');
         } catch (QueryException $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'خطأ في قاعدة البيانات: ' . $e->getMessage());
