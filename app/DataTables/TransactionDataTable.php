@@ -67,7 +67,7 @@ class TransactionDataTable extends DataTable
             ])
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->orderBy(3, 'desc')
+            ->orderBy(2, 'desc')
             ->parameters([
                 'dom' => 'B<"clear">lfrtip',
                 'scrollX' => false,
