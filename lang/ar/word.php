@@ -5,6 +5,8 @@ return [
     //auth
     'user_create' => 'تم الانشاء من قبل',
     'user_update' => 'تم التحديث من قبل',
+    'net_profit_or_loss' => 'صافي الربح أو الخسارة',
+    'balance' => 'الرصيد',
     //buttons
     'action' => 'الوظائف',
     'view' => 'عرض',

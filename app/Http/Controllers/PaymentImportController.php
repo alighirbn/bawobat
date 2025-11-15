@@ -38,47 +38,62 @@ class PaymentImportController extends Controller
 
         DB::beginTransaction();
         $periodId = $request->period_id ?? $this->getActivePeriodId();
+
         try {
-            // Iterate through each selected payment for import
             foreach ($selectedPayments as $paymentId) {
                 // Fetch payment from 'yasmin' database
                 $payment = YasminPayment::find($paymentId);
-                $periodId = $request->period_id ?? $this->getActivePeriodId();
-                // Ensure the payment exists
                 if (!$payment) {
                     continue;
                 }
 
-                // Create a new transaction in the 'bawobat' database
+                // Determine the correct credit account code based on cash_account_id
+                $accountMap = [
+                    5 => '7010202',
+                    9 => '7010204',
+                    10 => '7010205',
+                    11 => '7010206',
+                ];
+                $creditAccountCode = $accountMap[$payment->cash_account_id] ?? '7010202';
+
+                // Retrieve accounts and cost center
+                $creditAccount = Account::where('code', $creditAccountCode)->first();
+                $debitAccount = Account::where('code', '5300002')->first();
+                $costCenter = CostCenter::find(2);
+
+                // Create the transaction record
                 $transaction = Transaction::create([
                     'url_address' => $this->get_random_string(60),
                     'date' => $payment->payment_date,
-                    'description' => $payment->payment_note . ' - ' . $payment->contract->customer->customer_full_name . ' - ' . $payment->contract->building->building_number,
+                    'description' => $payment->payment_note . ' - ' .
+                        $payment->contract->customer->customer_full_name . ' - ' .
+                        $payment->contract->building->building_number,
                     'period_id' => $periodId,
                     'transactionable_id' => $payment->id,
-                    'transactionable_type' => YasminPayment::class,  // Polymorphic relation
-                    'user_id_create' => auth()->id(),  // Assuming you have authentication enabled
+                    'transactionable_type' => YasminPayment::class,
+                    'user_id_create' => auth()->id(),
                 ]);
-                // Add entries (debit/credit)
-                $transaction->addEntry(Account::where('code', '7010202')->first(), $payment->payment_amount, 'credit', CostCenter::find(2));
-                $transaction->addEntry(Account::where('code', '5300002')->first(), $payment->payment_amount, 'debit', CostCenter::find(2));
 
+                // Add debit/credit entries
+                $transaction->addEntry($creditAccount, $payment->payment_amount, 'credit', $costCenter);
+                $transaction->addEntry($debitAccount, $payment->payment_amount, 'debit', $costCenter);
 
-                // Track the payment import in the 'payment_imports' table (in 'bawobat' database)
+                // Record the import
                 PaymentImport::create([
                     'payment_id' => $payment->id,
                     'transaction_id' => $transaction->id,
                     'imported_at' => now(),
                 ]);
             }
+
             DB::commit();
-            // Redirect back with a success message
             return redirect()->route('payments.import')->with('success', 'تم استيراد المدفوعات بنجاح');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'حدث خطأ أثناء استيراد المدفوعات: ' . $e->getMessage());
         }
     }
+
 
     // (Optional) Show the list of imports if needed
     public function showImportedPayments()

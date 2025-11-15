@@ -186,6 +186,29 @@
                                 </div>
                             </div>
 
+                            <!-- Final Balance Section -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h2>{{ __('word.net_profit_or_loss') }}</h2>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th>{{ __('word.total_income') }}</th>
+                    <td class="text-end">{{ number_format($totalIncome, 0) }}</td>
+                </tr>
+                <tr>
+                    <th>{{ __('word.total_expenses') }}</th>
+                    <td class="text-end">{{ number_format($totalExpenses, 0) }}</td>
+                </tr>
+                <tr class="font-bold {{ $totalIncome - $totalExpenses >= 0 ? 'text-green-600' : 'text-red-600' }}">
+                    <th>{{ __('word.balance') }}</th>
+                    <td class="text-end">{{ number_format($totalIncome - $totalExpenses, 0) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
                         </div>
                     </div>
                 </div>

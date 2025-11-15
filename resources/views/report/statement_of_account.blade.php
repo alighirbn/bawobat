@@ -85,14 +85,16 @@
                                         @forelse ($soa as $entry)
                                             <tr class="font-semibold">
                                                 <td class="px-1 py-1 text-sm border border-gray-300 no-print">
-                                                    @if ($entry['url_address'])
-                                                        <a href="{{ route('transaction.show', $entry['url_address']) }}"
-                                                            class="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
-                                                            {{ __('word.view') }}
-                                                        </a>
-                                                    @else
-                                                        <!-- No button for opening balance -->
-                                                    @endif
+                                                @if ($entry['url_address'])
+                                                    <a href="{{ route('transaction.show', $entry['url_address']) }}"
+                                                     class="px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                                     target="_blank" rel="noopener noreferrer">
+                                                     {{ __('word.view') }}
+                                                    </a>
+                                                @else
+                                                    <!-- No button for opening balance -->
+                                                @endif
+
                                                 </td>
                                                 <td class="px-1 py-1 text-sm border border-gray-300">
                                                     {{ $entry['date'] }}</td>

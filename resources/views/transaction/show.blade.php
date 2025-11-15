@@ -39,9 +39,19 @@
                                 {{ __('word.archiveshow') }}
                             </a>
                         @endcan
+                       
                         <button id="print" class="btn btn-custom-print" onclick="window.print();">
                             {{ __('word.print') }}
                         </button>
+                        @can('transaction-delete')
+                          <form action="{{ route('transaction.destroy', $transaction->url_address) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-custom-delete" onclick="return confirm(' هل انت متأكد من حذف القسيمة ؟')">
+                             {{ __('word.delete') }}
+                            </button>
+                          </form>
+                        @endcan
                     </div>
                     <div class="print-container a4-width p-4 bg-white mx-auto" dir="rtl">
                         <div class="flex">
